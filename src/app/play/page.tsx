@@ -1,11 +1,10 @@
 "use client"
-import SignIn from "@/components/SignIn";
+import GameConnection from "@/components/GameConnection";
 
 const Index = () => {
     return (
         <div>
-            <h1>Sign in</h1>
-            <SignIn/>
+            <GameConnection/>
         </div>
     );
 };

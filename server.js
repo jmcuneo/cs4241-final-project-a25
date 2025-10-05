@@ -8,7 +8,9 @@ const app = express();
 const server = app.listen(3000);
 const wss = new WebSocketServer({ noServer: true });
 const nextApp = next({ dev: process.env.NODE_ENV !== "production" });
+const rooms = new Map();
 const clients = new Set();
+const waitingClients = [];
 
 nextApp.prepare().then(() => {
     app.use((req, res, next) => {
@@ -16,21 +18,56 @@ nextApp.prepare().then(() => {
     });
 
     wss.on('connection', (ws) => {
-        clients.add(ws);
-        console.log('New client connected');
+        let roomId = null;
+
+        waitingClients.push(ws);
+
+        if (waitingClients.length >= 2) {
+            // create a new room
+            const roomId = `room-${rooms.size + 1}`;
+            const [player1, player2] = waitingClients.splice(0, 2);
+            const room = new Set([player1, player2]);
+            rooms.set(roomId, room);
+
+            player1.roomId = roomId;
+            player2.roomId = roomId;
+
+            // notify players
+            [player1, player2].forEach((client, i) => {
+                client.send(JSON.stringify({ event: "joined", data: { roomId, player: i + 1 } }));
+            });
+
+            console.log(`Room ${roomId} started with 2 players`);
+        }
 
         ws.on('message', (message, isBinary) => {
-            console.log(`Message received: ${message}`);
-            clients.forEach(client => {
-                if (client.readyState === WebSocket.OPEN && (message.toString() !== `{"event":"ping"}`)) {
-                    client.send(message, { binary: isBinary });
-                }
-            });
+            const members = rooms.get(ws.roomId);
+            if (members) {
+                members.forEach(client => {
+                    if (client !== ws && client.readyState === WebSocket.OPEN) {
+                        client.send(message, { binary: isBinary });
+                    }
+                });
+            }
         });
 
         ws.on('close', () => {
-            clients.delete(ws);
-            console.log('Client disconnected');
+            if (ws.roomId) {
+                const members = rooms.get(ws.roomId);
+                if (members) {
+                    members.delete(ws);
+                    if (members.size === 0) {
+                        rooms.delete(ws.roomId);
+                        console.log(`Deleted ${ws.roomId}`);
+                    }
+                }
+            }
+
+            // Remove from waiting queue if still waiting
+            const index = waitingClients.indexOf(ws);
+            if (index !== -1) waitingClients.splice(index, 1);
+
+            console.log("Client disconnected");
         });
     });
 

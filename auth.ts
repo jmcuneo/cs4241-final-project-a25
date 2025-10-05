@@ -9,4 +9,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }),
     ],
     secret: process.env.AUTH_SECRET,
+    callbacks: {
+        async redirect({ url, baseUrl }) {
+            // Always redirect to /start after sign in
+            return `${baseUrl}/start`
+        },
+    },
 })
