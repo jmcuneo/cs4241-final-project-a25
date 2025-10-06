@@ -1,17 +1,18 @@
 "use client"
-import { useState, useEffect, useRef } from "react";
+import {useState, useEffect, useRef} from "react";
+import GameClient from "@/components/GameClient";
 
-interface GameClientProps {
+interface GameConnectionProps {
     deck: string[];
     onPlay: (card: string) => void;
     onPlayEnd: () => void;
 }
 
-export default function GameConnection(props: GameClientProps) {
+export default function GameConnection(props: GameConnectionProps) {
     const [pDeck, setpDeck] = useState<string[]>(props.deck);
-    const [lastPlayerCard, setLastPlayerCard] = useState<string | null>(null);
-    const [opponentDeckCount, setOpponentDeckCount] = useState<number | null>(null);
-    const [lastOpponentCard, setLastOpponentCard] = useState<string | null>(null);
+    const [lastPlayerCard, setLastPlayerCard] = useState<string | undefined>(undefined);
+    const [opponentDeckCount, setOpponentDeckCount] = useState<number | undefined>(undefined);
+    const [lastOpponentCard, setLastOpponentCard] = useState<string | undefined>(undefined);
     const [roomId, setRoomId] = useState<string | null>(null);
     const [playerNumber, setPlayerNumber] = useState<number | null>(null);
     const [isConnected, setIsConnected] = useState(false);
@@ -24,8 +25,9 @@ export default function GameConnection(props: GameClientProps) {
         const connectWebSocket = () => {
             if (typeof window === "undefined") return;
 
-            // Connect directly to port 3001 where WebSocket server is running
             const ws = new WebSocket('ws://localhost:3001');
+
+            // ws.binaryType = "arraybuffer";
 
             ws.onopen = () => {
                 console.log('WebSocket connected to port 3001');
@@ -34,17 +36,23 @@ export default function GameConnection(props: GameClientProps) {
             };
 
             ws.onmessage = (event) => {
+                // console.log(event)
+                // console.log(event.data.text())
                 const message = JSON.parse(event.data);
+                // const message = await event.data.text()
                 console.log('Received:', message);
-
-                switch (message.event) {
+                console.log('Received:', event.data);
+                const eventString : string = message.event;
+                console.log("Event: ", eventString);
+                switch (eventString) {
                     case "joined":
                         setRoomId(message.data.roomId);
                         setPlayerNumber(message.data.player);
                         setGameStatus(`Game started! You are Player ${message.data.player}`);
                         break;
 
-                    case "cardPlayed":
+                    case "play":
+                        console.log("Opponent played: ", message.data)
                         setLastOpponentCard(message.data.card);
                         setOpponentDeckCount(message.data.deckCount);
                         break;
@@ -52,6 +60,9 @@ export default function GameConnection(props: GameClientProps) {
                     case "opponentDisconnected":
                         setGameStatus("Opponent disconnected. You win!");
                         break;
+
+                    default:
+                        console.log("defaulting")
                 }
             };
 
@@ -97,7 +108,7 @@ export default function GameConnection(props: GameClientProps) {
         // Send card played to opponent
         if (wsRef.current?.readyState === WebSocket.OPEN) {
             wsRef.current.send(JSON.stringify({
-                event: "cardPlayed",
+                event: "play",
                 data: {
                     card: topCard,
                     deckCount: newDeck.length
@@ -113,44 +124,15 @@ export default function GameConnection(props: GameClientProps) {
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "20px", padding: "20px" }}>
-
+        <div>
             {/* Connection status */}
-            <div style={{ textAlign: "center" }}>
-                <p style={{ fontWeight: "bold" }}>
+            <div style={{textAlign: "center"}}>
+                <p style={{fontWeight: "bold"}}>
                     Status: {isConnected ? '🟢' : '🔴'} {gameStatus}
                 </p>
                 {roomId && <p>Room: {roomId}</p>}
             </div>
-
-            {/* Opponent info at the top */}
-            <div style={{ textAlign: "center", padding: "10px", border: "1px solid #ccc", borderRadius: "5px", minWidth: "200px" }}>
-                <h3>Opponent</h3>
-                <p>Cards Remaining: {opponentDeckCount ?? "?"}</p>
-                <p>Last Played: {lastOpponentCard ?? "None"}</p>
-            </div>
-
-            {/* Play button in the middle */}
-            <div>
-                <button
-                    onClick={playTopCard}
-                    disabled={pDeck.length === 0 || !isConnected || !roomId}
-                    style={{
-                        padding: "10px 20px",
-                        fontSize: "16px",
-                        cursor: pDeck.length === 0 || !isConnected || !roomId ? "not-allowed" : "pointer"
-                    }}
-                >
-                    Play Card
-                </button>
-            </div>
-
-            {/* Player info at the bottom */}
-            <div style={{ textAlign: "center", padding: "10px", border: "1px solid #ccc", borderRadius: "5px", minWidth: "200px" }}>
-                <h3>You {playerNumber ? `(Player ${playerNumber})` : ""}</h3>
-                <p>Cards Remaining: {pDeck.length}</p>
-                <p>Last Played: {lastPlayerCard ?? "None"}</p>
-            </div>
+            <GameClient deck={pDeck} onPlay={playTopCard} onPlayEnd={playTopCard} opponentDeckCount={opponentDeckCount} lastOpponentCard={lastOpponentCard}/>
         </div>
     );
 }

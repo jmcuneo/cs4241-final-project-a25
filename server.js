@@ -39,8 +39,9 @@ wss.on('connection', (ws) => {
         console.log(`Room ${roomId} started with 2 players`);
     }
 
-    ws.on('message', (message) => {
-        console.log("Message received:", message.toString());
+    ws.on('message', (data, isBinary) => {
+        const message = isBinary ? data : data.toString();
+        console.log("Message received:", message);
 
         const members = rooms.get(ws.roomId);
         if (members) {
