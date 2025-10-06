@@ -20,6 +20,7 @@ export default function GameConnection() {
     }, []);
 
     const connectWebSocket = () => {
+        console.log("Connected????");
         if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
             console.log("Already connected");
             return;
@@ -27,12 +28,21 @@ export default function GameConnection() {
 
         setSearching(true);
         const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        console.log(`Path being used: ${protocol}//${window.location.host}/api/ws`);
         const ws = new WebSocket(`${protocol}//${window.location.host}/api/ws`);
 
+        // console.log("Created WebSocket:", ws);
+
+        console.log("Connecting to WS:", `${protocol}//${window.location.host}/api/ws`);
         ws.onopen = () => {
-            console.log("Connected to server, waiting for opponent...");
-            socketRef.current = ws;
-        };
+            console.log("Connected to WS!");
+            ws.send(JSON.stringify({ type: "hello" }));
+        }
+        // ws.onopen = () => {
+        //     console.log("Connected to server, waiting for opponent...");
+        //     socketRef.current = ws;
+        // };
+        ws.onerror = (err) => console.error("WS error:", err);
 
         ws.onmessage = (event) => {
             try {
@@ -70,13 +80,13 @@ export default function GameConnection() {
                 console.error("Failed to parse message", err, event.data);
             }
         };
-
-        ws.onclose = () => {
-            console.log("Disconnected");
-            setConnected(false);
-            setSearching(false);
-            socketRef.current = null;
-        };
+        ws.onclose = (e) => console.log("WS closed:", e.code, e.reason);
+        // ws.onclose = () => {
+        //     console.log("Disconnected");
+        //     setConnected(false);
+        //     setSearching(false);
+        //     socketRef.current = null;
+        // };
 
         // store the socket reference
         socketRef.current = ws;
@@ -92,6 +102,7 @@ export default function GameConnection() {
     };
 
     const disconnectWebSocket = () => {
+        console.log("Disconnecting?");
         if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
             socketRef.current.close();
             socketRef.current = null;
@@ -116,9 +127,9 @@ export default function GameConnection() {
                     <button onClick={connectWebSocket} disabled={connected || searching}>
                         {searching ? "Searching..." : "Play"}
                     </button>
-                    <button onClick={disconnectWebSocket} disabled={!connected}>
-                        Disconnect
-                    </button>
+                    {/*<button onClick={disconnectWebSocket} disabled={!connected}>*/}
+                    {/*    Disconnect*/}
+                    {/*</button>*/}
                     <p>Status: {connected ? "Connected" : "Disconnected"}</p>
                 </div>
                 :

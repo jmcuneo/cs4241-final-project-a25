@@ -34,9 +34,9 @@ export default function GameClient(props: GameClientProps) {
                 <button onClick={playTopCard} disabled={pDeck.length === 0}>
                     Play Card
                 </button>
-                <button onClick={props.onPlayEnd} style={{ marginLeft: "10px" }}>
-                    Forfeit
-                </button>
+                {/*<button onClick={props.onPlayEnd} style={{ marginLeft: "10px" }}>*/}
+                {/*    Forfeit*/}
+                {/*</button>*/}
             </div>
 
             {/* Player info at the bottom */}

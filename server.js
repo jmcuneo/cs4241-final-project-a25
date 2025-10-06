@@ -1,3 +1,63 @@
+// server.js
+const express = require("express");
+const next = require('next');
+const http = require('http');
+const WebSocket = require('ws');
+
+const dev = process.env.NODE_ENV !== "production";
+const nextApp = next({ dev });
+const handle = nextApp.getRequestHandler();
+
+// WebSocket server on separate port
+const wsServer = http.createServer();
+const wss = new WebSocket.Server({ server: wsServer });
+const clients = new Set();
+
+wss.on('connection', (ws) => {
+    clients.add(ws);
+    console.log('New client connected. Total clients:', clients.size);
+
+    ws.on('message', (message, isBinary) => {
+        const messageStr = message.toString();
+        console.log(`Message received: ${messageStr}`);
+
+        if (messageStr === '{"event":"ping"}') {
+            return;
+        }
+
+        clients.forEach(client => {
+            if (client !== ws && client.readyState === WebSocket.OPEN) {
+                client.send(message, { binary: isBinary });
+            }
+        });
+    });
+
+    ws.on('close', () => {
+        clients.delete(ws);
+        console.log('Client disconnected. Total clients:', clients.size);
+    });
+
+    ws.on('error', (error) => {
+        console.error('WebSocket error:', error);
+    });
+});
+
+nextApp.prepare().then(() => {
+    const app = express();
+
+    app.use((req, res) => {
+        return handle(req, res);
+    });
+
+    app.listen(3000, () => {
+        console.log('> Next.js on http://localhost:3000');
+    });
+
+    wsServer.listen(3001, () => {
+        console.log('> WebSocket server on ws://localhost:3001');
+    });
+});
+
 const { parse } = require('url');
 const express = require("express");
 const next = require('next');
@@ -18,6 +78,7 @@ nextApp.prepare().then(() => {
     });
 
     wss.on('connection', (ws) => {
+        console.log("Client connection");
         let roomId = null;
 
         waitingClients.push(ws);
@@ -41,14 +102,19 @@ nextApp.prepare().then(() => {
         }
 
         ws.on('message', (message, isBinary) => {
-            const members = rooms.get(ws.roomId);
-            if (members) {
-                members.forEach(client => {
-                    if (client !== ws && client.readyState === WebSocket.OPEN) {
-                        client.send(message, { binary: isBinary });
-                    }
-                });
-            }
+            console.log("WS connected");
+            ws.on("message", (msg) => {
+                console.log("Message:", msg.toString());
+                ws.send("pong");
+            });
+            // const members = rooms.get(ws.roomId);
+            // if (members) {
+            //     members.forEach(client => {
+            //         if (client !== ws && client.readyState === WebSocket.OPEN) {
+            //             client.send(message, { binary: isBinary });
+            //         }
+            //     });
+            // }
         });
 
         ws.on('close', () => {
@@ -72,18 +138,27 @@ nextApp.prepare().then(() => {
     });
 
     server.on("upgrade", (req, socket, head) => {
+        console.log("Upgrading")
         const { pathname } = parse(req.url || "/", true);
-
+        console.log("Upgrade request pathname:", pathname);
         // Make sure we all for hot module reloading
         if (pathname === "/_next/webpack-hmr") {
             nextApp.getUpgradeHandler()(req, socket, head);
+            return;
         }
 
         // Set the path we want to upgrade to WebSockets
-        if (pathname === "/api/ws") {
+        else if (pathname === "/api/ws") {
+            console.log("Upgrade path")
             wss.handleUpgrade(req, socket, head, (ws) => {
+                console.log("Attempting connection")
                 wss.emit('connection', ws, req);
+                console.log("Connection worked", ws);
             });
+            return;
         }
+        socket.destroy();
+
+        console.log("Completed upgrade")
     });
 })
