@@ -61,9 +61,13 @@
     font-size: 4rem;
 }
 
-/* back of card styling */
-.card-back {
+/* back of card styling (DEFAULT)*/ 
+.card-back-default {
     background-color: #3355AF;
     background-image: repeating-radial-gradient(circle, #4477CC, #4477CC 10px, #3355AF 10px, #3355AF 20px);
-    transform: rotateY(180deg); /* flipped by default */
+    transform: rotateY(180deg);
+}
+
+.card-back-tw {
+    transform: rotateY(180deg);
 }
