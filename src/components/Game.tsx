@@ -2,13 +2,13 @@
 import {useState, useEffect, useRef} from "react";
 import GameClient from "@/components/GameClient";
 
-interface GameConnectionProps {
+interface Game {
     deck: string[];
     onPlay: (card: string) => void;
     onPlayEnd: () => void;
 }
 
-export default function GameConnection(props: GameConnectionProps) {
+export default function Game(props: Game) {
     const [pDeck, setpDeck] = useState<string[]>(props.deck);
     const [lastPlayerCard, setLastPlayerCard] = useState<string | undefined>(undefined);
     const [opponentDeckCount, setOpponentDeckCount] = useState<number | undefined>(undefined);
@@ -42,7 +42,7 @@ export default function GameConnection(props: GameConnectionProps) {
                 // const message = await event.data.text()
                 console.log('Received:', message);
                 console.log('Received:', event.data);
-                const eventString : string = message.event;
+                const eventString: string = message.event;
                 console.log("Event: ", eventString);
                 switch (eventString) {
                     case "joined":
@@ -126,13 +126,16 @@ export default function GameConnection(props: GameConnectionProps) {
     return (
         <div>
             {/* Connection status */}
-            <div style={{textAlign: "center"}}>
-                <p style={{fontWeight: "bold"}}>
-                    Status: {isConnected ? '🟢' : '🔴'} {gameStatus}
-                </p>
-                {roomId && <p>Room: {roomId}</p>}
-            </div>
-            <GameClient deck={pDeck} onPlay={playTopCard} onPlayEnd={playTopCard} opponentDeckCount={opponentDeckCount} lastOpponentCard={lastOpponentCard}/>
+            {!isConnected || gameStatus === "Waiting for opponent..." ?
+                <div style={{textAlign: "center"}}>
+                    <p style={{fontWeight: "bold"}}>
+                        Status: {isConnected ? '🟢' : '🔴'} {gameStatus}
+                    </p>
+                    {roomId && <p>Room: {roomId}</p>}
+                </div> :
+                <GameClient deck={pDeck} onPlay={playTopCard} onPlayEnd={playTopCard}
+                            opponentDeckCount={opponentDeckCount} lastOpponentCard={lastOpponentCard}/>
+            }
         </div>
     );
 }
