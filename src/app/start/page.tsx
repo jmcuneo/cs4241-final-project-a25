@@ -1,12 +1,11 @@
 "use client"
-import {useState, useEffect} from 'react';
-import SignIn from "@/components/SignIn";
+import GameClient from "@/components/GameClient";
 import GameConnection from "@/components/GameConnection";
 
 const Index = () => {
     return (
         <div>
-            <GameConnection/>
+            <GameConnection deck={["1h", "8c", "2d", "4d", "3s"]} onPlay={() => null} onPlayEnd={ () => null } />
         </div>
     );
 };
