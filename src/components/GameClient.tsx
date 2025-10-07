@@ -1,5 +1,7 @@
 "use client"
 import {useState, useEffect} from "react";
+import PlayerArea from "@/components/PlayerArea";
+import {Card} from "@/app/types";
 
 interface GameClientProps {
     deck: string[];
@@ -11,7 +13,7 @@ interface GameClientProps {
 
 export default function GameClient(props: GameClientProps) {
     const [pDeck, setpDeck] = useState<string[]>(props.deck);
-    const [lastPlayerCard, setLastPlayerCard] = useState<string | null>(null);
+    const [lastPlayerCard, setLastPlayerCard] = useState<string | undefined>(undefined);
 
     const playTopCard = () => {
         if (pDeck.length === 0) return; // nothing to play
@@ -20,49 +22,32 @@ export default function GameClient(props: GameClientProps) {
         props.onPlay(topCard);
     };
 
+    const convertToCard = (cardStr: string | undefined): Card => {
+        if (!cardStr || cardStr.length < 2) {
+            return {suit: "", rank: ""};
+        }
+
+        const suitChar = cardStr[0];
+        const rankStr = cardStr.slice(1);
+        return { suit: suitChar, rank: rankStr };
+    };
+
     return (
-        <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "20px", padding: "20px"}}>
+        <div className="game-board">
+            <PlayerArea
+                playerName={`Opponent`}
+                deck={props.opponentDeckCount} // Need to make this take just a number,
+                playedCards={[convertToCard(props.lastOpponentCard)]}
+                // backTheme={deckTheme === "egyptian" ? "egyptian" : "nordic"}
+            />
 
-            {/* Opponent info at the top */}
-            <div style={{
-                textAlign: "center",
-                padding: "10px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                minWidth: "200px"
-            }}>
-                <h3>Opponent</h3>
-                <p>Cards Remaining: {props.opponentDeckCount ?? "?"}</p>
-                <p>Last Played: {props.lastOpponentCard ?? "None"}</p>
-            </div>
-
-            {/* Play button in the middle */}
-            <div>
-                <button
-                    onClick={playTopCard}
-                    // disabled={pDeck.length === 0 || !isConnected || !roomId}
-                    style={{
-                        padding: "10px 20px",
-                        fontSize: "16px",
-                        // cursor: pDeck.length === 0 || !isConnected || !roomId ? "not-allowed" : "pointer"
-                    }}
-                >
-                    Play Card
-                </button>
-            </div>
-
-            {/* Player info at the bottom */}
-            <div style={{
-                textAlign: "center",
-                padding: "10px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                minWidth: "200px"
-            }}>
-                {/*<h3>You {playerNumber ? `(Player ${playerNumber})` : ""}</h3>*/}
-                <p>Cards Remaining: {pDeck.length}</p>
-                <p>Last Played: {lastPlayerCard ?? "None"}</p>
-            </div>
+            <PlayerArea
+                playerName={`You`}
+                deck={pDeck.length}
+                onPlayCard={playTopCard}
+                playedCards={[convertToCard(lastPlayerCard)]}
+                // backTheme={deckTheme === "egyptian" ? "egyptian" : "nordic"}
+            />
         </div>
     );
 }

@@ -124,19 +124,14 @@ export default function Game(props: Game) {
         }
     };
 
-    // if (!isConnected || gameStatus === "Waiting for opponent...") {
-    //     return <Queue />;
-    // }
+    if (!isConnected || gameStatus === "Waiting for opponent...") {
+        return <Queue/>;
+    }
 
     return (
         <div>
-            {/* Connection status */}
-            {!isConnected || gameStatus === "Waiting for opponent..." ?
-                <Queue/>
-                :
-                <GameClient deck={pDeck} onPlay={playTopCard} onPlayEnd={playTopCard}
-                            opponentDeckCount={opponentDeckCount} lastOpponentCard={lastOpponentCard}/>
-            }
+            <GameClient deck={pDeck} onPlay={playTopCard} onPlayEnd={playTopCard}
+                        opponentDeckCount={opponentDeckCount} lastOpponentCard={lastOpponentCard}/>
         </div>
     );
 }
