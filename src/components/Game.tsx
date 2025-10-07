@@ -132,7 +132,8 @@ export default function Game(props: Game) {
                         Status: {isConnected ? '🟢' : '🔴'} {gameStatus}
                     </p>
                     {roomId && <p>Room: {roomId}</p>}
-                </div> :
+                </div>
+                :
                 <GameClient deck={pDeck} onPlay={playTopCard} onPlayEnd={playTopCard}
                             opponentDeckCount={opponentDeckCount} lastOpponentCard={lastOpponentCard}/>
             }
