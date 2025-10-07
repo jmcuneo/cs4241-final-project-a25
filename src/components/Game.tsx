@@ -1,6 +1,7 @@
 "use client"
 import {useState, useEffect, useRef} from "react";
 import GameClient from "@/components/GameClient";
+import Queue from "@/components/Queue";
 
 interface Game {
     deck: string[];
@@ -123,16 +124,15 @@ export default function Game(props: Game) {
         }
     };
 
+    // if (!isConnected || gameStatus === "Waiting for opponent...") {
+    //     return <Queue />;
+    // }
+
     return (
         <div>
             {/* Connection status */}
             {!isConnected || gameStatus === "Waiting for opponent..." ?
-                <div style={{textAlign: "center"}}>
-                    <p style={{fontWeight: "bold"}}>
-                        Status: {isConnected ? '🟢' : '🔴'} {gameStatus}
-                    </p>
-                    {roomId && <p>Room: {roomId}</p>}
-                </div>
+                <Queue/>
                 :
                 <GameClient deck={pDeck} onPlay={playTopCard} onPlayEnd={playTopCard}
                             opponentDeckCount={opponentDeckCount} lastOpponentCard={lastOpponentCard}/>
