@@ -2,10 +2,10 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
+    padding-top: 40px;
     gap: 60px;
     background-color: green;
     color: white;
-    padding-top: 40px;
 }
 
 .player-area {
@@ -19,7 +19,6 @@
     text-align: center;
     min-width: 150px;
 }
-
 
 .player-pile h2 {
     position: absolute;
