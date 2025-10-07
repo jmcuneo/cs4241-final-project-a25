@@ -28,9 +28,9 @@ const PlayingCard = ({suit, rank, faceUp, onClick, backTheme}: CardProps) => {
         <div className={cardClasses}>
             {/* front */}
             <div className={`card-face card-front ${colorClass}`}>
-            <div className="rank top-left">{rank}</div>
-            <div className="suit">{suit}</div>
-            <div className="rank bottom-right">{rank}</div>
+            <div className="select-none rank top-left">{rank}</div>
+            <div className="select-none suit">{suit}</div>
+            <div className="select-none rank bottom-right">{rank}</div>
             </div>
 
             {/* back (Tailwind themed) */}
@@ -39,14 +39,14 @@ const PlayingCard = ({suit, rank, faceUp, onClick, backTheme}: CardProps) => {
                 <>
                 <div className="absolute inset-0 opacity-25 [background:radial-gradient(circle_at_center,white_1px,transparent_1px)] [background-size:16px_16px]" />
                 <div className="absolute inset-2 rounded-lg border border-white/30" />
-                <div className="text-4xl">ᚠᚢᚦ</div>
+                <div className="select-none text-4xl">ᚠᚢᚦ</div>
                 </>
             )}
             {backTheme === "egyptian" && (
                 <>
                 <div className="absolute inset-0 opacity-20 [background:repeating-linear-gradient(135deg,black,black_6px,transparent_6px,transparent_12px)] mix-blend-soft-light" />
                 <div className="absolute inset-2 rounded-lg border border-black/30" />
-                <div className="text-4xl">☥</div>
+                <div className="select-none text-4xl">☥</div>
                 </>
             )}
             </div>
