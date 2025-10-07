@@ -14,16 +14,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             // Always redirect to /start after sign in
             return `${baseUrl}/start`
         },
-        async session({ session, token }) {
-            // Add GitHub username (login)
-            session.user.username = token.username;
-            return session;
-        },
-        async jwt({ token, account, profile }) {
-            if (profile) {
-                token.username = profile.login; // GitHub username
-            }
-            return token;
-        },
     },
 })
