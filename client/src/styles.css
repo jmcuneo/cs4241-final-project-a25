@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:focus-visible { outline: 3px solid #6366f1; outline-offset: 2px; } /* keyboard focus */
+.leaflet-container { outline: none; }
