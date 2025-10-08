@@ -6,9 +6,9 @@
     "client"
   ],
   "scripts": {
-    "dev": "concurrently -n server,client -c blue,green \"pnpm --filter server dev\" \"pnpm --filter client dev\"",
-    "build": "pnpm -w --filter client build && pnpm -w --filter server build",
-    "start": "pnpm --filter server start"
+    "dev": "concurrently -n server,client -c blue,green \"pnpm --filter mbta-live-server dev\" \"pnpm --filter mbta-live-client dev\"",
+    "build": "pnpm -w --filter mbta-live-client build && pnpm -w --filter mbta-live-server build",
+    "start": "pnpm --filter mbta-live-server start"
   },
   "devDependencies": {
     "concurrently": "^9.0.0"
