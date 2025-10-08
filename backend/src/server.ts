@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { PrismaClient } from "./generated/prisma";
+import foods from "./routes/foods"
+import meals from "./routes/meals";
+
 
 dotenv.config();
 const app = express();
@@ -9,6 +12,10 @@ const prisma = new PrismaClient();
 
 app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
+
+app.use("/foods", foods);
+app.use("/meals", meals);
+
 
 app.get("/", (req, res) => res.send("Server running"));
 
