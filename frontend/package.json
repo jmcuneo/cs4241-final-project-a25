@@ -1,20 +1,15 @@
 {
-  "name": "group-7-final",
+  "name": "frontendd",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "seed": "npm run seed --prefix backend",
-    "reset-db": "npm run reset-db --prefix backend",
-    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
-    "dev:backend": "npm run dev --prefix backend",
-    "dev:frontend": "npm run dev --prefix frontend",
+    "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@prisma/extension-accelerate": "^2.0.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
@@ -23,13 +18,12 @@
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
-    "@vitejs/plugin-react-swc": "^4.1.0",
-    "concurrently": "^9.2.1",
+    "@vitejs/plugin-react": "^5.0.4",
+    "babel-plugin-react-compiler": "^19.1.0-rc.3",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
-    "prisma": "^6.17.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.45.0",
     "vite": "^7.1.7"
