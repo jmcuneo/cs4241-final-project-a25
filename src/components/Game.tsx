@@ -26,7 +26,8 @@ export default function Game(props: Game) {
         const connectWebSocket = () => {
             if (typeof window === "undefined") return;
 
-            const ws = new WebSocket('ws://localhost:3001');
+            const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+            const ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
 
             // ws.binaryType = "arraybuffer";
 

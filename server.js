@@ -1,17 +1,47 @@
+const { parse } = require('url');
 const express = require("express");
 const next = require('next');
 const http = require('http');
 const WebSocket = require('ws');
 
 const dev = process.env.NODE_ENV !== "production";
+const PORT = process.env.PORT || 3000;
 const nextApp = next({ dev });
 const handle = nextApp.getRequestHandler();
 
-// WebSocket server on separate port
-const wsServer = http.createServer();
-const wss = new WebSocket.Server({ server: wsServer });
+// Create HTTP server
+const app = express();
+const server = http.createServer(app);
+
+// WebSocket server attached to the same HTTP server
+const wss = new WebSocket.Server({ noServer: true });
 const rooms = new Map();
 const waitingClients = [];
+
+// Handle WebSocket upgrade
+server.on("upgrade", (req, socket, head) => {
+    const { pathname } = parse(req.url || "/", true);
+    console.log("Upgrade request pathname:", pathname);
+
+    // Handle WebSocket upgrade - using /ws to avoid NextAuth conflict
+    if (pathname === "/ws") {
+        console.log("Upgrading to WebSocket");
+        wss.handleUpgrade(req, socket, head, (ws) => {
+            console.log("WebSocket upgrade successful");
+            wss.emit('connection', ws, req);
+        });
+        return;
+    }
+
+    // Allow Next.js HMR in development
+    if (dev && pathname === "/_next/webpack-hmr") {
+        nextApp.getUpgradeHandler()(req, socket, head);
+        return;
+    }
+
+    // Destroy any other upgrade requests
+    socket.destroy();
+});
 
 wss.on('connection', (ws) => {
     console.log("New client connected");
@@ -88,17 +118,13 @@ wss.on('connection', (ws) => {
 });
 
 nextApp.prepare().then(() => {
-    const app = express();
-
+    // Handle all HTTP requests with Next.js
     app.use((req, res) => {
         return handle(req, res);
     });
 
-    app.listen(3000, () => {
-        console.log('> Next.js on http://localhost:3000');
-    });
-
-    wsServer.listen(3001, () => {
-        console.log('> WebSocket server on ws://localhost:3001');
+    server.listen(PORT, (err) => {
+        if (err) throw err;
+        console.log(`> Ready on http://localhost:${PORT}`);
     });
 });
