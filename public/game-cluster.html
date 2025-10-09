@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Game Cluster Page</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Page where users can look at a cluster of the games they've posted reviews for.">
+        <script src="js/game-cluster.js"></script>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://unpkg.com/nes.css/css/nes.min.css" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    </head>
+    <header>
+        <nav>
+        <ul>
+            <li><a href="users.html">Users</a></li>
+            <li><a href="index.html">Create Review</a></li>
+            <li><a href="reviews.html">Your Reviews</a></li>
+            <li><a href="game-cluster.html">Your Game Cluster</a></li>
+            <li><a href="account.html">Account</a></li>
+            <li><a href="#" id="log-link">Logout</a></li>
+        </ul>
+        </nav>
+        <h1>Game Review Site</h1>
+    </header>
+    <body>
+        <h2 id="game-cluster-heading">Your Game Cluster:</h2>
+        <select name="cluster-display-dropdown" id="cluster-display-dropdown">
+            <option value="bar">Bar Chart</option>
+            <option value="pie">Pie Chart</option>
+            <option value="bubble">Bubble Chart</option>
+        </select>
+        <select name="cluster-data-dropdown" id="cluster-data-dropdown">
+            <option value="year">By Year</option>
+            <option value="gameplayRating">By Gameplay Rating</option>
+            <option value="storyRating">By Story Rating</option>
+            <option value="visualsRating">By Visuals Rating</option>
+            <option value="musicRating">By Music Rating</option>
+            <option value="overallRating">By Overall Rating</option>
+        </select>
+        <div id="game-cluster"></div>
+    </body>
+</html>

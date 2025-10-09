@@ -20,6 +20,10 @@ const loadReviews = async function(){
     window.location.href = "login.html";
     return;
   }
+  
+  const userStatus = await getUserStatus();
+  if (userStatus.status)
+    document.querySelector("#reviews-heading").textContent = userStatus.user.username + "'s Reviews";
 
   const logLink = document.querySelector("#log-link");
   logLink.onclick = async (event) => {
@@ -30,10 +34,6 @@ const loadReviews = async function(){
 
   const data = await response.json();
   reviewSet = data;
-  
-  const userStatus = await getUserStatus();
-  if (userStatus.status)
-    document.querySelector("#reviews-heading").textContent = userStatus.user.username + "'s Reviews";
 
   const reviews = document.querySelector("#reviews");
   reviews.innerHTML = "";
