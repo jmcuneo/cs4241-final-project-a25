@@ -1,6 +1,6 @@
 {
-  "name": "webware-assignment-a-three",
-  "version": "2.0",
+  "name": "webware-final-project",
+  "version": "3.5",
   "description": "Game Review Site",
   "author": "Jimmy Martella",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "dotenv": "^17.2.2",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "mime": "^2.6.0",

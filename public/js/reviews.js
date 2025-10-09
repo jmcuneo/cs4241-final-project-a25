@@ -119,8 +119,7 @@ const editReview = async function(id){
   document.querySelector("#edit-musicRating").value = auditedReview.musicRating;
 
   document.querySelector("#submit-edit-button").dataset.id = id;
-
-  // document.querySelector("#overlay").classList.remove("hidden");
+  
   document.querySelector("#edit-window").classList.remove("hidden");
 }
 

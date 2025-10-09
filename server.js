@@ -1,17 +1,17 @@
 require("dotenv").config();
 
-const express = require('express')
-const session = require('express-session')
+const express = require('express');
+const session = require('express-session');
 const bcrypt = require('bcrypt');
 
 const { ObjectId, MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USERNM}:${process.env.PASS}@${process.env.HOST}/?retryWrites=true&w=majority&appName=Webware-Assignment-Three-A`;
 const client = new MongoClient(uri, { serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true, }});
 
-const app = express()
-app.use(express.json())
-app.use(express.urlencoded({ extended:true }))
-app.use(express.static('public'))
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended:true }));
+app.use(express.static('public'));
 app.use(session({
   secret: process.env.SECRET,
   resave: false,
@@ -19,8 +19,8 @@ app.use(session({
   cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-let reviewCollection = null
-let userCollection = null
+let reviewCollection = null;
+let userCollection = null;
 
 const run = async function(){
     try {
@@ -58,13 +58,22 @@ app.get('/user', (request, response) => {
     }
 })
 
+app.get('/users', authorisation, async (request, response) => {
+    try {
+        response.json(await userCollection.find().toArray());
+    } catch (error){
+        console.error("Error Fetching Data: ", error);
+        response.status(500).json({ error: "Failed To Fetch User Data" });
+    }
+})
+
 app.get('/reviews', authorisation, async (request, response) => {
     try {
         const username = request.session.user.username;
         response.json(await reviewCollection.find({ username }).toArray());
     } catch (error){
         console.error("Error Fetching Data: ", error);
-        response.status(500).json({ error: "Failed To Fetch Data" });
+        response.status(500).json({ error: "Failed To Fetch Review Data" });
     }
 })
 
@@ -83,7 +92,10 @@ app.post('/register', async (request, response) => {
         const hashword = await bcrypt.hash(password, 10);
         const newUser = await userCollection.insertOne({
             username: username,
-            password: hashword
+            password: hashword,
+            pronouns: "",
+            bio: "",
+            faves: []
         })
 
         request.session.user = {
