@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 
-if (!process.env.GITHUB_ID || !process.env.GITHUB_SECRET) {
+if (!process.env.AUTH_GITHUB_ID || !process.env.AUTH_GITHUB_SECRET) {
     throw new Error('Missing GITHUB_ID or GITHUB_SECRET environment variables')
 }
 
@@ -12,8 +12,8 @@ if (!process.env.AUTH_SECRET) {
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
         GitHub({
-            clientId: process.env.GITHUB_ID,
-            clientSecret: process.env.GITHUB_SECRET,
+            clientId: process.env.AUTH_GITHUB_ID,
+            clientSecret: process.env.AUTH_GITHUB_SECRET,
         }),
     ],
     secret: process.env.AUTH_SECRET,
