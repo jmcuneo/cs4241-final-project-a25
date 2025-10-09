@@ -36,7 +36,7 @@ export default function GameClient(props: GameClientProps) {
         <div className="game-board">
             <PlayerArea
                 playerName={`Opponent`}
-                deck={props.opponentDeckCount} // Need to make this take just a number,
+                deck={props.opponentDeckCount ? props.opponentDeckCount : 26} // Need to make this take just a number,
                 playedCards={[convertToCard(props.lastOpponentCard)]}
                 // backTheme={deckTheme === "egyptian" ? "egyptian" : "nordic"}
             />
