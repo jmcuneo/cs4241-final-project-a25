@@ -14,14 +14,26 @@ export interface FoodSearchResponse {
 }
 
 export interface FoodNutrient {
-  nutrientId: number;
-  nutrientName: string;
-  nutrientNumber: string;
-  unitName: string;
-  value: number;
-  rank?: number;
-  indentLevel?: number;
-  foodNutrientId: number;
+  type: string;
+  nutrient: {
+    id: number;
+    number: string;
+    name: string;
+    rank: number;
+    unitName: string;
+  };
+  amount: number;
+  id?: number;
+  dataPoints?: number;
+  max?: number;
+  min?: number;
+  median?: number;
+  minYearAcquired?: number;
+  foodNutrientDerivation?: {
+    id: number;
+    code: string;
+    description: string;
+  };
 }
 
 export interface FoodDetails {
@@ -42,10 +54,12 @@ export interface MealItem {
   quantity: number;
   calories: number;
   servingDescription?: string;
+  id?: string;
 }
 
 export interface Meal {
   userId?: number;
   date: string;
+  mealType?: "breakfast" | "lunch" | "dinner" | "snack";
   items: MealItem[];
 }

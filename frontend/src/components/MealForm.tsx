@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { useForm } from "@tanstack/react-form";
 import { addMeal, searchFoods, getFoodDetails } from "../api/client";
-import type { FoodSearchResult, FoodDetails, MealItem, FoodNutrient } from "../types/food";
+import type {
+  FoodSearchResult,
+  FoodDetails,
+  MealItem,
+  FoodNutrient,
+} from "../types/food";
 
 export default function MealForm() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -17,6 +22,8 @@ export default function MealForm() {
       quantity: 1,
       calories: 0,
       mealItems: [] as MealItem[],
+      mealType: "breakfast" as "breakfast" | "lunch" | "dinner" | "snack",
+      date: new Date().toISOString().split("T")[0],
     },
     onSubmit: async ({ value }) => {
       if (value.mealItems.length === 0) {
@@ -26,8 +33,8 @@ export default function MealForm() {
 
       try {
         const meal = {
-          userId: 1,
-          date: new Date().toISOString(),
+          date: new Date(value.date).toISOString(),
+          mealType: value.mealType,
           items: value.mealItems.map((item: MealItem) => ({
             foodId: item.foodId,
             quantity: item.quantity,
@@ -82,15 +89,16 @@ export default function MealForm() {
         .then((details) => {
           setFoodDetails(details);
           // Auto-calculate calories
-          const caloriesNutrient = (details.foodNutrients as FoodNutrient[])?.find(
-            (nutrient) =>
-              nutrient.nutrientId === 1008 ||
-              nutrient.nutrientName.toLowerCase().includes("energy"),
+          const caloriesNutrient = details.foodNutrients?.find(
+            (nutrient: FoodNutrient) =>
+              nutrient.nutrient?.id === 1008 ||
+              (nutrient.nutrient?.name &&
+                nutrient.nutrient.name.toLowerCase().includes("energy")),
           );
 
           let calories = 0;
           if (caloriesNutrient) {
-            const caloriesPer100g = caloriesNutrient.value;
+            const caloriesPer100g = caloriesNutrient.amount;
             const quantity = form.state.values.quantity;
 
             if (details.servingSize && details.servingSize > 0) {
@@ -117,15 +125,16 @@ export default function MealForm() {
   // Recalculate calories when quantity changes (if not manually editing)
   useEffect(() => {
     if (!isEditingCalories && foodDetails) {
-      const caloriesNutrient = (foodDetails.foodNutrients as FoodNutrient[])?.find(
-        (nutrient) =>
-          nutrient.nutrientId === 1008 ||
-          nutrient.nutrientName.toLowerCase().includes("energy"),
+      const caloriesNutrient = foodDetails.foodNutrients?.find(
+        (nutrient: FoodNutrient) =>
+          nutrient.nutrient?.id === 1008 ||
+          (nutrient.nutrient?.name &&
+            nutrient.nutrient.name.toLowerCase().includes("energy")),
       );
 
       let calories = 0;
       if (caloriesNutrient) {
-        const caloriesPer100g = caloriesNutrient.value;
+        const caloriesPer100g = caloriesNutrient.amount;
         const quantity = form.state.values.quantity;
 
         if (foodDetails.servingSize && foodDetails.servingSize > 0) {
@@ -170,6 +179,7 @@ export default function MealForm() {
       quantity,
       calories,
       servingDescription,
+      id: `${selectedFood.fdcId}-${Date.now()}-${Math.random()}`,
     };
 
     const currentItems = form.state.values.mealItems;
@@ -181,20 +191,16 @@ export default function MealForm() {
     setIsEditingCalories(false);
   };
 
-  const handleRemoveItem = (index: number) => {
+  const handleRemoveItem = (itemId: string) => {
     const currentItems = form.state.values.mealItems;
-    form.setFieldValue(
-      "mealItems",
-      currentItems.filter((_, i) => i !== index),
-    );
+    const newItems = currentItems.filter((item) => item.id !== itemId);
+    form.setFieldValue("mealItems", newItems);
   };
 
   const selectedFood = form.state.values.selectedFood;
-  const mealItems = form.state.values.mealItems;
-  const totalCalories = mealItems.reduce((sum, item) => sum + item.calories, 0);
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div className="w-2xl p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Add Meal</h2>
 
       <form
@@ -204,7 +210,55 @@ export default function MealForm() {
           form.handleSubmit();
         }}
       >
-        {/* Food Search */}
+        {/* Meal Type and Date */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <form.Field
+            name="mealType"
+            children={(field) => (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Meal Type:
+                </label>
+                <select
+                  value={field.state.value}
+                  onChange={(e) =>
+                    field.handleChange(
+                      e.target.value as
+                        | "breakfast"
+                        | "lunch"
+                        | "dinner"
+                        | "snack",
+                    )
+                  }
+                  className="w-full text-black px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="breakfast">Breakfast</option>
+                  <option value="lunch">Lunch</option>
+                  <option value="dinner">Dinner</option>
+                  <option value="snack">Snack</option>
+                </select>
+              </div>
+            )}
+          />
+
+          <form.Field
+            name="date"
+            children={(field) => (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Date:
+                </label>
+                <input
+                  type="date"
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  className="w-full text-black px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            )}
+          />
+        </div>
+
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Search for food:
@@ -216,15 +270,12 @@ export default function MealForm() {
             placeholder="Enter food name (e.g., salmon, apple, bread)..."
             className="w-full text-black px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-
           {searchQuery.length > 0 && searchQuery.length <= 2 && (
             <p className="text-sm text-gray-500 mt-1">
               Type at least 3 characters to search
             </p>
           )}
         </div>
-
-        {/* Search Loading */}
         {isSearching && (
           <div className="mb-6">
             <p className="text-gray-600">Searching...</p>
@@ -234,7 +285,9 @@ export default function MealForm() {
         {/* Search Results */}
         {searchResults.length > 0 && (
           <div className="mb-6">
-            <h3 className="text-lg font-semibold mb-3">Search Results:</h3>
+            <h3 className="text-black text-lg font-semibold mb-3">
+              Search Results:
+            </h3>
             <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-md">
               {searchResults.slice(0, 10).map((food) => (
                 <div
@@ -245,14 +298,6 @@ export default function MealForm() {
                   <h4 className="font-medium text-gray-900">
                     {food.description}
                   </h4>
-                  {food.brandOwner && (
-                    <p className="text-sm text-gray-600">
-                      Brand: {food.brandOwner}
-                    </p>
-                  )}
-                  <p className="text-xs text-gray-500">
-                    Data Type: {food.dataType}
-                  </p>
                 </div>
               ))}
             </div>
@@ -307,7 +352,7 @@ export default function MealForm() {
                           field.handleChange(Number(e.target.value))
                         }
                         readOnly={!isEditingCalories}
-                        className={`flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${
+                        className={`text-black flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${
                           !isEditingCalories ? "bg-gray-50" : ""
                         }`}
                       />
@@ -318,17 +363,18 @@ export default function MealForm() {
                           if (isEditingCalories && foodDetails) {
                             // Reset to auto-calculated value
                             const caloriesNutrient =
-                              (foodDetails.foodNutrients as FoodNutrient[])?.find(
-                                (nutrient) =>
-                                  nutrient.nutrientId === 1008 ||
-                                  nutrient.nutrientName
-                                    .toLowerCase()
-                                    .includes("energy"),
+                              foodDetails.foodNutrients?.find(
+                                (nutrient: FoodNutrient) =>
+                                  nutrient.nutrient?.id === 1008 ||
+                                  (nutrient.nutrient?.name &&
+                                    nutrient.nutrient.name
+                                      .toLowerCase()
+                                      .includes("energy")),
                               );
 
                             let autoCalories = 0;
                             if (caloriesNutrient) {
-                              const caloriesPer100g = caloriesNutrient.value;
+                              const caloriesPer100g = caloriesNutrient.amount;
                               const quantity = form.state.values.quantity;
 
                               if (
@@ -376,45 +422,61 @@ export default function MealForm() {
         )}
 
         {/* Meal Items */}
-        {mealItems.length > 0 && (
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold mb-3">Meal Items:</h3>
-            <div className="space-y-2">
-              {mealItems.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-md"
-                >
-                  <div className="flex-1">
-                    <h4 className="font-medium">{item.foodName}</h4>
-                    <p className="text-sm text-gray-600">
-                      Quantity: {item.quantity} {item.servingDescription} •
-                      Calories: {item.calories}
+        <form.Subscribe
+          selector={(state) => state.values.mealItems}
+          children={(mealItems) => (
+            <>
+              {mealItems.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold mb-3">Meal Items:</h3>
+                  <div className="space-y-2">
+                    {mealItems.map((item, index) => (
+                      <div
+                        key={item.id || index}
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-md"
+                      >
+                        <div className="flex-1">
+                          <h4 className="font-medium">{item.foodName}</h4>
+                          <p className="text-sm text-gray-600">
+                            Quantity: {item.quantity} {item.servingDescription}{" "}
+                            • Calories: {item.calories}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleRemoveItem(item.id || `fallback-${index}`);
+                          }}
+                          className="ml-2 px-2 py-1 text-red-600 hover:bg-red-100 rounded"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-4 p-3 bg-blue-50 rounded-md">
+                    <p className="text-lg font-semibold text-blue-800">
+                      Total Calories:{" "}
+                      {mealItems.reduce((sum, item) => sum + item.calories, 0)}
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveItem(index)}
-                    className="ml-2 px-2 py-1 text-red-600 hover:bg-red-100 rounded"
-                  >
-                    Remove
-                  </button>
                 </div>
-              ))}
-            </div>
-
-            <div className="mt-4 p-3 bg-blue-50 rounded-md">
-              <p className="text-lg font-semibold text-blue-800">
-                Total Calories: {totalCalories}
-              </p>
-            </div>
-          </div>
-        )}
+              )}
+            </>
+          )}
+        />
 
         {/* Submit Meal */}
         <form.Subscribe
-          selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([canSubmit, isSubmitting]) => (
+          selector={(state) => ({
+            canSubmit: state.canSubmit,
+            isSubmitting: state.isSubmitting,
+            mealItems: state.values.mealItems,
+          })}
+          children={({ canSubmit, isSubmitting, mealItems }) => (
             <button
               type="submit"
               disabled={!canSubmit || mealItems.length === 0}
