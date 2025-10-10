@@ -133,7 +133,6 @@ export default function Game() {
                     case "joined": {
                         setRoomId(message.data.roomId ?? null);
                         setPlayerNumber(message.data.player ?? null);
-                        setStatus(`Game started! You are Player ${message.data.player}`);
 
                         if (Array.isArray(message.data.deck)) {
                             // Incase the server is authoritative, it should also send opponent info.

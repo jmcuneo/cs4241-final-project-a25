@@ -1,10 +1,10 @@
 "use client"
-import { signOutAction } from "@/../actions"
+import { signOutWithGithub } from "@/../actions"
 
 export default function SignOutButton() {
     return (
-        <form action={signOutAction}>
-            <button type="submit">
+        <form action={signOutWithGithub}>
+            <button type="submit" >
                 Sign Out
             </button>
         </form>

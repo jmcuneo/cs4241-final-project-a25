@@ -5,6 +5,6 @@ export async function signInWithGithub() {
     await signIn("github")
 }
 
-export async function signOutAction() {
+export async function signOutWithGithub() {
     await signOut({ redirectTo: "/" })
 }

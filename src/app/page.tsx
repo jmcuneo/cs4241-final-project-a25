@@ -45,16 +45,20 @@ export default function StartPage() {
                                     <span>Wins: 0</span>
                                     <span>Losses: 0</span>
                                 </div>
-                                <SignOut/>
-                                {/*<button*/}
-                                {/*    onClick={() => signOut()}*/}
-                                {/*    className="mt-3 text-sm text-zinc-400 hover:text-zinc-200 underline-offset-4 hover:underline"*/}
-                                {/*>*/}
-                                {/*    Sign out*/}
+                                {/*<SignOut/>*/}
+                                {/*<button onClick={() => signOut()}*/}
+                                {/*        className="mt-3 text-sm text-zinc-400 hover:text-zinc-200 underline-offset-4 hover:underline"}>*/}
+                                {/*    Sign Out*/}
                                 {/*</button>*/}
+                                <button
+                                    onClick={() => signOut()}
+                                    className="mt-3 text-sm text-zinc-400 hover:text-zinc-200 underline-offset-4 hover:underline"
+                                >
+                                    Sign out
+                                </button>
                             </div>
                         ) : (
-                            <SignIn />
+                            <SignIn/>
                             // <button
                             //     onClick={() => signIn("github")}
                             //     className="w-full rounded-lg border border-zinc-600 px-3 py-2 text-left hover:bg-zinc-800"
