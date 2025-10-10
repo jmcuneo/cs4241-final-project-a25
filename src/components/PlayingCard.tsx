@@ -9,11 +9,12 @@ type CardProps = {
     backTheme?: "nordic" | "egyptian";
 };
 
+const SUITS = new Map<string, string>([["s","♠"], ["c","♣"], ["h","♥"], ["d","♦"]]);
 
 const PlayingCard = ({suit, rank, faceUp, onClick, backTheme}: CardProps) => {
-
+    const suitIcon = SUITS.get(suit);
     //card color by suit
-    const colorClass = (suit === '♥' || suit === '♦') ? 'red' : 'black';
+    const colorClass = (suitIcon === '♥' || suitIcon === '♦') ? 'red' : 'black';
 
     const cardClasses = `card ${!faceUp ? 'is-flipped' : ''}`;
 
@@ -29,7 +30,7 @@ const PlayingCard = ({suit, rank, faceUp, onClick, backTheme}: CardProps) => {
             {/* front */}
             <div className={`card-face card-front ${colorClass}`}>
             <div className="select-none rank top-left">{rank}</div>
-            <div className="select-none suit">{suit}</div>
+            <div className="select-none suit">{suitIcon}</div>
             <div className="select-none rank bottom-right">{rank}</div>
             </div>
 
