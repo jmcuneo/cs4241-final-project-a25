@@ -4,6 +4,8 @@ import PlayerArea from "@/components/PlayerArea";
 import {Card} from "@/app/types";
 import {router} from "next/client";
 
+type DeckTheme = "nordic" | "egyptian"; // Since GameClient now passes the themes to PlayerArea
+
 type GameClientProps = {
     deck: string[];
     onPlay: () => void;
@@ -42,6 +44,13 @@ export default function GameClient({
                                    }: GameClientProps) {
     const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
+    const [deckTheme, setDeckTheme] = useState<DeckTheme>("nordic"); 
+    useEffect(() => {
+    // read what Start page saved
+    const saved = (typeof window !== "undefined" && localStorage.getItem("deckTheme")) as DeckTheme | null;
+    if (saved === "egyptian" || saved === "nordic") setDeckTheme(saved);
+    }, []);
+
     if (playerName === opponentName) opponentName = "Opponent";
 
     // Show temporary status message
@@ -70,6 +79,7 @@ export default function GameClient({
                     deck={opponentDeckCount ?? 26}
                     playedCards={[convertToCard(lastOpponentCard)]}
                     winCount={opponentWins}
+                    backTheme={deckTheme}
                 />
             </div>
 
@@ -89,6 +99,7 @@ export default function GameClient({
                     playedCards={[convertToCard(lastPlayerCard)]}
                     winCount={playerWins}
                     onPlayCard={playTopCard}
+                    backTheme={deckTheme}
                 />
                 <p className="text-center text-sm mt-1">{playerName} ({opponentDeckCount})</p>
                 <button type="button"
