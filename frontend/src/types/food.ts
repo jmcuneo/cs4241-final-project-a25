@@ -55,6 +55,9 @@ export interface MealItem {
   calories: number;
   servingDescription?: string;
   id?: string;
+  protein?: number;
+  carbs?: number;
+  fat?: number;
 }
 
 export interface Meal {

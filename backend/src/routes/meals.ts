@@ -4,18 +4,43 @@ import prisma from "../db";
 const router = Router();
 
 router.post("/", async (req, res) => {
-  const { userId, date, items } = req.body;
+  const { userId, date, mealType, items } = req.body;
 
   try {
+    // First create or find foods in the database
+    const foodPromises = items.map(async (item: any) => {
+      // Try to find existing food by name, or create new one
+      let food = await prisma.food.findUnique({
+        where: { name: item.foodName },
+      });
+
+      if (!food) {
+        food = await prisma.food.create({
+          data: {
+            name: item.foodName,
+            calories: Math.round(item.calories / item.quantity) || 0,
+            protein: item.protein || 0,
+            carbs: item.carbs || 0,
+            fat: item.fat || 0,
+          },
+        });
+      }
+
+      return {
+        foodId: food.id,
+        quantity: item.quantity,
+      };
+    });
+
+    const mealItemsData = await Promise.all(foodPromises);
+
     const meal = await prisma.meal.create({
       data: {
         userId,
         date: new Date(date),
+        mealType: mealType ? mealType.toUpperCase() : "BREAKFAST",
         items: {
-          create: items.map((item: any) => ({
-            foodId: item.foodId,
-            quantity: item.quantity,
-          })),
+          create: mealItemsData,
         },
       },
       include: { items: { include: { food: true } } },
@@ -90,7 +115,7 @@ router.get("/by-date", async (req, res) => {
 
     // Group meals by date
     const mealsByDate = meals.reduce((acc: any, meal) => {
-      const dateKey = meal.date.toISOString().split("T")[0]; // YYYY-MM-DD format
+      const dateKey = meal.date.toISOString().split("T")[0];
 
       if (!acc[dateKey]) {
         acc[dateKey] = {

@@ -19,7 +19,16 @@ export async function getMeal(id: number) {
 export async function addMeal(meal: {
   userId?: number;
   date: string;
-  items: { foodId: number; quantity: number }[];
+  mealType?: string;
+  items: {
+    foodId: number;
+    quantity: number;
+    foodName: string;
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+  }[];
 }) {
   const res = await fetch(`/api/meals`, {
     method: "POST",
