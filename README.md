@@ -1,7 +1,9 @@
 # MBTA Tracking App  
 
 **Team Members:** Ashley Fontaine, Yi Hong Jiang, Brendan Leu, Utku Yakar
+
 **Group 17 Final Project**
+
 https://gr17-finalproject.brleu.com/
 
 ```
@@ -39,6 +41,11 @@ Then run the install & run script
 ./scripts/dev-all.sh
 ```
 
+#### Adding shadcn components
+```shell
+npx shadcn@latest add -c client <component>
+```
+
 #### Example `.env` file
 ```shell
 # --- Server ---
@@ -50,9 +57,11 @@ GITHUB_CLIENT_ID=your-app-id
 GITHUB_CLIENT_SECRET=your-app-secret
 GITHUB_CALLBACK_URL=http://localhost:8080/auth/github/callback
 MBTA_API_KEY=your-mbta-key
-
+```
+```shell
 # --- Client ---
 VITE_API_BASE=http://localhost:8080
+VITE_WS_URL=ws://localhost:8080/ws
 ```
 
 ### Technologies  
@@ -71,6 +80,7 @@ Yi Hong Jiang:
 
 Brendan Leu:
 - Stop Search
+- Saved Stop Countdown
 - GitHub CI
 - Deployed with Docker
 

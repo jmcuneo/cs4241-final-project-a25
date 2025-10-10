@@ -21,16 +21,16 @@ import { API } from '../lib/api';
 import { useEffect } from 'react';
 
 export function SelectStop(props) {
-  const {value, onChange, required} = props;
+  const {value, onChange, changeName, required} = props;
   const [open, setOpen] = React.useState(false)
   const [stops, setStops] = React.useState([])
 
   useEffect(() => {
     API.getStops().then((data) => {
-        console.log(data.data)
         setStops(data.data.map((stop) => {
             return {
                 value: stop.id,
+                name: stop.attributes.name,
                 label: `${stop.id} (${stop.attributes.name})`
             };
         }));
@@ -65,6 +65,7 @@ export function SelectStop(props) {
                   keywords={[stop.label]}
                   onSelect={(currentValue) => {
                     onChange(currentValue === value ? "" : currentValue)
+                    changeName(stop.name)
                     setOpen(false)
                   }}
                 >
