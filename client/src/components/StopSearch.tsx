@@ -24,13 +24,13 @@ export default function StopSearch() {
         </label>
         <label className="text-sm">
           <span className="block mb-1">Stop Name (optional)</span>
-          <input value={stopName} onChange={e=>setStopName(e.target.value)} className="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:text-white"/>
+          <input value={stopName} onChange={e=>setStopName(e.target.value)} className="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:text-white focus-visible:ring-offset-2"/>
         </label>
         <label className="text-sm">
           <span className="block mb-1">Route (optional)</span>
-          <input value={route} onChange={e=>setRoute(e.target.value)} className="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:text-white"/>
+          <input value={route} onChange={e=>setRoute(e.target.value)} className="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:text-white focus-visible:ring-offset-2"/>
         </label>
-        <button className="self-start px-4 py-2 rounded-xl bg-neutral-900 text-white">Save</button>
+        <button className="self-start px-4 py-2 rounded-xl bg-neutral-900 text-white focus-visible:ring-offset-2">Save</button>
       </form>
       <p className="mt-2 text-xs text-neutral-500">
         Tip: you can find stop IDs on the MBTA site or dev docs.

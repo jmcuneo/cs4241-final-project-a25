@@ -52,7 +52,7 @@ export default function AlertTicker({ items }:{ items:any[] }) {
 
   // simple alert ticker with show/hide feature
   return (
-    <section className="border-y bg-amber-50 dark:bg-amber-800 dark:text-white">
+    <section className="border-y bg-amber-50 dark:bg-amber-800 dark:text-white" role="alert" aria-live="polite">
       <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
         <div className="text-sm">
           <span className="font-medium">Service Alerts</span>

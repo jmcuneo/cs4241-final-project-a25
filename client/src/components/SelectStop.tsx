@@ -44,7 +44,7 @@ export function SelectStop(props) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="justify-between w-full border rounded-lg px-3 py-2"
+          className="justify-between w-full border rounded-lg px-3 py-2 focus-visible:ring-offset-2"
         >
           {value
             ? stops.find((stop) => stop.value === value)?.label

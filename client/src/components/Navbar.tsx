@@ -17,16 +17,16 @@ export default function Navbar({ user }:{ user:any }) {
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
         <Link to="/" className="font-bold">MBTA Live</Link>
         <div className="flex items-center gap-3">
-          <Link to="/dashboard" className="hover:underline">Dashboard</Link>
-          <Link to="/settings" className="hover:underline">Settings</Link>
+          <Link to="/dashboard" className="hover:underline focus-visible:ring-offset-2">Dashboard</Link>
+          <Link to="/settings" className="hover:underline focus-visible:ring-offset-2">Settings</Link>
           {user ? (
             <button
-              className="px-3 py-1 rounded-xl bg-neutral-900 text-white dark:bg-gray-700"
+              className="px-3 py-1 rounded-xl bg-neutral-900 text-white dark:bg-gray-700 focus-visible:ring-offset-2"
               onClick={async ()=>{ await API.logout(); nav('/'); }}>
               Logout
             </button>
           ) : (
-            <a className="px-3 py-1 rounded-xl bg-neutral-900 text-white dark:bg-gray-700" href={`${BASE}/auth/github`}>
+            <a className="px-3 py-1 rounded-xl bg-neutral-900 text-white dark:bg-gray-700 focus-visible:ring-offset-2" href={`${BASE}/auth/github`}>
               Login
             </a>
           )}
