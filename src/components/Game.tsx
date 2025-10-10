@@ -2,6 +2,7 @@
 import {useState, useEffect, useRef} from "react";
 import GameClient from "@/components/GameClient";
 import Queue from "@/components/Queue";
+import {useSession} from "next-auth/react";
 
 type Suit = "c" | "d" | "h" | "s";
 type Rank = 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14;
@@ -78,6 +79,7 @@ function canAffordFullWar(p: Player): boolean {
 }*/
 
 export default function Game() {
+    const {data: session} = useSession();
     const [pDeck, setPDeck] = useState<string[]>([]);
     const [canPlay, setCanPlay] = useState(true);
     const [lastPlayerCard, setLastPlayerCard] = useState<string>();
@@ -88,9 +90,8 @@ export default function Game() {
     const [isConnected, setIsConnected] = useState(false);
     const [oppDeck, setOppDeck] = useState<string[]>([]);
     const [gameStatus, setGameStatus] = useState("");
-    const [playerName, setPlayerName] = useState<string>("You");
     const [opponentName, setOpponentName] = useState<string>("Opponent");
-
+    const playerName = session?.user?.name ? session.user.name : "You";
     const [status, setStatus] = useState<string | undefined>("Connecting...");
 
     // Your discard pile (won cards you'll reshuffle into draw when empty)
