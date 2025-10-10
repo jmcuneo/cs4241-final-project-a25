@@ -4,8 +4,8 @@ import axios from 'axios';
 
 const Dashboard = () => {
     const [bets, setBets] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const { currentUser } = useAuth();
+    const [betsLoading, setBetsLoading] = useState(true);
+    const { currentUser, loading } = useAuth();
 
     useEffect(() => {
         if (currentUser) {
@@ -20,7 +20,7 @@ const Dashboard = () => {
         } catch (error) {
             console.error('Error fetching bets:', error);
         } finally {
-            setLoading(false);
+            setBetsLoading(false);
         }
     };
 
@@ -40,8 +40,7 @@ const Dashboard = () => {
         }
     };
 
-    // Show loading state while checking authentication
-    if (!currentUser) {
+    if (loading) {
         return (
             <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                 <div className="px-4 py-6 sm:px-0">
@@ -56,7 +55,7 @@ const Dashboard = () => {
         );
     }
 
-    if (loading) {
+    if (betsLoading) {
         return (
             <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                 <div className="px-4 py-6 sm:px-0">
@@ -81,7 +80,6 @@ const Dashboard = () => {
                     </p>
                 </div>
 
-                {/* Balance Card */}
                 <div className="bg-white overflow-hidden shadow rounded-lg mb-8">
                     <div className="px-4 py-5 sm:p-6">
                         <div className="flex items-center">

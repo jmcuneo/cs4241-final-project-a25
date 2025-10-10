@@ -22,31 +22,60 @@ export function AuthProvider({ children }) {
         const token = localStorage.getItem('token');
         const user = localStorage.getItem('user');
 
-        if (token && user) {
-            setCurrentUser(JSON.parse(user));
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        }
-        setLoading(false);
+        const checkAuth = setTimeout(() => {
+            if (token && user) {
+                try {
+                    const userData = JSON.parse(user);
+                    setCurrentUser(userData);
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                } catch (error) {
+                    console.error('Error parsing user data:', error);
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                }
+            }
+            setLoading(false);
+        }, 100);
+
+        return () => clearTimeout(checkAuth);
     }, []);
 
     const login = async (userData) => {
-        const response = await axios.post('http://localhost:5000/api/auth/login', userData);
-        const { token, user } = response.data;
+        try {
+            const response = await axios.post('http://localhost:5000/api/auth/login', userData);
+            const { token, user } = response.data;
 
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        setCurrentUser(user);
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            setCurrentUser(user);
+            return { success: true };
+        } catch (error) {
+            console.error('Login error:', error);
+            return {
+                success: false,
+                message: error.response?.data?.message || 'Login failed'
+            };
+        }
     };
 
     const register = async (userData) => {
-        const response = await axios.post('http://localhost:5000/api/auth/register', userData);
-        const { token, user } = response.data;
+        try {
+            const response = await axios.post('http://localhost:5000/api/auth/register', userData);
+            const { token, user } = response.data;
 
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        setCurrentUser(user);
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            setCurrentUser(user);
+            return { success: true };
+        } catch (error) {
+            console.error('Registration error:', error);
+            return {
+                success: false,
+                message: error.response?.data?.message || 'Registration failed'
+            };
+        }
     };
 
     const logout = () => {
@@ -57,17 +86,26 @@ export function AuthProvider({ children }) {
     };
 
     const updateBalance = (newBalance) => {
-        setCurrentUser(prev => ({
-            ...prev,
-            balance: newBalance
-        }));
-        const user = JSON.parse(localStorage.getItem('user'));
-        user.balance = newBalance;
-        localStorage.setItem('user', JSON.stringify(user));
+        setCurrentUser(prev => {
+            if (!prev) return prev;
+
+            const updatedUser = {
+                ...prev,
+                balance: newBalance
+            };
+
+            // Update localStorage
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            user.balance = newBalance;
+            localStorage.setItem('user', JSON.stringify(user));
+
+            return updatedUser;
+        });
     };
 
     const value = {
         currentUser,
+        loading,
         login,
         register,
         logout,
@@ -76,7 +114,7 @@ export function AuthProvider({ children }) {
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {children}
         </AuthContext.Provider>
     );
 }
