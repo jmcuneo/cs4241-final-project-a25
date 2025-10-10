@@ -2,12 +2,13 @@
 import React, {useEffect, useState} from "react";
 import PlayerArea from "@/components/PlayerArea";
 import {Card} from "@/app/types";
-import {router} from "next/client";
+
+type DeckTheme = "nordic" | "egyptian"; // Since GameClient now passes the themes to PlayerArea
 
 type GameClientProps = {
     deck: string[];
     onPlay: () => void;
-    onForfeit: () => void;
+    onPlayEnd: () => void;
     playerName: string;
     opponentName: string;
     gameStatus?: string;
@@ -29,7 +30,7 @@ function convertToCard(code?: string): Card {
 export default function GameClient({
                                        deck,
                                        onPlay,
-                                       onForfeit,
+                                       onPlayEnd,
                                        playerName,
                                        opponentName,
                                        gameStatus,
@@ -41,6 +42,13 @@ export default function GameClient({
                                        canPlay = true,
                                    }: GameClientProps) {
     const [statusMessage, setStatusMessage] = useState<string | null>(null);
+
+    const [deckTheme, setDeckTheme] = useState<DeckTheme>("nordic"); 
+    useEffect(() => {
+    // read what Start page saved
+    const saved = (typeof window !== "undefined" && localStorage.getItem("deckTheme")) as DeckTheme | null;
+    if (saved === "egyptian" || saved === "nordic") setDeckTheme(saved);
+    }, []);
 
     if (playerName === opponentName) opponentName = "Opponent";
 
@@ -70,6 +78,7 @@ export default function GameClient({
                     deck={opponentDeckCount ?? 26}
                     playedCards={[convertToCard(lastOpponentCard)]}
                     winCount={opponentWins}
+                    backTheme={deckTheme}
                 />
             </div>
 
@@ -89,14 +98,9 @@ export default function GameClient({
                     playedCards={[convertToCard(lastPlayerCard)]}
                     winCount={playerWins}
                     onPlayCard={playTopCard}
+                    backTheme={deckTheme}
                 />
                 <p className="text-center text-sm mt-1">{playerName} ({opponentDeckCount})</p>
-                <button type="button"
-                        onClick={() => {
-                            onForfeit();
-                        }}
-                        className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Forfeit
-                </button>
             </div>
 
             <style jsx global>{`
