@@ -11,7 +11,6 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Set up axios defaults
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -75,9 +74,5 @@ export function AuthProvider({ children }) {
         updateBalance
     };
 
-    return (
-        <AuthContext.Provider value={value}>
-            {!loading && children}
-        </AuthContext.Provider>
-    );
+
 }

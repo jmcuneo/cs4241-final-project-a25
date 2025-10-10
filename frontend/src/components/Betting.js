@@ -111,7 +111,6 @@ const Betting = () => {
                 )}
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Events List */}
                     <div className="lg:col-span-2">
                         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
                             <div className="px-4 py-5 sm:px-6">
@@ -149,7 +148,6 @@ const Betting = () => {
                         </div>
                     </div>
 
-                    {/* Betting Panel */}
                     <div className="lg:col-span-1">
                         <div className="bg-white shadow sm:rounded-lg sticky top-4">
                             <div className="px-4 py-5 sm:p-6">
@@ -159,7 +157,6 @@ const Betting = () => {
 
                                 {selectedEvent && (
                                     <div className="space-y-4">
-                                        {/* Moneyline */}
                                         <div>
                                             <h4 className="text-sm font-medium text-gray-900 mb-2">Moneyline</h4>
                                             <div className="space-y-2">
@@ -184,7 +181,6 @@ const Betting = () => {
                                             </div>
                                         </div>
 
-                                        {/* Spread */}
                                         <div>
                                             <h4 className="text-sm font-medium text-gray-900 mb-2">Spread</h4>
                                             <div className="space-y-2">
@@ -211,7 +207,6 @@ const Betting = () => {
                                             </div>
                                         </div>
 
-                                        {/* Total */}
                                         <div>
                                             <h4 className="text-sm font-medium text-gray-900 mb-2">Total Points</h4>
                                             <div className="space-y-2">
@@ -238,7 +233,6 @@ const Betting = () => {
                                             </div>
                                         </div>
 
-                                        {/* Bet Slip */}
                                         {selectedBet && (
                                             <div className="mt-6 p-4 bg-gray-50 rounded-md">
                                                 <h4 className="text-sm font-medium text-gray-900 mb-3">Your Bet</h4>
