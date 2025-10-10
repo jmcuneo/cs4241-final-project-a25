@@ -1,62 +1,39 @@
-# Final Project
+# Heatify
+## Group 16: Dillon Bresnahan, Cameron Norris, Akaash Walker
 
-[Example Projects from D24](https://echo360.org/collection/35d9eb4e-1c44-4880-80b5-c7a2f04ba64c/public)
+### Brief Description
+Heatify is a project where you can view where Spotify artists are from. Connect your Spotify account, and explore the world. Tell how many artists are from the country based off of its color. Click on countries and see which artists are from there.
 
-[Example Projects from A23](https://echo360.org/collection/50a4d343-caea-4deb-93ee-61bdd7da543f/public)
+Render deployed [here](https://heatifyapp.onrender.com/)
+Video Demo found [here](https://www.youtube.com/watch?v=a6IjSg5uVKY) on YouTube
 
-**Example Projects from Earlier Terms:**
-- [https://pushbox.glitch.me/app](https://pushbox.glitch.me/app)
-- [https://github.com/Cather-Zhang/final_project](https://github.com/Cather-Zhang/final_project)
-- [https://clip.kmoene.com/](https://clip.kmoene.com/)
-- [https://github.com/GP2P/G3P-Expense-Tracker](https://github.com/GP2P/G3P-Expense-Tracker)
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+All the artist data is gotten from your Spotify account. Unfortunately, Spotify does not store where artists are from. To circumvent this, a query is sent to Google Gemini that will inform the program where all the artist are from. This is then stored in a MongoDB database. After storage, all the data, including artists and number of artists per country, is shown in a world map developed by [Leaflet](https://leafletjs.com/).
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+### Additional Instructions (READ FULLY!)
+Users will need a Spotify account to use our program. We have created a dummy Google account for users to log into Spotify with. The login information is as follows:
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation. 
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) Upload the video to Canvas. (Further instructions are available in the Canvas assignment.) Make sure your video is less than five minutes but long enough to successfully explain your project and show it in action. There is no minimum video length.
+`Email: heatifyapp@gmail.com`
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have some impact, whether artistically, politically, productivity, or something else altogether. 
+`Password: WebWareA25!`
 
-## Deliverables
+We recommend using a private/incognito window to log in with this account, as it may interfere with your personal Spotify account if you are already logged in. When logging in, make sure to use the "_Log in with Google_" option as this dummy account is a Google account. We had to do this because we can disable 2FA on Google accounts, unlike regular Spotify accounts.
 
-### Form Team (Due Tuesday, September 23, 11:59 pm)
-Students are will work in teams of 3-5 students for the project. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#finalproject` channel in Slack to pitch ideas for final projects and/or find fellow team members as needed.
+**IMPORTANT NOTE:** The created dummy account is not currently added to the whitelist at the time of writing this README (10/10/25, ~8PM). Spotify only allows for a max of 5 new users to be added to the whitelist every day, which we have exceeded. I plan to add the dummy account to the whitelist on 10/11/25. Also, if you are a TA or professor who would like to add their personal account to the whitelist, feel free to reach out to me using my WPI email.
 
-Teams must be in place by end of day on Tuesday, September 23. If you have not identified a team at this point, you will be assigned a team. **Put all team members together in one of the empty "Final Project" groups on Canvas. You MUST do this step to receive full credit on the assignment.**
+### Technologies Used
+We  used Typescript for our main programming language, Node for the server React for our front-end, Tailwind for styling, Spotify API and Gemini API to get information, mongoDB to store data, Leaflet to create the heatmap, and Axios for server queries.
 
-### Proposal (Due Tuesday, September 30, 11:59 pm) 
-Provide an outline of your project direction and the names of associated team members. The outline should have enough detail so that staff can determine if it meets the minimum expectations or if it goes too far to be reasonable by the deadline. Please include a general description of the project and a list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript, etc.). Two to four paragraps should provide enough level of detail. Name the file proposal.md and submit a pull request by Tuesday, September 30th at 11:59 PM (end of day). Your pull request does not need to have a specific name. Only one pull request is required per team.
+### Challenges Faced
+1. A challenge we faced was getting the Google Gemini API to work. We had to make sure that the queries were formatted correctly and that Gemini did not stray from its task. 
+2. Importing the data from mongoDB and allowing it to populate the heatmap. We would sometimes have issues where the map was fetching the data before it was fully imported, leading to errors.
+3. Spotify API limitations: During development, Spotify limits the number of authorized users with a max of 25 whitelisted users. If we wanted to make this application available to anyone visiting the website, we would have to apply for Spotify's [extended quota mode](https://developer.spotify.com/documentation/web-api/concepts/quota-modes), which requires us to be a registered company, 250K monthly active users, and more. This of course is way beyond the scope of our abilities, and hence why we created a dummy account for users to log in with. As mentioned before, if you are a TA or professor who would like to add their personal account to the whitelist, please contact us.
 
-There are no other scheduled checkpoints for your project. 
+### Responsibilities
+**Akaash** - Wrote API calls to Spotify and Gemini, worked on the front end with React, and helped with styling
+**Cameron** - Created and managed the MongoDB database, worked on the front end with React, and helped with styling
+**Dillon** - Created the heatmap with Leaflet, worked on the front end with React, and helped with styling
 
-### Turning in Your Project (Due Friday, October 10, 11:59 pm)
-**Although the assignment is due at 11:59 pm, you must be prepared to demo your website in class that day.**
+### Accessibility Features
+We made sure the color design was clean so that people with sight issues could see properly. Along with this, there are no text entire necessary for easy use for everyone
 
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
-
-Deploy your app, in the form of a webpage, to Render/Heroku/Digital Ocean or whatever hosting service you choose; it is critical that the application functions correctly wherever you post it.
-
-The README for your second pull request doesn’t need to be a formal report, but it should contain the following:
-
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information, etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. What accessibility features you included in your project.
-
-Think of 1, 3, and 4 in particular in a similar vein to the design / technical achievements for A1—A4. Make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
-
-The video described above is also due on Canvas at this time.
-
-## FAQs
-
-**Can I use XYZ framework?** 
-
-You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. Note that the staff may not be able to assist with TypeScript questions.
