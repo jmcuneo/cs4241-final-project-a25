@@ -74,5 +74,9 @@ export function AuthProvider({ children }) {
         updateBalance
     };
 
-
+    return (
+        <AuthContext.Provider value={value}>
+            {!loading && children}
+        </AuthContext.Provider>
+    );
 }
