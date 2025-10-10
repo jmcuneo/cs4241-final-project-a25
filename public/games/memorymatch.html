@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Match Game</title>
+    <link rel="stylesheet" href="/memorymatch.css">
+    <script src="/memorymatch.js"></script>
+</head>
+<body>
+<div class="game-container">
+    <div class="header">
+        <h1>🃏 Memory Match 🃏</h1>
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">
+            <div class="stat-label">Moves</div>
+            <div class="stat-value" id="moves">0</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Matches</div>
+            <div class="stat-value" id="matches">0 / 12</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Time</div>
+            <div class="stat-value" id="timer">0:00</div>
+        </div>
+    </div>
+
+    <div class="theme-selector">
+        <button class="theme-btn active" onclick="changeTheme('emoji')">🎨 Emoji</button>
+        <button class="theme-btn" onclick="changeTheme('animals')">🐾 Animals</button>
+        <button class="theme-btn" onclick="changeTheme('shapes')">⭐ Shapes</button>
+        <button class="theme-btn" onclick="changeTheme('nfl')">🏈 NFL</button>
+    </div>
+
+    <div class="game-board" id="gameBoard"></div>
+
+    <div class="controls">
+        <button class="btn btn-primary" onclick="resetGame()">New Game</button>
+        <button class="btn btn-leaderboard" onclick="showLeaderboard()"> 🏆 Leaderboard</button>
+        <button class="btn btn-secondary" onclick="showRules()">How to Play</button>
+    </div>
+</div>
+
+<!-- Win Modal -->
+<div class="modal" id="winModal">
+    <div class="modal-content">
+        <h2>🎉 Congratulations! 🎉</h2>
+        <p>You won the game!</p>
+        <p><strong>Moves:</strong> <span id="finalMoves"></span></p>
+        <p><strong>Time:</strong> <span id="finalTime"></span></p>
+        <button class="btn btn-primary" onclick="closeModal()">Play Again</button>
+    </div>
+</div>
+
+<!-- Leaderboard Modal -->
+<div class="modal" id="leaderboardModal">
+    <div class="modal-content">
+        <h2>🏆 Leaderboard 🏆</h2>
+        <div id="leaderboardContent">Loading...</div>
+        <button class="btn btn-primary" onclick="closeLeaderboard()">Close</button>
+    </div>
+</div>
+
+
+<!-- Rules Modal -->
+<div class="modal" id="rulesModal">
+    <div class="modal-content">
+        <h2>📖 How to Play</h2>
+        <p>1. Click on cards to flip them over</p>
+        <p>2. Find matching pairs</p>
+        <p>3. Match all 12 pairs to win!</p>
+        <p>4. Try to win in fewer moves!</p>
+        <button class="btn btn-primary" onclick="closeRulesModal()">Got It!</button>
+    </div>
+</div>
+</body>
+</html>

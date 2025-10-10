@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="whackamole.css">
+    <title>Whack-a-Mole</title>
+</head>
+
+<body>
+    <main class="game" aria-label="Whack-a-Mole game">
+        <div class="hud">
+            <div id="score" class="badge" aria-live="polite">Score: 0</div>
+            <div id="timer" class="badge" aria-live="polite">00:15</div>
+            <button id="startBtn">Start</button>
+            <button id="resetBtn" class="danger">Reset</button>
+            <button id="lbBtn" type="button" title="View leaderboard">Leaderboard</button>
+        </div>
+
+        <section id="board" role="application" aria-label="Game board (4 by 4)"></section>
+
+        <div class="modal" id="leaderboardModal" aria-hidden="true" role="dialog" aria-label="Leaderboard">
+            <div class="modal-content">
+                <h2>🏆 Leaderboard</h2>
+                <div id="leaderboardContent">Loading…</div>
+                <button class="btn" id="lbCloseBtn" type="button">Close</button>
+            </div>
+        </div>
+
+        <div class="footer-note">Tip: Missing a click on the board removes 1 point. Make sure to hit the moles!</div>
+    </main>
+
+    <script src="whackamole.js"></script>
+</body>
+
+</html>
