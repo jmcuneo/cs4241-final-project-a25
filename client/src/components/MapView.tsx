@@ -117,7 +117,7 @@ export default function MapView() {
   // map container showing vehicle count
   return (
     <section className="rounded-2xl overflow-hidden border">
-      <div className="flex items-center justify-between px-4 py-2 text-sm bg-white">
+      <div className="flex items-center justify-between px-4 py-2 text-sm bg-white dark:bg-gray-800 dark:text-white">
         <div className="font-medium">Live Trains</div>
         <div className="text-neutral-500">{count} vehicles</div>
       </div>

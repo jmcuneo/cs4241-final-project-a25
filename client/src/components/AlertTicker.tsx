@@ -52,14 +52,14 @@ export default function AlertTicker({ items }:{ items:any[] }) {
 
   // simple alert ticker with show/hide feature
   return (
-    <section className="border-y bg-amber-50">
+    <section className="border-y bg-amber-50 dark:bg-amber-800 dark:text-white">
       <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
         <div className="text-sm">
           <span className="font-medium">Service Alerts</span>
-          <span className="ml-2 text-neutral-600">({count})</span>
+          <span className="ml-2 text-neutral-600 dark:text-gray-400">({count})</span>
         </div>
         <button
-          className="text-sm px-3 py-1 rounded-lg bg-amber-200 hover:bg-amber-300"
+          className="text-sm px-3 py-1 rounded-lg bg-amber-200 hover:bg-amber-300 dark:bg-amber-900"
           onClick={()=>setOpen(v=>!v)}
           aria-expanded={open}
           aria-controls="alerts-panel"
@@ -70,19 +70,19 @@ export default function AlertTicker({ items }:{ items:any[] }) {
       
       {open && (
         <div id="alerts-panel" className="max-w-6xl mx-auto px-4 pb-3">
-          <div className="rounded-xl border bg-white p-2 max-h-72 overflow-auto">
+          <div className="rounded-xl border bg-white p-2 max-h-72 overflow-auto dark:bg-gray-800">
             <ul className="space-y-2">
               {rows.map(r => (
-                <li key={r.id} className="border rounded-lg">
+                <li key={r.id} className="border rounded-lg dark:bg-gray-600">
                   <details>
                     <summary className="list-none cursor-pointer px-3 py-2 flex items-center gap-2">
                       <span className="text-sm font-medium">Alert:</span>
                       <span className="text-sm">{r.title}</span>
-                      {r.meta && <span className="text-xs text-neutral-600">— {r.meta}</span>}
-                      {r.when && <span className="ml-auto text-xs text-neutral-500">{r.when}</span>}
+                      {r.meta && <span className="text-xs text-neutral-400">— {r.meta}</span>}
+                      {r.when && <span className="ml-auto text-xs text-neutral-300">{r.when}</span>}
                     </summary>
                     {(r.details || r.url) && (
-                      <div className="px-3 pb-3 text-sm text-neutral-800">
+                      <div className="px-3 pb-3 text-sm text-neutral-800 dark:bg-gray-700 dark:text-white">
                         {r.details && <p className="whitespace-pre-wrap">{r.details}</p>}
                         {r.url && (
                           <p className="mt-2">

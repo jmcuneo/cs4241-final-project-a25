@@ -52,7 +52,7 @@ export default function Settings() {
     <div>
       <Navbar user={user}/>
       <main className="max-w-3xl mx-auto px-4 py-6 space-y-6">
-        <section className="rounded-2xl shadow p-6 bg-white">
+        <section className="rounded-2xl shadow p-6 bg-white dark:bg-gray-800 dark:text-white">
           <h2 className="text-lg font-semibold mb-2">Settings</h2>
           {!user && <p className="text-sm">Login to manage settings.</p>}
           {user && (
@@ -68,7 +68,7 @@ export default function Settings() {
               <div className="flex items-center gap-3">
                 <span className="text-sm">Theme</span>
                 <button
-                  className="px-3 py-1 rounded-lg border"
+                  className="px-3 py-1 rounded-lg border dark:bg-gray-700 dark:text-white"
                   onClick={()=>setTheme(t=> t === 'dark' ? 'light' : 'dark')}
                   disabled={busy}
                 >
@@ -76,16 +76,16 @@ export default function Settings() {
                 </button>
               </div>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 ">
                 <Link to="/dashboard" className="px-3 py-1 rounded-lg bg-neutral-900 text-white">Open Dashboard</Link>
-                <button className="px-3 py-1 rounded-lg border" onClick={exportData} disabled={busy}>Export My Data</button>
-                <button className="px-3 py-1 rounded-lg border text-red-600" onClick={clearAllFavorites} disabled={busy}>Clear All Favorites</button>
+                <button className="px-3 py-1 rounded-lg border dark:bg-gray-700 dark:text-white" onClick={exportData} disabled={busy}>Export My Data</button>
+                <button className="px-3 py-1 rounded-lg border text-red-600 dark:bg-gray-700" onClick={clearAllFavorites} disabled={busy}>Clear All Favorites</button>
               </div>
             </div>
           )}
         </section>
 
-        <section className="rounded-2xl shadow p-6 bg-white">
+        <section className="rounded-2xl shadow p-6 bg-white dark:bg-gray-800 dark:text-white">
           <h3 className="font-semibold mb-2">Accessibility</h3>
           <ul className="list-disc ml-5 text-sm space-y-1">
             <li>Keyboard focus styles (focus-visible).</li>

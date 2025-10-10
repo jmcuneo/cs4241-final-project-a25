@@ -24,11 +24,11 @@ export default function StopSearch() {
         </label>
         <label className="text-sm">
           <span className="block mb-1">Stop Name (optional)</span>
-          <input value={stopName} onChange={e=>setStopName(e.target.value)} className="w-full border rounded-lg px-3 py-2"/>
+          <input value={stopName} onChange={e=>setStopName(e.target.value)} className="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:text-white"/>
         </label>
         <label className="text-sm">
           <span className="block mb-1">Route (optional)</span>
-          <input value={route} onChange={e=>setRoute(e.target.value)} className="w-full border rounded-lg px-3 py-2"/>
+          <input value={route} onChange={e=>setRoute(e.target.value)} className="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:text-white"/>
         </label>
         <button className="self-start px-4 py-2 rounded-xl bg-neutral-900 text-white">Save</button>
       </form>

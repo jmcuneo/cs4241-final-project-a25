@@ -18,13 +18,13 @@ export default function Home() {
       <main className="max-w-6xl mx-auto px-4 py-6 space-y-6">
         <MapView/>
         <section className="grid md:grid-cols-2 gap-6">
-          <article className="rounded-2xl shadow p-6 bg-white">
+          <article className="rounded-2xl shadow p-6 bg-white dark:bg-gray-800 dark:text-white">
             <h2 className="text-lg font-semibold mb-2">What is this?</h2>
             <p className="text-sm">
               Live MBTA subway tracker. Watch trains move, check alerts, and save your stops!
             </p>
           </article>
-          <article className="rounded-2xl shadow p-6 bg-white">
+          <article className="rounded-2xl shadow p-6 bg-white dark:bg-gray-800 dark:text-white">
             <h2 className="text-lg font-semibold mb-2">Privacy Policy </h2>
             <p className="text-sm">
               We store only your GitHub ID, name, avatar, and favorited stops, nothing else.

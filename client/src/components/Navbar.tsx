@@ -13,7 +13,7 @@ const BASE =
 export default function Navbar({ user }:{ user:any }) {
   const nav = useNavigate();
   return (
-    <nav className="sticky top-0 z-10 bg-white/80 backdrop-blur border-b">
+    <nav className="sticky top-0 z-10 bg-white/80 backdrop-blur border-b dark:bg-gray-800/80 dark:text-white">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
         <Link to="/" className="font-bold">MBTA Live</Link>
         <div className="flex items-center gap-3">
@@ -21,12 +21,12 @@ export default function Navbar({ user }:{ user:any }) {
           <Link to="/settings" className="hover:underline">Settings</Link>
           {user ? (
             <button
-              className="px-3 py-1 rounded-xl bg-neutral-900 text-white"
+              className="px-3 py-1 rounded-xl bg-neutral-900 text-white dark:bg-gray-700"
               onClick={async ()=>{ await API.logout(); nav('/'); }}>
               Logout
             </button>
           ) : (
-            <a className="px-3 py-1 rounded-xl bg-neutral-900 text-white" href={`${BASE}/auth/github`}>
+            <a className="px-3 py-1 rounded-xl bg-neutral-900 text-white dark:bg-gray-700" href={`${BASE}/auth/github`}>
               Login
             </a>
           )}
