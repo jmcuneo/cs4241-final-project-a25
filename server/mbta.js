@@ -43,3 +43,16 @@ export async function fetchAlerts(params = {}) {
   if (!res.ok) throw new Error(`alerts: ${res.status}`);
   return res.json();
 }
+
+//Get upcoming departure predictions for a stop
+export async function fetchStops() {
+  // const query = new URLSearchParams({
+  //   'filter[stop]': stopId,
+  //   'include': 'route,trip,stop',
+  //   'page[limit]': '20',
+  //   'sort': 'departure_time'
+  // });
+  const res = await fetch(`${BASE}/stops`, { headers: headers(process.env.MBTA_API_KEY) });
+  if (!res.ok) throw new Error(`predictions: ${res.status}`);
+  return res.json();
+}

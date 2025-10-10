@@ -19,7 +19,7 @@ import favRoute from './routes/favorites.js';
 import alertsRoute from './routes/alerts.js';
 import { cspDirectives } from './utils/csp.js';
 import { initWS } from './ws.js';
-import { fetchPredictionsByStop } from './mbta.js';
+import { fetchPredictionsByStop, fetchStops } from './mbta.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -66,6 +66,15 @@ app.get('/api/ping', (_, res) => res.json({ ok: true }));
 app.use('/api/me', meRoute);
 app.use('/api/favorites', favRoute);
 app.use('/api/alerts', alertsRoute);
+
+app.get('/api/listStops', async (req, res) => {
+  try {
+    const data = await fetchStops();
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 // predictions by stop
 app.get('/api/predictions/:stopId', async (req, res) => {
