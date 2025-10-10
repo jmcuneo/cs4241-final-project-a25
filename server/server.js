@@ -19,7 +19,7 @@ import favRoute from './routes/favorites.js';
 import alertsRoute from './routes/alerts.js';
 import { cspDirectives } from './utils/csp.js';
 import { initWS } from './ws.js';
-import { fetchPredictionsByStop, fetchStops } from './mbta.js';
+import { fetchPredictionsByStop, fetchRouteShapes, fetchStops } from './mbta.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -81,6 +81,16 @@ app.get('/api/predictions/:stopId', async (req, res) => {
   try {
     const data = await fetchPredictionsByStop(req.params.stopId);
     res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// shapes by route
+app.get('/api/shapes/:route', async (req, res) => {
+  try {
+    const data = await fetchRouteShapes(req.params.route);
+    res.json(data.data);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

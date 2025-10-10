@@ -44,6 +44,12 @@ export async function fetchAlerts(params = {}) {
   return res.json();
 }
 
+export async function fetchRouteShapes(route) {
+  const res = await fetch(`${BASE}/shapes?filter[route]=${route}`, { headers: headers(process.env.MBTA_API_KEY) });
+  if (!res.ok) throw new Error(`shapes: ${res.status}`);
+  return res.json();
+}
+
 //Get upcoming departure predictions for a stop
 export async function fetchStops() {
   // const query = new URLSearchParams({

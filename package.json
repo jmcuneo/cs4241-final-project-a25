@@ -13,5 +13,8 @@
   "devDependencies": {
     "concurrently": "^9.0.0"
   },
-  "packageManager": "pnpm@9.11.0"
+  "packageManager": "pnpm@9.11.0",
+  "dependencies": {
+    "pnpm": "^10.18.2"
+  }
 }
