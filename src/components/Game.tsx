@@ -287,7 +287,7 @@ export default function Game() {
     function startWar() {
         setInWar(true);
 
-        let workingTable = [...table];
+        const workingTable = [...table];
 
         // Check to see if the user has enough cards to play:
         // 3 down cards and 1 up card (4 total cards) each
