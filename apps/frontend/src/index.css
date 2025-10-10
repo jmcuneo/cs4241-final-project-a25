@@ -1,0 +1,59 @@
+/* fonts */
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&family=Roboto:wght@400;500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-body;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: "Roboto", system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Base button */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2
+        rounded-xl transition-transform active:scale-[.98] select-none;
+    text-decoration: none;
+    display: inline-flex;
+  }
+
+  /* Solid big blue pill CTA — now Roboto Medium */
+  .btn-sky {
+    background-color: #0092e0;
+    color: #ffffff;
+    font-family: "Roboto", system-ui, sans-serif;
+    font-weight: 500;
+    border-radius: 9999px;
+    font-size: 1rem;
+    padding: 0.75rem 2rem;
+  }
+
+  .logo-badge {
+    @apply inline-flex items-center justify-center rounded-2xl;
+    width: 60px;
+    height: 60px;
+    background: #ff99a7;
+  }
+
+  @screen md {
+    .logo-badge {
+      width: 90px;
+      height: 90px;
+    }
+  }
+
+  .hero-logo {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    padding: 4px;
+  }
+}
