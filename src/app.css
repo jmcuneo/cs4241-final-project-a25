@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+
+/* Color blind badges on letters */
+.cb-badge {
+    position: absolute;
+    top: 0.125rem;
+    right: 0.125rem;
+    font-size: 0.625rem;
+    opacity: 0.5;
+}
+
+@media (min-width: 640px) {
+    .cb-badge {
+        top: 0.25rem;
+        right: 0.25rem;
+    }
+}
+
+/* Skip link focus styles */
+.skip-link:focus {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    background-color: black;
+    color: white;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    z-index: 50;
+    font-weight: bold;
+}
+
+/* Keyboard summary details open/hover focus */
+details summary:focus {
+    outline: 2px solid #22c55e;
+    border-radius: 0.25rem;
+}
