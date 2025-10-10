@@ -39,6 +39,22 @@ Then run the install & run script
 ./scripts/dev-all.sh
 ```
 
+#### Example `.env` file
+```shell
+# --- Server ---
+NODE_ENV=development
+PORT=8080
+SESSION_SECRET=replace-me
+MONGODB_URI=mongodb://localhost:27017/mbta_live
+GITHUB_CLIENT_ID=your-app-id
+GITHUB_CLIENT_SECRET=your-app-secret
+GITHUB_CALLBACK_URL=http://localhost:8080/auth/github/callback
+MBTA_API_KEY=your-mbta-key
+
+# --- Client ---
+VITE_API_BASE=http://localhost:8080
+```
+
 ### Technologies  
 The frontend should be at http://localhost:5173 and the backend should be at http://localhost:8080
 
