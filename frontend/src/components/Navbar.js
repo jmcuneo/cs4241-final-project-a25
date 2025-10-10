@@ -10,8 +10,6 @@ const Navbar = () => {
         logout();
     };
 
-    if (!currentUser) return null;
-
     return (
         <nav className="bg-green-600 text-white shadow-lg">
             <div className="max-w-7xl mx-auto px-4">
@@ -45,18 +43,37 @@ const Navbar = () => {
                     </div>
 
                     <div className="flex items-center space-x-4">
-                        <div className="text-sm">
-                            Balance: <span className="font-bold">${currentUser.balance}</span>
-                        </div>
-                        <div className="text-sm">
-                            Welcome, <span className="font-bold">{currentUser.username}</span>
-                        </div>
-                        <button
-                            onClick={handleLogout}
-                            className="bg-green-700 hover:bg-green-800 px-3 py-2 rounded-md text-sm font-medium"
-                        >
-                            Logout
-                        </button>
+                        {currentUser ? (
+                            <>
+                                <div className="text-sm">
+                                    Balance: <span className="font-bold">${currentUser.balance}</span>
+                                </div>
+                                <div className="text-sm">
+                                    Welcome, <span className="font-bold">{currentUser.username}</span>
+                                </div>
+                                <button
+                                    onClick={handleLogout}
+                                    className="bg-green-700 hover:bg-green-800 px-3 py-2 rounded-md text-sm font-medium"
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
+                            <div className="flex space-x-2">
+                                <Link
+                                    to="/login"
+                                    className="bg-green-700 hover:bg-green-800 px-3 py-2 rounded-md text-sm font-medium"
+                                >
+                                    Login
+                                </Link>
+                                <Link
+                                    to="/register"
+                                    className="bg-green-800 hover:bg-green-900 px-3 py-2 rounded-md text-sm font-medium"
+                                >
+                                    Register
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

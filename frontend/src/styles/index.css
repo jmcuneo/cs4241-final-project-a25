@@ -9,7 +9,6 @@ body {
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #f3f4f6;
 }
 
 .odds-positive {
@@ -18,13 +17,4 @@ body {
 
 .odds-negative {
     color: #dc2626;
-}
-
-.bet-card {
-    transition: all 0.3s ease;
-}
-
-.bet-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }

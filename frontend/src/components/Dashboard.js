@@ -1,24 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
     const [bets, setBets] = useState([]);
     const [betsLoading, setBetsLoading] = useState(true);
     const { currentUser, loading } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (currentUser) {
+        console.log('Dashboard - Current user:', currentUser);
+        console.log('Dashboard - Auth loading:', loading);
+
+        if (!loading && currentUser) {
+            console.log('🔄 Fetching bets for user:', currentUser.username);
             fetchBets();
+        } else if (!loading && !currentUser) {
+            console.log('No user logged in, setting bets loading to false');
+            setBetsLoading(false);
         }
-    }, [currentUser]);
+    }, [currentUser, loading]);
 
     const fetchBets = async () => {
         try {
+            console.log('Making API call to /api/bets');
             const response = await axios.get('http://localhost:5000/api/bets');
+            console.log('Bets API response:', response.data);
             setBets(response.data);
         } catch (error) {
-            console.error('Error fetching bets:', error);
+            console.error('Error fetching bets:', error.response?.data || error.message);
+            if (error.response?.status === 401) {
+                console.log('🔐 Unauthorized - redirecting to login');
+                navigate('/login');
+            }
         } finally {
             setBetsLoading(false);
         }
@@ -40,7 +55,9 @@ const Dashboard = () => {
         }
     };
 
+    // Show loading state while checking authentication
     if (loading) {
+        console.log('Dashboard showing auth loading state');
         return (
             <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                 <div className="px-4 py-6 sm:px-0">
@@ -55,7 +72,33 @@ const Dashboard = () => {
         );
     }
 
+    if (!currentUser) {
+        console.log('No user - showing redirect state');
+        return (
+            <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <div className="px-4 py-6 sm:px-0">
+                    <div className="border-4 border-dashed border-gray-200 rounded-lg h-96 flex items-center justify-center">
+                        <div className="text-center">
+                            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            <h3 className="mt-2 text-sm font-medium text-gray-900">Not logged in</h3>
+                            <p className="mt-1 text-sm text-gray-500">Please log in to view your dashboard.</p>
+                            <button
+                                onClick={() => navigate('/login')}
+                                className="mt-4 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
+                            >
+                                Go to Login
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     if (betsLoading) {
+        console.log('Dashboard showing bets loading state');
         return (
             <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                 <div className="px-4 py-6 sm:px-0">
@@ -70,16 +113,18 @@ const Dashboard = () => {
         );
     }
 
+    console.log('Dashboard rendering with user data');
     return (
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
             <div className="px-4 py-6 sm:px-0">
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
                     <p className="mt-2 text-gray-600">
-                        Welcome back, {currentUser?.username}! Here's your betting overview.
+                        Welcome back, {currentUser.username}! Here's your betting overview.
                     </p>
                 </div>
 
+                {/* Balance Card */}
                 <div className="bg-white overflow-hidden shadow rounded-lg mb-8">
                     <div className="px-4 py-5 sm:p-6">
                         <div className="flex items-center">
@@ -91,7 +136,7 @@ const Dashboard = () => {
                             <div className="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt className="text-sm font-medium text-gray-500 truncate">Available Balance</dt>
-                                    <dd className="text-lg font-medium text-gray-900">${currentUser?.balance || 0}</dd>
+                                    <dd className="text-lg font-medium text-gray-900">${currentUser.balance || 0}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -114,6 +159,12 @@ const Dashboard = () => {
                                 </svg>
                                 <h3 className="mt-2 text-sm font-medium text-gray-900">No bets placed</h3>
                                 <p className="mt-1 text-sm text-gray-500">Get started by placing your first bet!</p>
+                                <button
+                                    onClick={() => navigate('/betting')}
+                                    className="mt-4 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
+                                >
+                                    Place Your First Bet
+                                </button>
                             </div>
                         ) : (
                             <ul className="divide-y divide-gray-200">
@@ -126,12 +177,12 @@ const Dashboard = () => {
                                                         bet.status === 'won' ? 'bg-green-100' :
                                                             bet.status === 'lost' ? 'bg-red-100' : 'bg-yellow-100'
                                                     }`}>
-                            <span className={`text-sm font-medium ${
-                                bet.status === 'won' ? 'text-green-800' :
-                                    bet.status === 'lost' ? 'text-red-800' : 'text-yellow-800'
-                            }`}>
-                              {bet.status === 'won' ? 'W' : bet.status === 'lost' ? 'L' : 'P'}
-                            </span>
+                                                        <span className={`text-sm font-medium ${
+                                                            bet.status === 'won' ? 'text-green-800' :
+                                                                bet.status === 'lost' ? 'text-red-800' : 'text-yellow-800'
+                                                        }`}>
+                                                            {bet.status === 'won' ? 'W' : bet.status === 'lost' ? 'L' : 'P'}
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 <div className="ml-4">

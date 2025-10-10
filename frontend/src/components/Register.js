@@ -40,13 +40,17 @@ const Register = () => {
         }
 
         try {
-            await register({
+            const result = await register({
                 username: formData.username,
                 password: formData.password
             });
-            navigate('/dashboard');
+            if (result.success) {
+                navigate('/dashboard');
+            } else {
+                setError(result.message);
+            }
         } catch (error) {
-            setError(error.response?.data?.message || 'Registration failed');
+            setError('Registration failed - please try again');
         }
     };
 
@@ -54,7 +58,7 @@ const Register = () => {
         <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8">
                 <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrobold text-gray-900">
+                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                         Create your account
                     </h2>
                 </div>

@@ -29,10 +29,14 @@ const Login = () => {
         setError('');
 
         try {
-            await login(formData);
-            navigate('/dashboard');
+            const result = await login(formData);
+            if (result.success) {
+                navigate('/dashboard');
+            } else {
+                setError(result.message);
+            }
         } catch (error) {
-            setError(error.response?.data?.message || 'Login failed');
+            setError('Login failed - please try again');
         }
     };
 
