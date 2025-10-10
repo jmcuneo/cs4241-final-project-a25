@@ -81,7 +81,7 @@ export default function Game() {
     const [pDeck, setPDeck] = useState<string[]>([]);
     const [canPlay, setCanPlay] = useState(true);
     const [lastPlayerCard, setLastPlayerCard] = useState<string>();
-    const [opponentDeckCount, setOpponentDeckCount] = useState<number>();
+    const [opponentDeckCount, setOpponentDeckCount] = useState<number>(26);
     const [lastOpponentCard, setLastOpponentCard] = useState<string>();
     const [roomId, setRoomId] = useState<string | null>(null);
     const [playerNumber, setPlayerNumber] = useState<number | null>(null);
@@ -156,7 +156,7 @@ export default function Game() {
                     }
                     case "play": {
                         setLastOpponentCard(message.data.card);
-                        setOpponentDeckCount(message.data.deckCount);
+                        setOpponentDeckCount(message.data.deckCount-1);
                         setOppDrawCount(message.data.deckCount);
                         break;
                     }
@@ -406,30 +406,47 @@ export default function Game() {
         if (!canPlay) return;
         setCanPlay(false);
 
-        // Compute next deck and send WS using the *new* length
-        setPDeck(prev => {
-            if (prev.length === 0) {
-                setCanPlay(true); // nothing to play; re-enable
-                return prev;
-            }
-            const topCard = prev[0];
-            const nextDeck = prev.slice(1);
+        const topCard = pDeck[0];
+        setPDeck(pDeck.slice(1));
 
-            setLastPlayerCard(topCard);
+        setLastPlayerCard(topCard);
 
-            if (wsRef.current?.readyState === WebSocket.OPEN) {
-                wsRef.current.send(
-                    JSON.stringify({
-                        event: "play",
-                        data: {
-                            card: topCard,
-                            deckCount: nextDeck.length, // Use next length, not stale prev
-                        },
-                    })
-                );
-            }
-            return nextDeck;
-        });
+        if (wsRef.current?.readyState === WebSocket.OPEN) {
+            wsRef.current.send(
+                JSON.stringify({
+                    event: "play",
+                    data: {
+                        card: topCard,
+                        deckCount: pDeck.length, // Use next length, not stale prev
+                    },
+                })
+            );
+        }
+        //
+        // // Compute next deck and send WS using the *new* length
+        // setPDeck(prev => {
+        //     if (prev.length === 0) {
+        //         setCanPlay(true); // nothing to play; re-enable
+        //         return prev;
+        //     }
+        //     const topCard = prev[0];
+        //     const nextDeck = prev.slice(1);
+        //
+        //     setLastPlayerCard(topCard);
+        //
+        //     if (wsRef.current?.readyState === WebSocket.OPEN) {
+        //         wsRef.current.send(
+        //             JSON.stringify({
+        //                 event: "play",
+        //                 data: {
+        //                     card: topCard,
+        //                     deckCount: nextDeck.length, // Use next length, not stale prev
+        //                 },
+        //             })
+        //         );
+        //     }
+        //     return nextDeck;
+        // });
     }
 
     if (!isConnected || status === "Waiting for opponent...") {
@@ -440,7 +457,8 @@ export default function Game() {
         <div>
             <GameClient deck={pDeck} onPlay={playTopCard} onPlayEnd={() => {
             }} gameStatus={gameStatus}
-                        opponentDeckCount={opponentDeckCount ?? 0} lastOpponentCard={lastOpponentCard}
+                        opponentDeckCount={opponentDeckCount}
+                        lastOpponentCard={lastOpponentCard}
                         lastPlayerCard={lastPlayerCard}
                         canPlay={canPlay}
                         playerName={playerName}

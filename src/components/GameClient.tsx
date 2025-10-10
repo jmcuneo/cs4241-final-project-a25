@@ -72,10 +72,10 @@ export default function GameClient({
 
             {/* Opponent row */}
             <div className="flex w-full justify-center items-center gap-2 p-2 flex-col">
-                <p className="text-center text-sm mt-1">{opponentName} ({opponentDeckCount})</p>
+                <p className="text-center text-sm mt-1">{opponentName} ({opponentDeckCount ? opponentDeckCount : 26})</p>
                 <PlayerArea
                     isPlayer={false}
-                    deck={opponentDeckCount ?? 26}
+                    deck={opponentDeckCount ? opponentDeckCount : 26}
                     playedCards={[convertToCard(lastOpponentCard)]}
                     winCount={opponentWins}
                     backTheme={deckTheme}
@@ -100,7 +100,7 @@ export default function GameClient({
                     onPlayCard={playTopCard}
                     backTheme={deckTheme}
                 />
-                <p className="text-center text-sm mt-1">{playerName} ({opponentDeckCount})</p>
+                <p className="text-center text-sm mt-1">{playerName} ({deck.length})</p>
             </div>
 
             <style jsx global>{`
