@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 5
+        minlength: 6
     },
     balance: {
         type: Number,
