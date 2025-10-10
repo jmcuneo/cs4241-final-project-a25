@@ -43,6 +43,7 @@ export const API = {
   },
   async shapes(route: string) {
     const r = await fetch(`${BASE}/api/shapes/${route}`, { credentials: 'include', mode: 'cors' });
+    return r.json();
   },
   async getStops() {
     const r = await fetch(`${BASE}/api/listStops`, { credentials: 'include', mode: 'cors' });
