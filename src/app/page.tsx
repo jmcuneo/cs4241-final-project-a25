@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import Link from "next/link";
 import SignIn from "@/components/SignIn";
 import {useSession, signIn, signOut} from "next-auth/react";
+import SignOut from "@/components/SignOut";
 
 type DeckTheme = "nordic" | "egyptian";
 
@@ -44,21 +45,23 @@ export default function StartPage() {
                                     <span>Wins: 0</span>
                                     <span>Losses: 0</span>
                                 </div>
-                                <button
-                                    onClick={() => signOut()}
-                                    className="mt-3 text-sm text-zinc-400 hover:text-zinc-200 underline-offset-4 hover:underline"
-                                >
-                                    Sign out
-                                </button>
+                                <SignOut/>
+                                {/*<button*/}
+                                {/*    onClick={() => signOut()}*/}
+                                {/*    className="mt-3 text-sm text-zinc-400 hover:text-zinc-200 underline-offset-4 hover:underline"*/}
+                                {/*>*/}
+                                {/*    Sign out*/}
+                                {/*</button>*/}
                             </div>
                         ) : (
-                            <button
-                                onClick={() => signIn("github")}
-                                className="w-full rounded-lg border border-zinc-600 px-3 py-2 text-left hover:bg-zinc-800"
-                            >
-                                <span className="font-medium">Continue with GitHub</span>
-                                <span className="block text-xs text-zinc-400">Sign in to track your stats</span>
-                            </button>
+                            <SignIn />
+                            // <button
+                            //     onClick={() => signIn("github")}
+                            //     className="w-full rounded-lg border border-zinc-600 px-3 py-2 text-left hover:bg-zinc-800"
+                            // >
+                            //     <span className="font-medium">Continue with GitHub</span>
+                            //     <span className="block text-xs text-zinc-400">Sign in to track your stats</span>
+                            // </button>
                         )}
                     </div>
 
