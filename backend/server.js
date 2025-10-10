@@ -54,6 +54,7 @@ mongoose.connection.on('disconnected', () => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/bets', require('./routes/bets'));
 app.use('/api/odds', require('./routes/odds'));
+app.use('/api/leaderboard', require('./routes/leaderboard'));
 
 app.get('/', (req, res) => {
     res.json({
@@ -126,17 +127,8 @@ if (require.main === module) {
         console.log('\nServer started successfully.');
         console.log(`Running on port ${PORT}`);
         console.log(`Access the API at: http://localhost:${PORT}`);
-        console.log(`Health check: http://localhost:${PORT}/health`);
+        console.log(`Server check: http://localhost:${PORT}/health`);
         console.log(`Database test: http://localhost:${PORT}/test-db`);
-        console.log('\nAvailable endpoints:');
-        console.log('   GET  /              - API status');
-        console.log('   GET  /health        - Health check');
-        console.log('   GET  /test-db       - Test database connection');
-        console.log('   POST /api/auth/login - User login');
-        console.log('   POST /api/auth/register - User registration');
-        console.log('   GET  /api/odds      - Get sports odds');
-        console.log('   GET  /api/bets      - Get user bets');
-        console.log('   POST /api/bets      - Place a bet');
     });
 }
 

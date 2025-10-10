@@ -6,6 +6,8 @@ import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import Betting from './components/Betting';
 import Navbar from './components/Navbar';
+import About from './components/About';
+
 
 function App() {
     return (
@@ -18,6 +20,9 @@ function App() {
                         <Route path="/register" element={<Register />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/betting" element={<Betting />} />
+                        <Route path="/about" element={<About />} />
+
+
                         <Route path="/" element={<Navigate to="/dashboard" replace />} />
                     </Routes>
                 </div>

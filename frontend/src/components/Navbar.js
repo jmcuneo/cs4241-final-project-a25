@@ -39,6 +39,16 @@ const Navbar = () => {
                             >
                                 Place Bets
                             </Link>
+                            <Link
+                                to="/about"
+                                className={`px-3 py-2 rounded-md text-sm font-medium ${
+                                    location.pathname === '/about'
+                                        ? 'bg-green-700 text-white'
+                                        : 'text-green-100 hover:bg-green-700'
+                                }`}
+                            >
+                                About
+                            </Link>
                         </div>
                     </div>
 

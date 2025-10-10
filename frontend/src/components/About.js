@@ -12,9 +12,8 @@ const About = () => {
 
                 <div className="border-t border-gray-200">
                     <div className="px-4 py-5 sm:p-6">
-                        {/* Introduction */}
                         <div className="mb-8">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">Welcome to SportsBet! 🎯</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">Welcome to SportsBet!</h2>
                             <p className="text-gray-600 mb-4">
                                 SportsBet is a virtual sports betting platform where you can experience the thrill of sports betting
                                 without risking real money. Practice your betting strategies, learn about different bet types, and
@@ -22,9 +21,8 @@ const About = () => {
                             </p>
                         </div>
 
-                        {/* How to Use */}
                         <div className="mb-8">
-                            <h3 className="text-xl font-semibold text-gray-900 mb-4">🚀 How to Get Started</h3>
+                            <h3 className="text-xl font-semibold text-gray-900 mb-4">How to Get Started</h3>
 
                             <div className="space-y-4">
                                 <div className="flex items-start">
@@ -77,27 +75,26 @@ const About = () => {
                             </div>
                         </div>
 
-                        {/* Bet Types Explained */}
                         <div className="mb-8">
-                            <h3 className="text-xl font-semibold text-gray-900 mb-4">📊 Understanding Bet Types</h3>
+                            <h3 className="text-xl font-semibold text-gray-900 mb-4">Understanding Bet Types</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div className="bg-gray-50 p-4 rounded-lg">
-                                    <h4 className="font-semibold text-green-600 mb-2">💰 Moneyline</h4>
+                                    <h4 className="font-semibold text-green-600 mb-2">Moneyline</h4>
                                     <p className="text-sm text-gray-600">
                                         Bet on which team will win the game outright. Positive odds (+) show potential profit on a $100 bet, negative odds (-) show how much you need to bet to win $100.
                                     </p>
                                 </div>
 
                                 <div className="bg-gray-50 p-4 rounded-lg">
-                                    <h4 className="font-semibold text-green-600 mb-2">📈 Point Spread</h4>
+                                    <h4 className="font-semibold text-green-600 mb-2">Point Spread</h4>
                                     <p className="text-sm text-gray-600">
                                         Bet on a team to win by a certain margin. The favorite gives points (-), the underdog gets points (+). Your team must "cover the spread" to win.
                                     </p>
                                 </div>
 
                                 <div className="bg-gray-50 p-4 rounded-lg">
-                                    <h4 className="font-semibold text-green-600 mb-2">🎯 Total (Over/Under)</h4>
+                                    <h4 className="font-semibold text-green-600 mb-2">Total (Over/Under)</h4>
                                     <p className="text-sm text-gray-600">
                                         Bet on whether the total points scored by both teams will be over or under a specified number. The game score determines if it's over or under.
                                     </p>
@@ -105,9 +102,8 @@ const About = () => {
                             </div>
                         </div>
 
-                        {/* Features */}
                         <div className="mb-8">
-                            <h3 className="text-xl font-semibold text-gray-900 mb-4">⭐ Key Features</h3>
+                            <h3 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <ul className="space-y-2 text-gray-600">
                                     <li className="flex items-center">
@@ -140,9 +136,10 @@ const About = () => {
                             </div>
                         </div>
 
-                        {/* Important Notes */}
+
+
                         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                            <h4 className="font-semibold text-blue-800 mb-2">⚠️ Important Notes</h4>
+                            <h4 className="font-semibold text-blue-800 mb-2">Important Notes</h4>
                             <ul className="text-sm text-blue-700 space-y-1">
                                 <li>• This is a simulation platform using virtual currency - no real money is involved</li>
                                 <li>• All betting is for entertainment and educational purposes only</li>
@@ -151,7 +148,8 @@ const About = () => {
                             </ul>
                         </div>
 
-                        {/* Call to Action */}
+
+
                         <div className="mt-8 text-center">
                             <Link
                                 to="/betting"
