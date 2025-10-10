@@ -1,0 +1,198 @@
+const express = require('express');
+const axios = require('axios');
+const router = express.Router();
+
+// Get your API key from https://the-odds-api.com/
+const API_KEY = process.env.ODDS_API_KEY || 'YOUR_API_KEY_HERE';
+const BASE_URL = 'https://api.the-odds-api.com/v4';
+
+// Get live NBA odds
+router.get('/', async (req, res) => {
+    try {
+        // Request odds for upcoming NBA games
+        const response = await axios.get(`${BASE_URL}/sports/basketball_nba/odds`, {
+            params: {
+                apiKey: API_KEY,
+                regions: 'us', // US bookmakers including FanDuel
+                markets: 'h2h,spreads,totals', // Moneyline, spreads, and totals
+                oddsFormat: 'american', // +100, -120 format
+                dateFormat: 'iso' // ISO date format
+            }
+        });
+
+        console.log(`Remaining API requests: ${response.headers['x-requests-remaining']}`);
+
+        // Transform the API data to match frontend structure
+        const events = response.data.map(event => {
+            // Find FanDuel bookmaker data
+            const fanduel = event.bookmakers.find(bookmaker => bookmaker.key === 'fanduel');
+
+            // If no FanDuel data, use the first available bookmaker as fallback
+            const bookmaker = fanduel || (event.bookmakers.length > 0 ? event.bookmakers[0] : null);
+
+            if (!bookmaker) {
+                return null;
+            }
+
+            return {
+                id: event.id,
+                name: `${event.away_team} @ ${event.home_team}`,
+                sport: 'NBA Basketball',
+                date: event.commence_time,
+                bookmaker: bookmaker.title,
+                odds: {
+                    moneyline: bookmaker.markets.find(m => m.key === 'h2h')?.outcomes.map(outcome => ({
+                        team: outcome.name,
+                        odds: outcome.price
+                    })) || [],
+                    spread: bookmaker.markets.find(m => m.key === 'spreads')?.outcomes.map(outcome => ({
+                        team: outcome.name,
+                        spread: outcome.point,
+                        odds: outcome.price
+                    })) || [],
+                    total: bookmaker.markets.find(m => m.key === 'totals')?.outcomes.map(outcome => ({
+                        type: outcome.name,
+                        points: outcome.point,
+                        odds: outcome.price
+                    })) || []
+                }
+            };
+        }).filter(event => event !== null); // Remove null events
+
+        res.json(events);
+    } catch (error) {
+        console.error('Error fetching NBA odds from The Odds API:', error.message);
+
+        // Enhanced fallback mock data with NBA focus
+        const mockEvents = [
+            {
+                id: 'nba1',
+                name: 'Los Angeles Lakers @ Golden State Warriors',
+                sport: 'NBA Basketball',
+                date: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), // 2 hours from now
+                bookmaker: 'FanDuel',
+                odds: {
+                    moneyline: [
+                        { team: 'Los Angeles Lakers', odds: -150 },
+                        { team: 'Golden State Warriors', odds: +130 }
+                    ],
+                    spread: [
+                        { team: 'Los Angeles Lakers', spread: -3.5, odds: -110 },
+                        { team: 'Golden State Warriors', spread: +3.5, odds: -110 }
+                    ],
+                    total: [
+                        { type: 'Over', points: 225.5, odds: -110 },
+                        { type: 'Under', points: 225.5, odds: -110 }
+                    ]
+                }
+            },
+            {
+                id: 'nba2',
+                name: 'Boston Celtics @ Milwaukee Bucks',
+                sport: 'NBA Basketball',
+                date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours from now
+                bookmaker: 'FanDuel',
+                odds: {
+                    moneyline: [
+                        { team: 'Boston Celtics', odds: -120 },
+                        { team: 'Milwaukee Bucks', odds: +100 }
+                    ],
+                    spread: [
+                        { team: 'Boston Celtics', spread: -2.5, odds: -110 },
+                        { team: 'Milwaukee Bucks', spread: +2.5, odds: -110 }
+                    ],
+                    total: [
+                        { type: 'Over', points: 232.5, odds: -110 },
+                        { type: 'Under', points: 232.5, odds: -110 }
+                    ]
+                }
+            },
+            {
+                id: 'nba3',
+                name: 'Phoenix Suns @ Denver Nuggets',
+                sport: 'NBA Basketball',
+                date: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(), // 3 hours from now
+                bookmaker: 'FanDuel',
+                odds: {
+                    moneyline: [
+                        { team: 'Phoenix Suns', odds: +180 },
+                        { team: 'Denver Nuggets', odds: -220 }
+                    ],
+                    spread: [
+                        { team: 'Phoenix Suns', spread: +5.5, odds: -110 },
+                        { team: 'Denver Nuggets', spread: -5.5, odds: -110 }
+                    ],
+                    total: [
+                        { type: 'Over', points: 228.0, odds: -110 },
+                        { type: 'Under', points: 228.0, odds: -110 }
+                    ]
+                }
+            }
+        ];
+
+        res.json(mockEvents);
+    }
+});
+
+// Get specific sport odds (for future expansion)
+router.get('/:sport', async (req, res) => {
+    const { sport } = req.params;
+    const sportMap = {
+        'nba': 'basketball_nba',
+        'ncaab': 'basketball_ncaab',
+        'nfl': 'americanfootball_nfl',
+        'nhl': 'icehockey_nhl'
+    };
+
+    const apiSport = sportMap[sport] || sport;
+
+    try {
+        const response = await axios.get(`${BASE_URL}/sports/${apiSport}/odds`, {
+            params: {
+                apiKey: API_KEY,
+                regions: 'us',
+                markets: 'h2h,spreads,totals',
+                oddsFormat: 'american'
+            }
+        });
+
+        // Similar transformation as above
+        const events = response.data.map(event => {
+            const fanduel = event.bookmakers.find(bookmaker => bookmaker.key === 'fanduel');
+            const bookmaker = fanduel || (event.bookmakers.length > 0 ? event.bookmakers[0] : null);
+
+            if (!bookmaker) return null;
+
+            return {
+                id: event.id,
+                name: `${event.away_team} @ ${event.home_team}`,
+                sport: sport.toUpperCase(),
+                date: event.commence_time,
+                bookmaker: bookmaker.title,
+                odds: {
+                    moneyline: bookmaker.markets.find(m => m.key === 'h2h')?.outcomes.map(outcome => ({
+                        team: outcome.name,
+                        odds: outcome.price
+                    })) || [],
+                    spread: bookmaker.markets.find(m => m.key === 'spreads')?.outcomes.map(outcome => ({
+                        team: outcome.name,
+                        spread: outcome.point,
+                        odds: outcome.price
+                    })) || [],
+                    total: bookmaker.markets.find(m => m.key === 'totals')?.outcomes.map(outcome => ({
+                        type: outcome.name,
+                        points: outcome.point,
+                        odds: outcome.price
+                    })) || []
+                }
+            };
+        }).filter(event => event !== null);
+
+        res.json(events);
+    } catch (error) {
+        console.error(`Error fetching ${sport} odds:`, error.message);
+        res.status(500).json({ message: 'Error fetching odds data' });
+    }
+});
+
+module.exports = router;
