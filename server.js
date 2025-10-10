@@ -58,6 +58,28 @@ app.get('/user', (request, response) => {
     }
 })
 
+app.get('/account/:username', authorisation, async (request, response) => {
+    try {
+        const { username } = request.params;
+        const viewedUser = await userCollection.findOne({ username });
+
+        if (!user)
+            return response.status(500).json({ error: "Failed To Find User Data" });
+
+        const viewedProfile = {
+            username: viewedUser.username,
+            pronouns: viewedUser.pronouns,
+            bio: viewedUser.bio,
+            faves: viewedUser.faves || []
+        }
+
+        response.json(viewedProfile);
+    } catch (error){
+        console.error("Error Fetching Data: ", error);
+        response.status(500).json({ error: "Failed To Fetch User Data" });
+    }
+})
+
 app.get('/users', authorisation, async (request, response) => {
     try {
         response.json(await userCollection.find().toArray());
@@ -165,7 +187,7 @@ app.post('/submit', authorisation, async (request, response) => {
     }
 })
 
-app.put("/edit/:id", authorisation, async (request, response) => {
+app.put("/edit-review/:id", authorisation, async (request, response) => {
     try {
         // console.log("Editing Post " + request.params.id);
         const { blurb, gameplayRating, storyRating, visualsRating, musicRating } = request.body;
@@ -178,6 +200,16 @@ app.put("/edit/:id", authorisation, async (request, response) => {
         response.json({ success: true })
     } catch (error){
         console.error("Error Updating Review Data: ", error);
+        response.status(500).json({ error: "Failed To Update Data" });
+    }
+})
+
+app.put("/edit-account/:id", authorisation, async (request, response) => {
+    try {
+        
+        response.json({ success: true })
+    } catch (error){
+        console.error("Error Updating Account Data: ", error);
         response.status(500).json({ error: "Failed To Update Data" });
     }
 })

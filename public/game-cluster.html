@@ -5,6 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Page where users can look at a cluster of the games they've posted reviews for.">
+        <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="js/game-cluster.js"></script>
         <link rel="stylesheet" href="css/main.css">
         <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -28,18 +29,17 @@
     </header>
     <body>
         <h2 id="game-cluster-heading">Your Game Cluster:</h2>
-        <select name="cluster-display-dropdown" id="cluster-display-dropdown">
+        <!-- <select name="cluster-display-dropdown" id="cluster-display-dropdown">
             <option value="bar">Bar Chart</option>
             <option value="pie">Pie Chart</option>
             <option value="bubble">Bubble Chart</option>
-        </select>
+        </select> -->
         <select name="cluster-data-dropdown" id="cluster-data-dropdown">
-            <option value="year">By Year</option>
+            <option value="overallRating">By Overall Rating</option>
             <option value="gameplayRating">By Gameplay Rating</option>
             <option value="storyRating">By Story Rating</option>
             <option value="visualsRating">By Visuals Rating</option>
             <option value="musicRating">By Music Rating</option>
-            <option value="overallRating">By Overall Rating</option>
         </select>
         <div id="game-cluster"></div>
     </body>

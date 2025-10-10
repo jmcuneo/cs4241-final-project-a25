@@ -19,6 +19,7 @@
             <li><a href="users.html">Users</a></li>
             <li><a href="index.html">Create Review</a></li>
             <li><a href="reviews.html">Your Reviews</a></li>
+            <li><a href="game-cluster.html">Your Game Cluster</a></li>
             <li><a href="account.html">Account</a></li>
             <li><a href="#" id="log-link">Logout</a></li>
         </ul>
@@ -26,23 +27,35 @@
         <h1>Game Review Site</h1>
     </header>
     <body>
-        <h2 id="profile-heading">Your Account:</h2>
+        <h2 id="profile-heading" class="review-card">Your Account:</h2>
         <div id="profile">
             <span>
                 <h4>Username:</h4>
                 <p id="account-username"></p>
             </span>
+            <span>
+                <h4>Pronouns:</h4>
+                <p id="account-pronouns"></p>
+            </span>
+            <span>
+                <h4>Bio:</h4>
+                <p id="account-bio"></p>
+            </span>
+            <span>
+                <h4>Favorite Games:</h4>
+                <ul id="account-faves"></ul>
+            </span>
+            <button id="edit-button" class="nes-btn hidden">Edit Profile</button>
         </div>
         
         <div id="edit-window" class="edit-review hidden">
             <h3>Edit Review:</h3>
             <form>
-                <h3 id="edit-title"></h3>
                 <label for="edit-pronouns">Pronouns: </label>
                 <input type="text" id="edit-pronouns" class="nes-input" placeholder="Your Review">
                 <br>
                 <label for="edit-bio">Bio: </label>
-                <input type="text" id="edit-bio" class="nes-input" placeholder="1-10">
+                <textarea type="text" id="edit-bio" class="nes-input" placeholder="1-10"></textarea>
                 <br>
                 <label for="edit-favourites">Favourite Games: </label>
                 <div id="edit-favourites">

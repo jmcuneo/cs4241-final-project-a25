@@ -20,6 +20,9 @@ const loadReviews = async function(){
     window.location.href = "login.html";
     return;
   }
+  const data = await response.json();
+  reviewSet = data;
+
   
   const userStatus = await getUserStatus();
   if (userStatus.status)
@@ -31,10 +34,6 @@ const loadReviews = async function(){
     await fetch("/logout", { method: "POST" });
     location.reload();
   }
-
-  const data = await response.json();
-  reviewSet = data;
-
   const reviews = document.querySelector("#reviews");
   reviews.innerHTML = "";
 
@@ -164,7 +163,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       // datePosted: auditedReview.datePosted
     }
 
-    const response = await fetch(`/edit/${id}`, {
+    const response = await fetch(`/edit-review/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(editedReview)

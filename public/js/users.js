@@ -18,8 +18,12 @@ const loadUsers = async function(){
   users.innerHTML = "";
 
   data.forEach(i => {
+    const link = document.createElement("a");
+    link.href = `account.html?username=${i.username}`;
+    link.textContent = i.username;
+    
     const user = document.createElement("li");
-    user.innerText = i.username;
+    user.appendChild(link);
     users.appendChild(user);
   })
 }
