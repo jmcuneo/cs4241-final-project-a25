@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
             if (token && user) {
                 try {
                     const userData = JSON.parse(user);
-                    console.log('👤 Setting current user:', userData.username);
+                    console.log('Setting current user:', userData.username);
                     setCurrentUser(userData);
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 } catch (error) {

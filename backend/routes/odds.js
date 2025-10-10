@@ -65,7 +65,7 @@ router.get('/', async (req, res) => {
                 id: 'nba1',
                 name: 'Los Angeles Lakers @ Golden State Warriors',
                 sport: 'NBA Basketball',
-                date: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), // 2 hours from now
+                date: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
                 bookmaker: 'FanDuel',
                 odds: {
                     moneyline: [
@@ -86,7 +86,7 @@ router.get('/', async (req, res) => {
                 id: 'nba2',
                 name: 'Boston Celtics @ Milwaukee Bucks',
                 sport: 'NBA Basketball',
-                date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours from now
+                date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
                 bookmaker: 'FanDuel',
                 odds: {
                     moneyline: [
@@ -107,7 +107,7 @@ router.get('/', async (req, res) => {
                 id: 'nba3',
                 name: 'Phoenix Suns @ Denver Nuggets',
                 sport: 'NBA Basketball',
-                date: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(), // 3 hours from now
+                date: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(),
                 bookmaker: 'FanDuel',
                 odds: {
                     moneyline: [

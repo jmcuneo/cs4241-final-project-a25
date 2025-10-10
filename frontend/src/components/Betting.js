@@ -17,7 +17,7 @@ const Betting = () => {
 
     const fetchOdds = async () => {
         try {
-            console.log('📊 Fetching odds from API...');
+            console.log('Fetching odds from API...');
             const response = await axios.get('http://localhost:5000/api/odds');
             console.log('Odds data received:', response.data);
             setEvents(response.data);
@@ -59,7 +59,7 @@ const Betting = () => {
         }
 
         try {
-            console.log('🎯 Placing bet with data:', {
+            console.log('Placing bet with data:', {
                 eventId: selectedEvent.id,
                 eventName: selectedEvent.name,
                 betType: selectedBet.type,

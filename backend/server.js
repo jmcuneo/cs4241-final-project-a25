@@ -37,20 +37,6 @@ mongoose.connect(MONGODB_URI, {
         console.log('Error name:', err.name);
         console.log('Error message:', err.message);
         console.log('Full error:', err);
-
-        // Provide specific troubleshooting advice based on error type
-        if (err.name === 'MongoNetworkError') {
-            console.log('\nTroubleshooting tips:');
-            console.log('   1. Check if MongoDB is running locally: run "mongod" or "brew services start mongodb-community"');
-            console.log('   2. For MongoDB Atlas: Check your IP whitelist in Atlas dashboard');
-            console.log('   3. For MongoDB Atlas: Verify your connection string in .env file');
-            console.log('   4. Check your internet connection');
-        } else if (err.name === 'MongoServerSelectionError') {
-            console.log('\nTroubleshooting tips:');
-            console.log('   1. Check if the MongoDB server is running');
-            console.log('   2. Verify the connection string in your .env file');
-            console.log('   3. Check firewall settings');
-        }
     });
 
 mongoose.connection.on('connected', () => {
