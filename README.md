@@ -1,62 +1,104 @@
-# Final Project
+# Group 20 Final Project
 
-[Example Projects from D24](https://echo360.org/collection/35d9eb4e-1c44-4880-80b5-c7a2f04ba64c/public)
+**Deployment Link**
 
-[Example Projects from A23](https://echo360.org/collection/50a4d343-caea-4deb-93ee-61bdd7da543f/public)
+https://group20-final-project-a25.onrender.com/
 
-**Example Projects from Earlier Terms:**
-- [https://pushbox.glitch.me/app](https://pushbox.glitch.me/app)
-- [https://github.com/Cather-Zhang/final_project](https://github.com/Cather-Zhang/final_project)
-- [https://clip.kmoene.com/](https://clip.kmoene.com/)
-- [https://github.com/GP2P/G3P-Expense-Tracker](https://github.com/GP2P/G3P-Expense-Tracker)
+**Repository Used In Deployment (contains server files and built files)**
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+https://github.com/lwaaron2023/Group20-final-project-a25-production.git
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+## What we created:
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation. 
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) Upload the video to Canvas. (Further instructions are available in the Canvas assignment.) Make sure your video is less than five minutes but long enough to successfully explain your project and show it in action. There is no minimum video length.
+As a group we created a web application that allows a user to play a variety of simple games. These games include simpler games such as click the button and more complex games like battleship. Some games are 1 player while others are online multiplayer games.
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have some impact, whether artistically, politically, productivity, or something else altogether. 
+## Instructions on how to play each game:
 
-## Deliverables
+### Battleship
 
-### Form Team (Due Tuesday, September 23, 11:59 pm)
-Students are will work in teams of 3-5 students for the project. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#finalproject` channel in Slack to pitch ideas for final projects and/or find fellow team members as needed.
+The controls are:
 
-Teams must be in place by end of day on Tuesday, September 23. If you have not identified a team at this point, you will be assigned a team. **Put all team members together in one of the empty "Final Project" groups on Canvas. You MUST do this step to receive full credit on the assignment.**
+To interact with tiles/select ships/place ships: left-click
+To rotate a ship before placement: press r with a ship selected
 
-### Proposal (Due Tuesday, September 30, 11:59 pm) 
-Provide an outline of your project direction and the names of associated team members. The outline should have enough detail so that staff can determine if it meets the minimum expectations or if it goes too far to be reasonable by the deadline. Please include a general description of the project and a list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript, etc.). Two to four paragraps should provide enough level of detail. Name the file proposal.md and submit a pull request by Tuesday, September 30th at 11:59 PM (end of day). Your pull request does not need to have a specific name. Only one pull request is required per team.
+To select a ship to place simply click on one of the boxes with the letter "0" in it, and the number of "0"s will dictate the length of the ship.
 
-There are no other scheduled checkpoints for your project. 
+### 1000 Click in 10 Minutes
 
-### Turning in Your Project (Due Friday, October 10, 11:59 pm)
-**Although the assignment is due at 11:59 pm, you must be prepared to demo your website in class that day.**
+The controls are:
 
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
+To start the game, press the pink button. 
+To continue clicking, press the pink button to add points. 
+When you win (or lose), press the pink button to reset the game.
+When you have enough points, you can scroll below to (upgrades) to get more points per click
 
-Deploy your app, in the form of a webpage, to Render/Heroku/Digital Ocean or whatever hosting service you choose; it is critical that the application functions correctly wherever you post it.
+### Squish the cockroach
 
-The README for your second pull request doesn’t need to be a formal report, but it should contain the following:
+Click the start button to start the game
+You will have 10 seconds to click on the cockroach. You can save your name at the end of the game.
 
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information, etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. What accessibility features you included in your project.
+### TrustAI
 
-Think of 1, 3, and 4 in particular in a similar vein to the design / technical achievements for A1—A4. Make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
+You will be asked a set of questions and answers generated by AI. Your job is to verify if the answer for that question is correct!
 
-The video described above is also due on Canvas at this time.
+### Unscramble
 
-## FAQs
+You can pick the topics that you like. Then, you have to solve or unscramble the words to win points.
 
-**Can I use XYZ framework?** 
+## Technologies used throughout the project
 
-You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. Note that the staff may not be able to assist with TypeScript questions.
+We used a variety of libraries and technologies including, but not limited to:
+
+1. Vite was used to create and build the client-side experience.
+2. Express was used for the server side experience.
+3. Http was used for the server side experience
+4. Node js was used for the server side experience
+5. Websocket API was used to allow the server to establish ways of communicating with clients that allowed clients to communicate with each other.
+6. Tailwind CSS and Styled Component was used to style the webpages.
+7. React was used to design and structure the webpages.
+8. Pug was used to render the webpages.
+9. React dom was used for inner-page routing.
+10. For Trust AI : Used Svelte for the frontend and Node.js with Express for the backend. Real-time interaction between the player and AI is handled through WebSockets, making the gameplay smooth and responsive. MongoDB stores user and game data, and GitHub OAuth provides secure login. Trivia questions come from custom routes and external APIs like Open Trivia, Geo, and Stooq for variety. Sessions are managed with express-session, and the full app is deployed on Render.
+
+## Challenges faced throughout the project:
+
+The main challenges faced throughout the entire project were:
+
+1. Issues with adapting to the new libraries and technologies used in the project. Certain packages had a learning curve before we were comfortable using them.
+2. Coordination and communication in the group. Communicating with each other throughout the project proved to be problematic as lines of communication often broke done at critical moments.
+3. For Trust AI : The main challenges were keeping the real-time game smooth with WebSockets and managing session data correctly. It was also tricky to connect multiple APIs and make sure everything worked together in the Svelte app.
+
+## Responsabilites:
+
+1. Aaron Waller was responsible for:
+  - Creating the battleship game.
+  - Creating the server.js file.
+  - Building and deploying the project to Render.
+  - Creating the routing within the web application that allowed for users to play the different games from the website.
+  - Styling the webpage that contained all the games.
+  - Creating the individual pages for the different games so that the games were iframes inside of the container websote.
+
+2. Benedict Antwi was responsible for:
+  - Creating, styling and deploying the "1000 clicks in 10 minutes" game.
+
+3. Tien Nguyen was responsible for:
+  - Created and styled a demo webpage.
+  - Styled the Home page
+  - Contribute game "Squish the cockroach"
+
+4. Aditya Patel was reponsible for:
+  - Creating, styling and deploying the "Trust AI" game.
+  - Edited and Made the Final Video.
+  - Added Thumbnails
+
+5. Aishwarya Silam was reponsible for:
+  - Creating, styling and deploying the "Unscramble" game.
+
+## Accessibility features:
+
+1. Using high constrast color schemes that did not rely soley on the color itself but rather the shades and hughes of colors to convey meaning
+2. Using colors that are easily distigishable for people with common types of color blindness (red-green, blue-purple, etc)
+3. Using shape and location of elements to convey information about them
+4. For Trust AI: The game includes several accessibility features to make it easy for everyone to play. All buttons and controls can be used with the keyboard using the Tab and Enter keys. The design uses a clear dark-on-light color scheme for better visibility and readable font sizes that adjust to any screen size. Each button and score element includes ARIA labels for screen readers, and visual highlights help players easily follow round changes and button selections.
+
+
