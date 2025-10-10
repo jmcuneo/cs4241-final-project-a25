@@ -75,10 +75,14 @@ This project uses **React with Vite** for the front-end application, utilizing *
 
 ## Group Member Contributions
 Ashley Fontaine:
+- Dark Mode
 
 Yi Hong Jiang:
+- Subway Line Indicators
+- Stop Indicators
 
 Brendan Leu:
+- Added shadcn & upgraded tailwind
 - Stop Search
 - Saved Stop Countdown
 - GitHub CI
