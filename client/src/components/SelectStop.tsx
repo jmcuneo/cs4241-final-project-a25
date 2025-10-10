@@ -21,7 +21,7 @@ import { API } from '../lib/api';
 import { useEffect } from 'react';
 
 export function SelectStop(props) {
-  const {value, onChange, required, className} = props;
+  const {value, onChange, required} = props;
   const [open, setOpen] = React.useState(false)
   const [stops, setStops] = React.useState([])
 
@@ -44,7 +44,7 @@ export function SelectStop(props) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="justify-between w-full border rounded-lg px-3 py-2"
         >
           {value
             ? stops.find((stop) => stop.value === value)?.label
@@ -52,7 +52,7 @@ export function SelectStop(props) {
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[400px] p-0">
         <Command>
           <CommandInput placeholder="Search stops..." className="h-9" />
           <CommandList>

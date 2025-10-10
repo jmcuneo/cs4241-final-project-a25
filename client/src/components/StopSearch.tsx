@@ -20,7 +20,7 @@ export default function StopSearch() {
       }}>
         <label className="text-sm">
           <span className="block mb-1">Stop ID</span>
-          <SelectStop value={stopId} onChange={e=>setStopId(e)} required className="w-full border rounded-lg px-3 py-2" />
+          <SelectStop value={stopId} onChange={e=>setStopId(e)} required />
         </label>
         <label className="text-sm">
           <span className="block mb-1">Stop Name (optional)</span>
