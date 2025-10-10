@@ -23,7 +23,7 @@ export default function Queue() {
 
                 <div className="mt-6 flex justify-center gap-3">
                     <button
-                        onClick={() => router.push("/start")}
+                        onClick={() => router.push("/")}
                         className="rounded-lg border border-zinc-600 px-4 py-2 hover:bg-zinc-800"
                     >
                         Back
