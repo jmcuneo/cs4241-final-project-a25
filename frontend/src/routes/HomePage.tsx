@@ -95,7 +95,6 @@ export default function HomePage() {
   };
 
   const isToday = selectedDate === new Date().toISOString().split("T")[0];
-  // Fix timezone issue by creating date with explicit time
   const selectedDateObj = new Date(selectedDate + "T12:00:00.000Z");
   const formattedDate = selectedDateObj.toLocaleDateString("en-US", {
     weekday: "long",

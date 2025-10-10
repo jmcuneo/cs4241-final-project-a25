@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
         food = await prisma.food.create({
           data: {
             name: item.foodName,
-            calories: Math.round(item.calories / item.quantity) || 0,
+            calories: item.calories || 0,
             protein: item.protein || 0,
             carbs: item.carbs || 0,
             fat: item.fat || 0,
