@@ -55,14 +55,31 @@ export default function HomePage() {
     fetchMealsForDate();
   }, [selectedDate]);
 
-  const totals = dayData
-    ? {
-        calories: dayData.totalCalories,
-        protein: dayData.totalProtein,
-        carbs: dayData.totalCarbs,
-        fat: dayData.totalFat,
-      }
-    : { calories: 0, protein: 0, carbs: 0, fat: 0 };
+  const totals =
+    dayData && dayData.meals.length > 0
+      ? dayData.meals.reduce(
+          (acc, meal) => {
+            // Calculate meal total from individual items
+            const mealTotal = meal.items?.reduce(
+              (itemAcc, item) => ({
+                calories: itemAcc.calories + (item.food.calories || 0),
+                protein: itemAcc.protein + (item.food.protein || 0),
+                carbs: itemAcc.carbs + (item.food.carbs || 0),
+                fat: itemAcc.fat + (item.food.fat || 0),
+              }),
+              { calories: 0, protein: 0, carbs: 0, fat: 0 },
+            ) || { calories: 0, protein: 0, carbs: 0, fat: 0 };
+
+            return {
+              calories: acc.calories + mealTotal.calories,
+              protein: acc.protein + mealTotal.protein,
+              carbs: acc.carbs + mealTotal.carbs,
+              fat: acc.fat + mealTotal.fat,
+            };
+          },
+          { calories: 0, protein: 0, carbs: 0, fat: 0 },
+        )
+      : { calories: 0, protein: 0, carbs: 0, fat: 0 };
 
   const meals = dayData?.meals || [];
 
@@ -284,22 +301,38 @@ export default function HomePage() {
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="text-sm font-medium text-gray-900">
-                              {Math.round(
-                                meal.calculatedNutrition?.calories || 0,
-                              )}{" "}
-                              cal
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              P:{" "}
-                              {Math.round(
-                                meal.calculatedNutrition?.protein || 0,
-                              )}
-                              g | C:{" "}
-                              {Math.round(meal.calculatedNutrition?.carbs || 0)}
-                              g | F:{" "}
-                              {Math.round(meal.calculatedNutrition?.fat || 0)}g
-                            </p>
+                            {(() => {
+                              // Calculate meal totals from individual items since backend may be using old logic
+                              const mealTotals = meal.items?.reduce(
+                                (acc, item) => ({
+                                  calories:
+                                    acc.calories + (item.food.calories || 0),
+                                  protein:
+                                    acc.protein + (item.food.protein || 0),
+                                  carbs: acc.carbs + (item.food.carbs || 0),
+                                  fat: acc.fat + (item.food.fat || 0),
+                                }),
+                                { calories: 0, protein: 0, carbs: 0, fat: 0 },
+                              ) || {
+                                calories: 0,
+                                protein: 0,
+                                carbs: 0,
+                                fat: 0,
+                              };
+
+                              return (
+                                <>
+                                  <p className="text-sm font-medium text-gray-900">
+                                    {Math.round(mealTotals.calories)} cal
+                                  </p>
+                                  <p className="text-xs text-gray-500">
+                                    P: {Math.round(mealTotals.protein)}g | C:{" "}
+                                    {Math.round(mealTotals.carbs)}g | F:{" "}
+                                    {Math.round(mealTotals.fat)}g
+                                  </p>
+                                </>
+                              );
+                            })()}
                           </div>
                         </div>
 
@@ -321,33 +354,12 @@ export default function HomePage() {
                                   </div>
                                   <div className="text-right text-sm">
                                     <p className="font-medium text-gray-900">
-                                      {Math.round(
-                                        item.food.calories * item.quantity,
-                                      )}{" "}
-                                      cal
+                                      {Math.round(item.food.calories)} cal
                                     </p>
                                     <div className="text-xs text-gray-500 space-y-1">
-                                      <p>
-                                        P:{" "}
-                                        {Math.round(
-                                          item.food.protein * item.quantity,
-                                        )}
-                                        g
-                                      </p>
-                                      <p>
-                                        C:{" "}
-                                        {Math.round(
-                                          item.food.carbs * item.quantity,
-                                        )}
-                                        g
-                                      </p>
-                                      <p>
-                                        F:{" "}
-                                        {Math.round(
-                                          item.food.fat * item.quantity,
-                                        )}
-                                        g
-                                      </p>
+                                      <p>P: {Math.round(item.food.protein)}g</p>
+                                      <p>C: {Math.round(item.food.carbs)}g</p>
+                                      <p>F: {Math.round(item.food.fat)}g</p>
                                     </div>
                                   </div>
                                 </div>

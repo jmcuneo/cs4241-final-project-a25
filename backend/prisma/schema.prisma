@@ -12,13 +12,13 @@ model User {
   username String @unique
   email    String @unique
   password String
-  meals     Meal[]
+  meals    Meal[]
 }
 
 model Food {
   id       Int        @id @default(autoincrement())
   name     String     @unique
-  calories Int
+  calories Float
   protein  Float
   carbs    Float
   fat      Float
