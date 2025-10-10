@@ -17,7 +17,9 @@ const Betting = () => {
 
     const fetchOdds = async () => {
         try {
+            console.log('📊 Fetching odds from API...');
             const response = await axios.get('http://localhost:5000/api/odds');
+            console.log('Odds data received:', response.data);
             setEvents(response.data);
         } catch (error) {
             console.error('Error fetching odds:', error);
@@ -46,7 +48,7 @@ const Betting = () => {
         }
 
         const stakeAmount = parseFloat(stake);
-        if (stakeAmount < 1) {
+        if (isNaN(stakeAmount) || stakeAmount < 1) {
             setMessage('Minimum stake is $1');
             return;
         }
@@ -57,21 +59,42 @@ const Betting = () => {
         }
 
         try {
+            console.log('🎯 Placing bet with data:', {
+                eventId: selectedEvent.id,
+                eventName: selectedEvent.name,
+                betType: selectedBet.type,
+                selection: selectedBet.team || selectedBet.type,
+                odds: selectedBet.odds,
+                stake: stakeAmount
+            });
+
             const response = await axios.post('http://localhost:5000/api/bets', {
                 eventId: selectedEvent.id,
                 eventName: selectedEvent.name,
                 betType: selectedBet.type,
-                selection: selectedBet.selection,
+                selection: selectedBet.team || selectedBet.type,
                 odds: selectedBet.odds,
                 stake: stakeAmount
             });
+
+            console.log('Bet placed successfully:', response.data);
 
             updateBalance(response.data.user.balance);
             setMessage('Bet placed successfully!');
             setStake('');
             setSelectedBet(null);
+
+            setTimeout(() => setMessage(''), 3000);
+
         } catch (error) {
-            setMessage(error.response?.data?.message || 'Error placing bet');
+            console.error('Error placing bet:', error);
+            if (error.response) {
+                setMessage(`Error: ${error.response.data.message || 'Failed to place bet'}`);
+            } else if (error.request) {
+                setMessage('Network error - please check if backend is running');
+            } else {
+                setMessage('Unexpected error occurred');
+            }
         }
     };
 
@@ -102,7 +125,7 @@ const Betting = () => {
 
                 {message && (
                     <div className={`mb-4 p-4 rounded-md ${
-                        message.includes('Error') || message.includes('Insufficient')
+                        message.includes('Error') || message.includes('error') || message.includes('Failed') || message.includes('Insufficient')
                             ? 'bg-red-100 border border-red-400 text-red-700'
                             : 'bg-green-100 border border-green-400 text-green-700'
                     }`}>
@@ -124,7 +147,11 @@ const Betting = () => {
                                     {events.map((event) => (
                                         <li key={event.id}>
                                             <button
-                                                onClick={() => setSelectedEvent(event)}
+                                                onClick={() => {
+                                                    setSelectedEvent(event);
+                                                    setSelectedBet(null);
+                                                    setStake('');
+                                                }}
                                                 className={`w-full text-left p-6 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out ${
                                                     selectedEvent?.id === event.id ? 'bg-blue-50' : ''
                                                 }`}
@@ -157,81 +184,87 @@ const Betting = () => {
 
                                 {selectedEvent && (
                                     <div className="space-y-4">
-                                        <div>
-                                            <h4 className="text-sm font-medium text-gray-900 mb-2">Moneyline</h4>
-                                            <div className="space-y-2">
-                                                {selectedEvent.odds.moneyline.map((odds, index) => (
-                                                    <button
-                                                        key={index}
-                                                        onClick={() => setSelectedBet({ ...odds, type: 'moneyline' })}
-                                                        className={`w-full text-left p-3 border rounded-md transition-colors ${
-                                                            selectedBet?.team === odds.team && selectedBet?.type === 'moneyline'
-                                                                ? 'border-green-500 bg-green-50'
-                                                                : 'border-gray-300 hover:border-gray-400'
-                                                        }`}
-                                                    >
-                                                        <div className="flex justify-between items-center">
-                                                            <span className="text-sm font-medium text-gray-900">{odds.team}</span>
-                                                            <span className={odds.odds > 0 ? 'odds-positive' : 'odds-negative'}>
-                                {formatOdds(odds.odds)}
-                              </span>
-                                                        </div>
-                                                    </button>
-                                                ))}
+                                        {selectedEvent.odds.moneyline && selectedEvent.odds.moneyline.length > 0 && (
+                                            <div>
+                                                <h4 className="text-sm font-medium text-gray-900 mb-2">Moneyline</h4>
+                                                <div className="space-y-2">
+                                                    {selectedEvent.odds.moneyline.map((odds, index) => (
+                                                        <button
+                                                            key={index}
+                                                            onClick={() => setSelectedBet({ ...odds, type: 'moneyline' })}
+                                                            className={`w-full text-left p-3 border rounded-md transition-colors ${
+                                                                selectedBet?.team === odds.team && selectedBet?.type === 'moneyline'
+                                                                    ? 'border-green-500 bg-green-50'
+                                                                    : 'border-gray-300 hover:border-gray-400'
+                                                            }`}
+                                                        >
+                                                            <div className="flex justify-between items-center">
+                                                                <span className="text-sm font-medium text-gray-900">{odds.team}</span>
+                                                                <span className={odds.odds > 0 ? 'text-green-600' : 'text-red-600'}>
+                                                                    {formatOdds(odds.odds)}
+                                                                </span>
+                                                            </div>
+                                                        </button>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
 
-                                        <div>
-                                            <h4 className="text-sm font-medium text-gray-900 mb-2">Spread</h4>
-                                            <div className="space-y-2">
-                                                {selectedEvent.odds.spread.map((odds, index) => (
-                                                    <button
-                                                        key={index}
-                                                        onClick={() => setSelectedBet({ ...odds, type: 'spread' })}
-                                                        className={`w-full text-left p-3 border rounded-md transition-colors ${
-                                                            selectedBet?.team === odds.team && selectedBet?.type === 'spread'
-                                                                ? 'border-green-500 bg-green-50'
-                                                                : 'border-gray-300 hover:border-gray-400'
-                                                        }`}
-                                                    >
-                                                        <div className="flex justify-between items-center">
-                              <span className="text-sm font-medium text-gray-900">
-                                {odds.team} ({odds.spread > 0 ? '+' : ''}{odds.spread})
-                              </span>
-                                                            <span className={odds.odds > 0 ? 'odds-positive' : 'odds-negative'}>
-                                {formatOdds(odds.odds)}
-                              </span>
-                                                        </div>
-                                                    </button>
-                                                ))}
+                                        {selectedEvent.odds.spread && selectedEvent.odds.spread.length > 0 && (
+                                            <div>
+                                                <h4 className="text-sm font-medium text-gray-900 mb-2">Spread</h4>
+                                                <div className="space-y-2">
+                                                    {selectedEvent.odds.spread.map((odds, index) => (
+                                                        <button
+                                                            key={index}
+                                                            onClick={() => setSelectedBet({ ...odds, type: 'spread' })}
+                                                            className={`w-full text-left p-3 border rounded-md transition-colors ${
+                                                                selectedBet?.team === odds.team && selectedBet?.type === 'spread'
+                                                                    ? 'border-green-500 bg-green-50'
+                                                                    : 'border-gray-300 hover:border-gray-400'
+                                                            }`}
+                                                        >
+                                                            <div className="flex justify-between items-center">
+                                                                <span className="text-sm font-medium text-gray-900">
+                                                                    {odds.team} ({odds.spread > 0 ? '+' : ''}{odds.spread})
+                                                                </span>
+                                                                <span className={odds.odds > 0 ? 'text-green-600' : 'text-red-600'}>
+                                                                    {formatOdds(odds.odds)}
+                                                                </span>
+                                                            </div>
+                                                        </button>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
 
-                                        <div>
-                                            <h4 className="text-sm font-medium text-gray-900 mb-2">Total Points</h4>
-                                            <div className="space-y-2">
-                                                {selectedEvent.odds.total.map((odds, index) => (
-                                                    <button
-                                                        key={index}
-                                                        onClick={() => setSelectedBet({ ...odds, type: 'total' })}
-                                                        className={`w-full text-left p-3 border rounded-md transition-colors ${
-                                                            selectedBet?.type === odds.type && selectedBet?.type === 'total'
-                                                                ? 'border-green-500 bg-green-50'
-                                                                : 'border-gray-300 hover:border-gray-400'
-                                                        }`}
-                                                    >
-                                                        <div className="flex justify-between items-center">
-                              <span className="text-sm font-medium text-gray-900">
-                                {odds.type} {odds.points}
-                              </span>
-                                                            <span className={odds.odds > 0 ? 'odds-positive' : 'odds-negative'}>
-                                {formatOdds(odds.odds)}
-                              </span>
-                                                        </div>
-                                                    </button>
-                                                ))}
+                                        {selectedEvent.odds.total && selectedEvent.odds.total.length > 0 && (
+                                            <div>
+                                                <h4 className="text-sm font-medium text-gray-900 mb-2">Total Points</h4>
+                                                <div className="space-y-2">
+                                                    {selectedEvent.odds.total.map((odds, index) => (
+                                                        <button
+                                                            key={index}
+                                                            onClick={() => setSelectedBet({ ...odds, type: 'total' })}
+                                                            className={`w-full text-left p-3 border rounded-md transition-colors ${
+                                                                selectedBet?.type === odds.type && selectedBet?.type === 'total'
+                                                                    ? 'border-green-500 bg-green-50'
+                                                                    : 'border-gray-300 hover:border-gray-400'
+                                                            }`}
+                                                        >
+                                                            <div className="flex justify-between items-center">
+                                                                <span className="text-sm font-medium text-gray-900">
+                                                                    {odds.type} {odds.points}
+                                                                </span>
+                                                                <span className={odds.odds > 0 ? 'text-green-600' : 'text-red-600'}>
+                                                                    {formatOdds(odds.odds)}
+                                                                </span>
+                                                            </div>
+                                                        </button>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
 
                                         {selectedBet && (
                                             <div className="mt-6 p-4 bg-gray-50 rounded-md">
@@ -240,14 +273,14 @@ const Betting = () => {
                                                     <div className="flex justify-between">
                                                         <span className="text-gray-600">Selection:</span>
                                                         <span className="font-medium">
-                              {selectedBet.team || selectedBet.type} {selectedBet.points && `(${selectedBet.points})`}
-                            </span>
+                                                            {selectedBet.team || selectedBet.type} {selectedBet.points && `(${selectedBet.points})`}
+                                                        </span>
                                                     </div>
                                                     <div className="flex justify-between">
                                                         <span className="text-gray-600">Odds:</span>
-                                                        <span className={selectedBet.odds > 0 ? 'odds-positive' : 'odds-negative'}>
-                              {formatOdds(selectedBet.odds)}
-                            </span>
+                                                        <span className={selectedBet.odds > 0 ? 'text-green-600' : 'text-red-600'}>
+                                                            {formatOdds(selectedBet.odds)}
+                                                        </span>
                                                     </div>
                                                     <div className="pt-2">
                                                         <label htmlFor="stake" className="block text-sm font-medium text-gray-700 mb-1">
@@ -258,23 +291,24 @@ const Betting = () => {
                                                             id="stake"
                                                             min="1"
                                                             max={currentUser.balance}
+                                                            step="1"
                                                             value={stake}
                                                             onChange={(e) => setStake(e.target.value)}
                                                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
                                                             placeholder="Enter stake amount"
                                                         />
                                                     </div>
-                                                    {stake && !isNaN(stake) && stake >= 1 && (
+                                                    {stake && !isNaN(stake) && parseFloat(stake) >= 1 && (
                                                         <div className="flex justify-between pt-2 border-t border-gray-200">
                                                             <span className="text-gray-600">To Win:</span>
                                                             <span className="font-medium text-green-600">
-                                ${calculatePotentialWin(selectedBet.odds, parseFloat(stake))}
-                              </span>
+                                                                ${calculatePotentialWin(selectedBet.odds, parseFloat(stake))}
+                                                            </span>
                                                         </div>
                                                     )}
                                                     <button
                                                         onClick={handlePlaceBet}
-                                                        disabled={!stake || stake < 1 || stake > currentUser.balance}
+                                                        disabled={!stake || parseFloat(stake) < 1 || parseFloat(stake) > currentUser.balance}
                                                         className="w-full mt-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white py-2 px-4 rounded-md transition-colors"
                                                     >
                                                         Place Bet

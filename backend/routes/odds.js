@@ -2,9 +2,11 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 
-// Get your API key from https://the-odds-api.com/
-const API_KEY = process.env.ODDS_API_KEY || 'YOUR_API_KEY_HERE';
+const API_KEY = process.env.ODDS_API_KEY;
 const BASE_URL = 'https://api.the-odds-api.com/v4';
+
+
+
 
 router.get('/', async (req, res) => {
     try {
@@ -149,6 +151,9 @@ router.get('/:sport', async (req, res) => {
             }
         });
 
+
+
+
         const events = response.data.map(event => {
             const fanduel = event.bookmakers.find(bookmaker => bookmaker.key === 'fanduel');
             const bookmaker = fanduel || (event.bookmakers.length > 0 ? event.bookmakers[0] : null);
@@ -186,5 +191,6 @@ router.get('/:sport', async (req, res) => {
         res.status(500).json({ message: 'Error fetching odds data' });
     }
 });
+
 
 module.exports = router;

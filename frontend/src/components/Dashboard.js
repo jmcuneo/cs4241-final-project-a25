@@ -14,7 +14,7 @@ const Dashboard = () => {
         console.log('Dashboard - Auth loading:', loading);
 
         if (!loading && currentUser) {
-            console.log('🔄 Fetching bets for user:', currentUser.username);
+            console.log('Fetching bets for user:', currentUser.username);
             fetchBets();
         } else if (!loading && !currentUser) {
             console.log('No user logged in, setting bets loading to false');
@@ -31,7 +31,7 @@ const Dashboard = () => {
         } catch (error) {
             console.error('Error fetching bets:', error.response?.data || error.message);
             if (error.response?.status === 401) {
-                console.log('🔐 Unauthorized - redirecting to login');
+                console.log('Unauthorized - redirecting to login');
                 navigate('/login');
             }
         } finally {
@@ -55,7 +55,6 @@ const Dashboard = () => {
         }
     };
 
-    // Show loading state while checking authentication
     if (loading) {
         console.log('Dashboard showing auth loading state');
         return (
