@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MiniCard from './MiniCard';
 import { API } from '../lib/api';
+import { SelectStop } from './SelectStop';
 
 //user pastes stop id + name they know
 export default function StopSearch() {
@@ -19,7 +20,7 @@ export default function StopSearch() {
       }}>
         <label className="text-sm">
           <span className="block mb-1">Stop ID</span>
-          <input value={stopId} onChange={e=>setStopId(e.target.value)} required className="w-full border rounded-lg px-3 py-2"/>
+          <SelectStop value={stopId} onChange={e=>setStopId(e)} required />
         </label>
         <label className="text-sm">
           <span className="block mb-1">Stop Name (optional)</span>

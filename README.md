@@ -39,6 +39,7 @@ Then run the install & run script
 ./scripts/dev-all.sh
 ```
 
+### Technologies  
 The frontend should be at http://localhost:5173 and the backend should be at http://localhost:8080
 
 ## Technologies  
