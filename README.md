@@ -6,6 +6,8 @@ For our final project, we created a nutrition tracker that allows you to track m
 
 A link to our project, which was deployed with render, can be found here:
 
+In order to run it locally, please run npm i in both the frontend, and backend directories.
+
 Our project uses Express for its backend and React for its frontend. Additionally, our backend makes use of PostgreSQL and Prisma connector for its database. Our frontend uses tailwind css for styling, and wouter for page routing.
 
 In order to log into our project, you must create a user profile. The easiest way is to just log in with Github
