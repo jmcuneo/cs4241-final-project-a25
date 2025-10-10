@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
       data: {
         userId,
         date: new Date(date),
-        mealType: mealType ? mealType.toUpperCase() : "BREAKFAST",
+        //mealType: mealType ? mealType.toUpperCase() : "BREAKFAST",
         items: {
           create: mealItemsData,
         },

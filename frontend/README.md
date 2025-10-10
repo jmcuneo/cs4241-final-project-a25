@@ -1,75 +1,20 @@
-# React + TypeScript + Vite
+Group 7 Final Project: Nutrition Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+By Matt Franco, Maxwell Jeronimo, Ayush Kulkarni, and Ryan Nemeti
 
-Currently, two official plugins are available:
+For our final project, we created a nutrition tracker that allows you to track meals, explore recipes, and view nutrition information. It also features a login page that allows users to log in with github or email, and a database to store information in.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A link to our project, which was deployed with render, can be found here:
 
-## React Compiler
+Our project uses Express for its backend and React for its frontend. Additionally, our backend makes use of PostgreSQL and Prisma connector for its database. Our frontend uses tailwind css for styling, and wouter for page routing.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+In order to log into our project, you must create a user profile. The easiest way is to just log in with Github
 
-Note: This will impact Vite dev & build performances.
+We faced a few challenges with this project, specifically with project structure. There were a lot of times when we had to specifically install packages into our frontend or backend. Additionaly, we had to find APIs for nutrition information since there was no way that we could create our own database of that.
 
-## Expanding the ESLint configuration
+For distribution of work, each member focused on different aspects of the work to try to minimize merge conflicts on the repository.
+Max and Matt focused on backend work, with Max setting up the database and its connection while Matt worked on setting up the API and its functionality. 
+Matt also did some frontend work with the API and organizational work with the file structure Ayush focused on Auth0 and some frontend 
+Ryan focused on page routing and the recipes page, as well as some accessibility features.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Accessibility: Our page features an intuitive dashboard with an easy to use navigation bar, as well as standout, descriptive buttons.

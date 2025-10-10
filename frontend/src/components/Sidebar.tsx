@@ -16,6 +16,12 @@ export default function Sidebar() {
       label: "Meals",
       description: "Log Daily Meals",
     },
+    {
+        id: "recipes",
+        path:"/recipes",
+        label: "Recipes",
+        description: "Explore Recipes"
+    }
   ];
 
   return (
