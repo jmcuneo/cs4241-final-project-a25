@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
     const food = await prisma.food.create({
       data: {
         name,
-        calories: parseInt(calories),
+        calories: parseFloat(calories) || 0,
         protein: parseFloat(protein) || 0,
         carbs: parseFloat(carbs) || 0,
         fat: parseFloat(fat) || 0,

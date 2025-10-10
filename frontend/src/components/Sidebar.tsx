@@ -55,31 +55,6 @@ export default function Sidebar() {
           );
         })}
       </nav>
-      <div className="mt-auto p-4">
-        <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50">
-          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-            <svg
-              className="w-4 h-4 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              />
-            </svg>
-          </div>
-          <div className="flex-1">
-            <div className="font-medium text-sm text-gray-800">
-              User Profile
-            </div>
-            <div className="text-xs text-gray-500">Manage account</div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

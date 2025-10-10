@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
         food = await prisma.food.create({
           data: {
             name: item.foodName,
-            calories: Math.round(item.calories / item.quantity) || 0,
+            calories: item.calories || 0,
             protein: item.protein || 0,
             carbs: item.carbs || 0,
             fat: item.fat || 0,
@@ -63,26 +63,6 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.error("Error fetching meals:", error);
     res.status(500).json({ error: "Failed to fetch meals" });
-  }
-});
-
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const meal = await prisma.meal.findUnique({
-      where: { id: parseInt(id) },
-      include: { items: { include: { food: true } } },
-    });
-
-    if (!meal) {
-      return res.status(404).json({ error: "Meal not found" });
-    }
-
-    res.json(meal);
-  } catch (error) {
-    console.error("Error fetching meal:", error);
-    res.status(500).json({ error: "Failed to fetch meal" });
   }
 });
 
@@ -172,6 +152,26 @@ router.get("/by-date", async (req, res) => {
   } catch (error) {
     console.error("Error fetching meals by date:", error);
     res.status(500).json({ error: "Failed to fetch meals by date" });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const meal = await prisma.meal.findUnique({
+      where: { id: parseInt(id) },
+      include: { items: { include: { food: true } } },
+    });
+
+    if (!meal) {
+      return res.status(404).json({ error: "Meal not found" });
+    }
+
+    res.json(meal);
+  } catch (error) {
+    console.error("Error fetching meal:", error);
+    res.status(500).json({ error: "Failed to fetch meal" });
   }
 });
 

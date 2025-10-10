@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const API_URL = "http://localhost:3000";
 
-function Login() {
+export default function Login() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -59,5 +59,3 @@ function Login() {
     </div>
   );
 }
-
-export default Login;
