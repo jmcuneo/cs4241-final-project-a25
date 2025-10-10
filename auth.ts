@@ -21,7 +21,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     callbacks: {
         async redirect({ url, baseUrl }) {
             // Always redirect to /start after sign in
-            return `${baseUrl}/start`
+            return `${baseUrl}`
         },
     },
 })
