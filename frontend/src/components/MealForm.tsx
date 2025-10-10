@@ -19,7 +19,7 @@ export default function MealForm() {
   const form = useForm({
     defaultValues: {
       selectedFood: null as FoodSearchResult | null,
-      quantity: 1,
+      quantity: 100,
       calories: 0,
       mealItems: [] as MealItem[],
       mealType: "breakfast" as "breakfast" | "lunch" | "dinner" | "snack",
