@@ -15,6 +15,41 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res) => {
+  const { name, calories, protein, carbs, fat } = req.body;
+
+  if (!name || calories === undefined) {
+    return res.status(400).json({ error: "Name and calories are required" });
+  }
+
+  try {
+    // Check if food already exists
+    const existingFood = await prisma.food.findUnique({
+      where: { name },
+    });
+
+    if (existingFood) {
+      return res.json(existingFood);
+    }
+
+    // Create new food
+    const food = await prisma.food.create({
+      data: {
+        name,
+        calories: parseInt(calories),
+        protein: parseFloat(protein) || 0,
+        carbs: parseFloat(carbs) || 0,
+        fat: parseFloat(fat) || 0,
+      },
+    });
+
+    res.json(food);
+  } catch (error) {
+    console.error("Error creating food:", error);
+    res.status(500).json({ error: "Failed to create food" });
+  }
+});
+
 router.get("/search", async (req, res) => {
   const { q: query } = req.query;
 

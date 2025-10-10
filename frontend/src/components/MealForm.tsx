@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "@tanstack/react-form";
-import { addMeal, searchFoods, getFoodDetails } from "../api/client";
+import { addMeal, searchFoods, getFoodDetails, addFood } from "../api/client";
 import type {
   FoodSearchResult,
   FoodDetails,
@@ -32,13 +32,76 @@ export default function MealForm() {
       }
 
       try {
+        // Create or get food items first
+        const mealItemsWithLocalIds = await Promise.all(
+          value.mealItems.map(async (item: MealItem) => {
+            try {
+              // Get nutrition data from USDA API if available
+              let protein = 0;
+              let carbs = 0;
+              let fat = 0;
+
+              try {
+                const details = await getFoodDetails(item.foodId);
+                const nutrients = details.foodNutrients || [];
+
+                // Extract protein (nutrient ID 1003)
+                const proteinNutrient = nutrients.find(
+                  (n: FoodNutrient) => n.nutrient?.id === 1003,
+                );
+                if (proteinNutrient) {
+                  protein = proteinNutrient.amount || 0;
+                }
+
+                // Extract carbs (nutrient ID 1005)
+                const carbsNutrient = nutrients.find(
+                  (n: FoodNutrient) => n.nutrient?.id === 1005,
+                );
+                if (carbsNutrient) {
+                  carbs = carbsNutrient.amount || 0;
+                }
+
+                // Extract fat (nutrient ID 1004)
+                const fatNutrient = nutrients.find(
+                  (n: FoodNutrient) => n.nutrient?.id === 1004,
+                );
+                if (fatNutrient) {
+                  fat = fatNutrient.amount || 0;
+                }
+              } catch (nutritionError) {
+                console.warn(
+                  `Could not fetch nutrition data for ${item.foodName}:`,
+                  nutritionError,
+                );
+              }
+
+              // Create the food in the local database
+              const food = await addFood({
+                name: item.foodName,
+                calories: Math.round(item.calories / item.quantity), // calories per unit
+                protein: protein,
+                carbs: carbs,
+                fat: fat,
+              });
+
+              return {
+                foodId: food.id, // Use the local database ID
+                quantity: item.quantity,
+              };
+            } catch (error) {
+              console.error(
+                `Failed to create food item: ${item.foodName}`,
+                error,
+              );
+              throw new Error(`Failed to create food item: ${item.foodName}`);
+            }
+          }),
+        );
+
         const meal = {
           date: new Date(value.date).toISOString(),
           mealType: value.mealType,
-          items: value.mealItems.map((item: MealItem) => ({
-            foodId: item.foodId,
-            quantity: item.quantity,
-          })),
+          items: mealItemsWithLocalIds,
         };
 
         await addMeal(meal);
@@ -58,7 +121,6 @@ export default function MealForm() {
     },
   });
 
-  // Search for foods when query changes
   useEffect(() => {
     const searchTimeout = setTimeout(async () => {
       if (searchQuery.length > 2) {
@@ -80,7 +142,6 @@ export default function MealForm() {
     return () => clearTimeout(searchTimeout);
   }, [searchQuery]);
 
-  // Load food details when a food is selected
   useEffect(() => {
     const selectedFood = form.state.values.selectedFood;
     if (selectedFood && !foodDetails) {

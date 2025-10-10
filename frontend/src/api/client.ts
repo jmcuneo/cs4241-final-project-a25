@@ -30,6 +30,22 @@ export async function addMeal(meal: {
   return res.json();
 }
 
+export async function addFood(food: {
+  name: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+}) {
+  const res = await fetch(`/api/foods`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(food),
+  });
+  if (!res.ok) throw new Error("Failed to add food");
+  return res.json();
+}
+
 export async function searchFoods(query: string) {
   const res = await fetch(`/api/foods/search?q=${encodeURIComponent(query)}`);
   if (!res.ok) throw new Error("Failed to search foods");
