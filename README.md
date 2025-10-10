@@ -72,6 +72,7 @@ Yi Hong Jiang:
 Brendan Leu:
 - Stop Search
 - GitHub CI
+- Deployed with Docker
 
 Utku Yakar:
 - Project Setup
