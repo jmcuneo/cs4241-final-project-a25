@@ -1,3 +1,13 @@
+export async function checkAuth() {
+  const res = await fetch("http://localhost:3000/api/user", {
+    credentials: "include",
+  });
+  if (res.ok) {
+    return res.json();
+  }
+  return null;
+}
+
 export async function getFoods() {
   const res = await fetch(`/api/foods`);
   if (!res.ok) throw new Error("Failed to fetch foods");
@@ -13,6 +23,21 @@ export async function getMeals() {
 export async function getMeal(id: number) {
   const res = await fetch(`/api/meals/${id}`);
   if (!res.ok) throw new Error("Failed to fetch meal");
+  return res.json();
+}
+
+export async function getMealsByDate(
+  userId?: number,
+  startDate?: string,
+  endDate?: string,
+) {
+  const params = new URLSearchParams();
+  if (userId) params.append("userId", userId.toString());
+  if (startDate) params.append("startDate", startDate);
+  if (endDate) params.append("endDate", endDate);
+
+  const res = await fetch(`/api/meals/by-date?${params.toString()}`);
+  if (!res.ok) throw new Error("Failed to fetch meals by date");
   return res.json();
 }
 
