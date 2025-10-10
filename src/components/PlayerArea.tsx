@@ -19,7 +19,7 @@ const PlayerArea = ({ isPlayer, deck, playedCards, winCount = 0, onPlayCard, bac
                 className={`card-container ${isPlayer && onPlayCard ? "cursor-pointer hover:scale-105 transition-transform" : ""}`}
                 onClick={onPlayCard}
             >
-                {deck > 0 ? (
+                {isPlayer && deck > 0 ? (
                     <PlayingCard rank="1" suit="h" faceUp={false} backTheme={backTheme} />
                 ) : (
                     <div className="w-20 h-28 bg-gray-600/40 rounded-xl border border-gray-400 flex items-center justify-center text-sm">
