@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
     },
     balance: {
         type: Number,
-        default: 1000 // Starting balance
+        default: 1000
     },
     createdAt: {
         type: Date,
@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-// Hash password before saving
+
 UserSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
 
@@ -38,9 +38,8 @@ UserSchema.pre('save', async function(next) {
     }
 });
 
-// Compare password method
+
 UserSchema.methods.comparePassword = async function(candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
 };
 
-module.exports = mongoose.model('User', UserSchema);

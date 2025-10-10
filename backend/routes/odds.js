@@ -6,28 +6,23 @@ const router = express.Router();
 const API_KEY = process.env.ODDS_API_KEY || 'YOUR_API_KEY_HERE';
 const BASE_URL = 'https://api.the-odds-api.com/v4';
 
-// Get live NBA odds
 router.get('/', async (req, res) => {
     try {
-        // Request odds for upcoming NBA games
         const response = await axios.get(`${BASE_URL}/sports/basketball_nba/odds`, {
             params: {
                 apiKey: API_KEY,
-                regions: 'us', // US bookmakers including FanDuel
-                markets: 'h2h,spreads,totals', // Moneyline, spreads, and totals
-                oddsFormat: 'american', // +100, -120 format
-                dateFormat: 'iso' // ISO date format
+                regions: 'us',
+                markets: 'h2h,spreads,totals',
+                oddsFormat: 'american',
+                dateFormat: 'iso'
             }
         });
 
         console.log(`Remaining API requests: ${response.headers['x-requests-remaining']}`);
 
-        // Transform the API data to match frontend structure
         const events = response.data.map(event => {
-            // Find FanDuel bookmaker data
             const fanduel = event.bookmakers.find(bookmaker => bookmaker.key === 'fanduel');
 
-            // If no FanDuel data, use the first available bookmaker as fallback
             const bookmaker = fanduel || (event.bookmakers.length > 0 ? event.bookmakers[0] : null);
 
             if (!bookmaker) {
@@ -57,13 +52,12 @@ router.get('/', async (req, res) => {
                     })) || []
                 }
             };
-        }).filter(event => event !== null); // Remove null events
+        }).filter(event => event !== null);
 
         res.json(events);
     } catch (error) {
         console.error('Error fetching NBA odds from The Odds API:', error.message);
 
-        // Enhanced fallback mock data with NBA focus
         const mockEvents = [
             {
                 id: 'nba1',
@@ -134,7 +128,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get specific sport odds (for future expansion)
 router.get('/:sport', async (req, res) => {
     const { sport } = req.params;
     const sportMap = {
@@ -156,7 +149,6 @@ router.get('/:sport', async (req, res) => {
             }
         });
 
-        // Similar transformation as above
         const events = response.data.map(event => {
             const fanduel = event.bookmakers.find(bookmaker => bookmaker.key === 'fanduel');
             const bookmaker = fanduel || (event.bookmakers.length > 0 ? event.bookmakers[0] : null);

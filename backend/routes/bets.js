@@ -21,7 +21,6 @@ router.post('/', auth, async (req, res) => {
             return res.status(400).json({ message: 'Insufficient balance' });
         }
 
-        // Calculate potential win
         let potentialWin;
         if (odds > 0) {
             potentialWin = stake * (odds / 100);
@@ -58,4 +57,3 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
-module.exports = router;
