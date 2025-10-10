@@ -15,14 +15,16 @@ dotenv.config();
 const app = express();
 // const prisma = new PrismaClient();
 
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
-app.use("/foods", foods);
-app.use("/meals", meals);
-
-app.use(express.static(path.join(__dirname, "../../dist")))
+// app.use(express.static(path.join(__dirname, "../../frontend/dist")))
 
 app.use(session ({  
     secret: process.env.SESSION_SECRET!,
@@ -64,7 +66,7 @@ app.use(session ({
     "/callback",
     passport.authenticate("auth0", { failureRedirect: "/" }),
     (_req: Request, res: Response) => {
-      res.redirect("/profile");
+      res.redirect("http://localhost:5173/home");
     }
   );
   
@@ -75,17 +77,12 @@ app.use(session ({
       res.status(401).json({ message: "Not authenticated" });
     }
   });
-  
-  app.get("/profile", (req: Request, res: Response) => {
-    if (req.isAuthenticated()) {
-      res.sendFile(path.join(__dirname, "../../dist/index.html"));
-    } else {
-      res.redirect("/login");
-    }
-  });
 
-  app.get("/", (req: Request, res: Response) => {
-    res.redirect("/login");
-  });
+  app.use("/foods", foods);
+  app.use("/meals", meals);
+
+  // app.get("*", (_req: Request, res: Response) => {
+  //   res.redirect("http://localhost:5173");
+  // });
 
 app.listen(3000, () => console.log("Server listening on http://localhost:3000"));
