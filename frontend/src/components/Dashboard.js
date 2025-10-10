@@ -8,8 +8,10 @@ const Dashboard = () => {
     const { currentUser } = useAuth();
 
     useEffect(() => {
-        fetchBets();
-    }, []);
+        if (currentUser) {
+            fetchBets();
+        }
+    }, [currentUser]);
 
     const fetchBets = async () => {
         try {
@@ -38,6 +40,22 @@ const Dashboard = () => {
         }
     };
 
+    // Show loading state while checking authentication
+    if (!currentUser) {
+        return (
+            <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <div className="px-4 py-6 sm:px-0">
+                    <div className="border-4 border-dashed border-gray-200 rounded-lg h-96 flex items-center justify-center">
+                        <div className="text-center">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
+                            <p className="mt-4 text-gray-600">Loading user data...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     if (loading) {
         return (
             <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -59,7 +77,7 @@ const Dashboard = () => {
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
                     <p className="mt-2 text-gray-600">
-                        Welcome back, {currentUser.username}! Here's your betting overview.
+                        Welcome back, {currentUser?.username}! Here's your betting overview.
                     </p>
                 </div>
 
@@ -75,7 +93,7 @@ const Dashboard = () => {
                             <div className="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt className="text-sm font-medium text-gray-500 truncate">Available Balance</dt>
-                                    <dd className="text-lg font-medium text-gray-900">${currentUser.balance}</dd>
+                                    <dd className="text-lg font-medium text-gray-900">${currentUser?.balance || 0}</dd>
                                 </dl>
                             </div>
                         </div>
