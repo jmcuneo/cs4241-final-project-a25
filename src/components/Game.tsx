@@ -2,6 +2,7 @@
 import {useState, useEffect, useRef} from "react";
 import GameClient from "@/components/GameClient";
 import Queue from "@/components/Queue";
+import {router} from "next/client";
 
 type Suit = "c" | "d" | "h" | "s";
 type Rank = 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14;
@@ -162,7 +163,9 @@ export default function Game() {
                         break;
                     }
                     case "opponentDisconnected": {
-                        setStatus("Opponent disconnected. You win!");
+                        setGameStatus("Opponent disconnected. You win!");
+                        console.log("Disconnect recieved")
+                        setTimeout(()=>{ws.close(1000, "Game ended"); location.href = "/";}, 2000);
                         break;
                     }
                     default:
@@ -403,6 +406,11 @@ export default function Game() {
         }
     }, [lastPlayerCard, lastOpponentCard]);
 
+    function forfeit() {
+        wsRef.current?.close(1000, 'Normal Closure');
+        location.href = "/";
+    }
+
     function playTopCard() {
         if (!canPlay) return;
         setCanPlay(false);
@@ -439,8 +447,8 @@ export default function Game() {
 
     return (
         <div>
-            <GameClient deck={pDeck} onPlay={playTopCard} onPlayEnd={() => {
-            }} gameStatus={gameStatus}
+            <GameClient deck={pDeck} onPlay={playTopCard} onForfeit={forfeit}
+                        gameStatus={gameStatus}
                         opponentDeckCount={opponentDeckCount ?? 0} lastOpponentCard={lastOpponentCard}
                         lastPlayerCard={lastPlayerCard}
                         canPlay={canPlay}
