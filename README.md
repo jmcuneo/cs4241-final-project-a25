@@ -1,62 +1,52 @@
-# Final Project
+# README
+**Group 14:**
+Kaylie Quach, Christine Ngo, Gianni Rosato
 
-[Example Projects from D24](https://echo360.org/collection/35d9eb4e-1c44-4880-80b5-c7a2f04ba64c/public)
+## Bad Pizza, Sad Pizza
 
-[Example Projects from A23](https://echo360.org/collection/50a4d343-caea-4deb-93ee-61bdd7da543f/public)
+Deployment: https://badpizza-sadpizza.onrender.com
 
-**Example Projects from Earlier Terms:**
-- [https://pushbox.glitch.me/app](https://pushbox.glitch.me/app)
-- [https://github.com/Cather-Zhang/final_project](https://github.com/Cather-Zhang/final_project)
-- [https://clip.kmoene.com/](https://clip.kmoene.com/)
-- [https://github.com/GP2P/G3P-Expense-Tracker](https://github.com/GP2P/G3P-Expense-Tracker)
+(Recommended 75% zoomed out for best experience.)
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+This project is a parody of the game "Good Pizza, Great Pizza". Players log into the game using their GitHub profile and are redirected to an instructions page. The player can proceed to gameplay. On the gameplay screen, there are several components: 3 randomized orders at the top, a timer, a pizza-making board, an oven, and a "marketplace" where players can add toppings to their pizza as well as buy more special ingredients (any ingredient that isn't sauce or cheese). Players make a pizza by adding toppings that correspond to a generated order, baking it, then selling it. The goal of the game is to sell as many pizzas as you can in order to accrue the most revenue within a 2-minute time limit. Because buying more special toppings using in-game revenue allow the player to sell pizzas for a high price (more toppings = higher selling price), there is an aspect of strategy in the game.
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+Upon the timer running out, the player can see how many pizzas they sold and how much revenue they made, as well as accessing the leaderboard where each gameplay record has a GitHub username, # of pizzas sold, and revenue earned. The leaderboard is ranked by highest to lowest revenue.
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation. 
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) Upload the video to Canvas. (Further instructions are available in the Canvas assignment.) Make sure your video is less than five minutes but long enough to successfully explain your project and show it in action. There is no minimum video length.
+## Technologies:
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have some impact, whether artistically, politically, productivity, or something else altogether. 
+**Vite React**: Our frontend is entirely built using Vite and React with Javascript, allowing seamless switching between multiple pages as well as efficient handling of the many functionalities in our game.
+**NES.css**: We used NES.css as our CSS framework for this application, creating a retro 8-bit vibe that we wanted for our pizza game. This matched well with the custom-made 8-bit sprites and pizza layers we made for the game.
+**Express.js**: Our backend server is compiled using Express/Node.js. Our backend took care of middleware for our authentication and database APIs and routes to the connect the database to the leaderboard.
+**MongoDB (Atlas)**: We stored data using Mongo Atlas. This stored the GitHub account associated with gameplay, number of pizzas sold, revenue earned, and other data associated with 1 gameplay so it can be displayed on the leaderboard.
+**Passport.js**: We used Passport's GitHub strategy in order to allow users to log in using their GitHub account. 
 
-## Deliverables
+## Challenges
 
-### Form Team (Due Tuesday, September 23, 11:59 pm)
-Students are will work in teams of 3-5 students for the project. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#finalproject` channel in Slack to pitch ideas for final projects and/or find fellow team members as needed.
+We experienced a few challenges while trying to implement novel features for our application, especially things we haven't necessarily covered in class before. One of the biggest challenges was figuring out how to use useEffect and setInterval/clearInterval to implement the 2-minute timer feature, while also having that not break the oven progress bar, because they were using the same handlers. Configuring the custom Popup messages also took some time to make sure it didn't interrupt gameplay but could also handle user spamming. Figuring out how to reset all data (revenue, ingredient count, pizza, etc.) after a game session was also tricky. Overall, many of the challenges came from checking for edge cases and bugs in the application and making sure there's a quick solution or Popup for each case. 
 
-Teams must be in place by end of day on Tuesday, September 23. If you have not identified a team at this point, you will be assigned a team. **Put all team members together in one of the empty "Final Project" groups on Canvas. You MUST do this step to receive full credit on the assignment.**
+On backend, we had a little bit of trouble connecting the database to our project; it was quickly resolved after realizing one of our members was running Mongo locally instead of on Atlas.
 
-### Proposal (Due Tuesday, September 30, 11:59 pm) 
-Provide an outline of your project direction and the names of associated team members. The outline should have enough detail so that staff can determine if it meets the minimum expectations or if it goes too far to be reasonable by the deadline. Please include a general description of the project and a list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript, etc.). Two to four paragraps should provide enough level of detail. Name the file proposal.md and submit a pull request by Tuesday, September 30th at 11:59 PM (end of day). Your pull request does not need to have a specific name. Only one pull request is required per team.
+## Group Member Contributions
 
-There are no other scheduled checkpoints for your project. 
+**Kaylie Quach**:
+- Timer implementation, styling
+- Random order generation, styling
+- Ingredient purchase implementation, revenue depletion on handleBuy
+- Layering toppings onto pizza
+- Custom Popup alerts
+- handleTimeUp implementation
 
-### Turning in Your Project (Due Friday, October 10, 11:59 pm)
-**Although the assignment is due at 11:59 pm, you must be prepared to demo your website in class that day.**
+**Christine Ngo**:
+- Pixel art of sprites, pizza layers, and oven
+- Session storage for ingredient amount during gameplay and game reset
+- Bake/sell button functionality
+- Trash button implementation
+- Instructions page
+- Baking functionality, animation, and progress bar
+- Main styling for application
 
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
-
-Deploy your app, in the form of a webpage, to Render/Heroku/Digital Ocean or whatever hosting service you choose; it is critical that the application functions correctly wherever you post it.
-
-The README for your second pull request doesn’t need to be a formal report, but it should contain the following:
-
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information, etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. What accessibility features you included in your project.
-
-Think of 1, 3, and 4 in particular in a similar vein to the design / technical achievements for A1—A4. Make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
-
-The video described above is also due on Canvas at this time.
-
-## FAQs
-
-**Can I use XYZ framework?** 
-
-You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. Note that the staff may not be able to assist with TypeScript questions.
+**Gianni Rosato**
+- Express backend
+- Authentication via passport.js GitHub strategy
+- MongoDB database configuration
+- Leaderboard page
