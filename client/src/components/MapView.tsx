@@ -5,6 +5,12 @@ import { API } from '../lib/api';
 import { connectWS } from '../lib/ws';
 import type { Vehicle } from '../types';
 
+const stationIcons = L.divIcon({
+  className: 'station',
+  html: `<div style="width:10px;height:10px;border-radius:50%;background:#ffff;opacity:.7;border:1px solid black;"></div>`,
+  iconSize: [10,10]
+})
+
 const getLineColor = (route: string): string => {
   const colors: Record<string, string> = {
     'Red': '#DA291C',
@@ -70,6 +76,7 @@ const mapRouteShapes = async (map: L.Map) => {
 // map view component allows live vehicle tracking
 export default function MapView() {
   const mapRef = useRef<L.Map | null>(null);
+  const stopsRef = useRef<Record<string, L.Marker>>({});
   const markersRef = useRef<Record<string, L.Marker>>({});
   const [count, setCount] = useState(0);
 
@@ -83,6 +90,21 @@ export default function MapView() {
       attribution: '© OpenStreetMap'
     }).addTo(map);
     mapRouteShapes(map);
+    //map stops (kinda maps outside of boston too)
+    API.getStops().then((data) => {
+      const stops = data.data;
+  
+      stops.forEach((stop: any) => {
+        if (stop.attributes && stop.attributes.latitude && stop.attributes.longitude && stop.attributes.location_type === 1) {
+          L.marker(
+            [stop.attributes.latitude, stop.attributes.longitude],
+            { icon: stationIcons }
+          )
+          .bindTooltip(stop.attributes.name, { direction: 'top', offset: [0, -8] })
+          .addTo(map);
+        }
+      });  
+    })
     mapRef.current = map;
 
     const ws = connectWS((vehicles: Vehicle[]) => {
