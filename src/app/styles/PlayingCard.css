@@ -4,6 +4,12 @@
     perspective: 1000px; /* 3D effect */
 }
 
+.small-card-container {
+    width: 75px !important;
+    height: 105px !important;
+    perspective: 1000px; /* 3D effect */
+}
+
 /* rotates when card flipping */
 .card {
     width: 100%;

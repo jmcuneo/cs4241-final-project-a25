@@ -9,15 +9,15 @@ type GameClientProps = {
     deck: string[];
     onPlay: () => void;
     onPlayEnd: () => void;
-    onForfeit: ()=> void;
+    onForfeit: () => void;
     playerName: string;
     opponentName: string;
+    myWon: number;
+    oppWon: number;
     gameStatus?: string;
     opponentDeckCount?: number;
     lastOpponentCard?: string;
     lastPlayerCard?: string;
-    playerWins?: number;
-    opponentWins?: number;
     canPlay?: boolean;
 };
 
@@ -36,11 +36,10 @@ export default function GameClient({
                                        playerName,
                                        opponentName,
                                        gameStatus,
+                                       myWon, oppWon,
                                        opponentDeckCount,
                                        lastOpponentCard,
                                        lastPlayerCard,
-                                       playerWins = 0,
-                                       opponentWins = 0,
                                        canPlay = true,
                                    }: GameClientProps) {
     const [statusMessage, setStatusMessage] = useState<string | null>(null);
@@ -79,7 +78,7 @@ export default function GameClient({
                     isPlayer={false}
                     deck={opponentDeckCount ? opponentDeckCount : 26}
                     playedCards={[convertToCard(lastOpponentCard)]}
-                    winCount={opponentWins}
+                    winCount={oppWon}
                     backTheme={deckTheme}
                 />
             </div>
@@ -98,7 +97,7 @@ export default function GameClient({
                     isPlayer={true}
                     deck={deck.length}
                     playedCards={[convertToCard(lastPlayerCard)]}
-                    winCount={playerWins}
+                    winCount={myWon}
                     onPlayCard={playTopCard}
                     backTheme={deckTheme}
                 />

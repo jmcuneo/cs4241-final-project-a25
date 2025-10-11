@@ -5,12 +5,12 @@ interface PlayerAreaProps {
     deck: number;
     isPlayer: boolean;
     playedCards: Card[];
-    winCount?: number;
+    winCount: number;
     onPlayCard?: () => void;
     backTheme?: "nordic" | "egyptian";
 }
 
-const PlayerArea = ({ isPlayer, deck, playedCards, winCount = 0, onPlayCard, backTheme }: PlayerAreaProps) => {
+const PlayerArea = ({ isPlayer, deck, playedCards, winCount, onPlayCard, backTheme }: PlayerAreaProps) => {
 
     return (
         <div className="flex justify-center items-center gap-6 w-full max-w-3xl">
@@ -22,7 +22,7 @@ const PlayerArea = ({ isPlayer, deck, playedCards, winCount = 0, onPlayCard, bac
                 {isPlayer && (deck > 0 ? (
                     <PlayingCard rank="1" suit="h" faceUp={false} backTheme={backTheme} />
                 ) : (
-                    <div className="w-20 h-28 bg-gray-600/40 rounded-xl border border-gray-400 flex items-center justify-center text-sm">
+                    <div className="w-[75px] h-[105px] bg-gray-600/40 rounded-xl border border-gray-400 flex items-center justify-center text-sm">
                         Empty
                     </div>
                 ))}
@@ -38,24 +38,26 @@ const PlayerArea = ({ isPlayer, deck, playedCards, winCount = 0, onPlayCard, bac
             {/* Right: Win Pile */}
             <div className="flex flex-col items-center">
                 <div className="relative">
-                    {[...Array(Math.min(winCount, 5))].map((_, i) => (
-                        <div
-                            key={i}
-                            className="absolute"
-                            style={{
-                                top: `${i * 3}px`,
-                                left: `${i * 3}px`,
-                                zIndex: i,
-                            }}
-                        >
-                            <PlayingCard rank="1" suit="s" faceUp={false} backTheme={backTheme} />
-                        </div>
-                    ))}
-                    {winCount === 0 && (
-                        <div className="w-20 h-28 bg-gray-600/30 rounded-xl border border-gray-400 flex items-center justify-center text-sm">
+                    {/*{[...Array(Math.min(winCount, 5))].map((_, i) => (*/}
+                    {/*    <div*/}
+                    {/*        key={i}*/}
+                    {/*        className="absolute"*/}
+                    {/*        style={{*/}
+                    {/*            top: `${i * 3}px`,*/}
+                    {/*            left: `${i * 3}px`,*/}
+                    {/*            zIndex: i,*/}
+                    {/*        }}*/}
+                    {/*    >*/}
+                    {/*        <PlayingCard rank="1" suit="s" faceUp={false} backTheme={backTheme} />*/}
+                    {/*    </div>*/}
+                    {/*))}*/}
+                    {winCount === 0 ? (
+                        <div className="w-[75px] h-[105px] bg-gray-600/30 rounded-xl border border-gray-400 flex items-center justify-center text-sm">
                             Empty
                         </div>
-                    )}
+                    ) :
+                        <PlayingCard small={true} rank="1" suit="h" faceUp={false} backTheme={backTheme} />
+                    }
                 </div>
                 <p className="text-sm mt-1">Wins: {winCount}</p>
             </div>

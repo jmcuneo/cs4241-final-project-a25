@@ -91,6 +91,8 @@ export default function Game() {
     const [oppDeck, setOppDeck] = useState<string[]>([]);
     const [gameStatus, setGameStatus] = useState("");
     const [opponentName, setOpponentName] = useState<string>("Opponent");
+    const [oppWinDeck, setOppWinDeck] = useState([]);
+    const [playWinDeck, setPlayWinDeck] = useState([]);
     const playerName = session?.user?.name ? session.user.name : "You";
     const [status, setStatus] = useState<string | undefined>("Connecting...");
 
@@ -257,6 +259,7 @@ export default function Game() {
         } else if (cmp < 0) {
             setOppWon(prev => [...prev, lastPlayerCard, lastOpponentCard]);
             setGameStatus("Opponent won the round");
+            // setOppWinDeck([oppWinDeck, ]);
             setCanPlay(true);
         } else {
             // TIE -> seed the table with the tied face-up cards, enter war
@@ -265,6 +268,8 @@ export default function Game() {
             setGameStatus("War!");
             startWar(); // Kick off 3 down + 1 up logic
         }
+        if (pDeck.length == 0) setPDeck(myWon);
+        if (oppDeck.length == 0) setOppDeck(oppWon);
     }
 
     function totalMine() {
@@ -466,6 +471,8 @@ export default function Game() {
             }} gameStatus={gameStatus}
                         onForfeit={forfeit}
                         opponentDeckCount={opponentDeckCount}
+                        myWon={myWon.length}
+                        oppWon={oppWon.length}
                         lastOpponentCard={lastOpponentCard}
                         lastPlayerCard={lastPlayerCard}
                         canPlay={canPlay}
