@@ -5,7 +5,7 @@ const router = express.Router();
 const API_KEY = process.env.ODDS_API_KEY;
 const BASE_URL = 'https://api.the-odds-api.com/v4';
 
-const enhancedMockEvents = [
+const mockEvents = [
     {
         id: 'nba1',
         name: 'Los Angeles Lakers @ Golden State Warriors',
@@ -51,11 +51,11 @@ const enhancedMockEvents = [
 ];
 
 router.get('/', async (req, res) => {
-    try {
-        if (!API_KEY || API_KEY === '1fab61de77270fb23d28dc6401ce25ea') {
-            return res.json(enhancedMockEvents);
-        }
+    if (!API_KEY || API_KEY === '1fab61de77270fb23d28dc6401ce25ea') {
+        return res.json(mockEvents);
+    }
 
+    try {
         const response = await axios.get(`${BASE_URL}/sports/basketball_nba/odds`, {
             params: {
                 apiKey: API_KEY,
@@ -97,10 +97,10 @@ router.get('/', async (req, res) => {
             };
         }).filter(event => event !== null);
 
-        res.json(events.length > 0 ? events : enhancedMockEvents);
+        res.json(events.length > 0 ? events : mockEvents);
 
     } catch (error) {
-        res.json(enhancedMockEvents);
+        res.json(mockEvents);
     }
 });
 
