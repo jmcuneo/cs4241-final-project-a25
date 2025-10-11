@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>TinyPets - Login</title>
+
+    <!-- Styling -->
+    <link href="./main_files/style.css" rel="stylesheet">
+</head>
+
+
+    <!-- Navigation Bar -->
+
+<body>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+        <div class="pixel-corner pixel-corner-tl"></div>
+        <div class="pixel-corner pixel-corner-tr"></div>
+        <div class="pixel-corner pixel-corner-bl"></div>
+        <div class="pixel-corner pixel-corner-br"></div>
+        
+        <h1 class="title">TINYPETS LOGIN<span class="pixel-cursor"></span></h1>
+        
+        <!-- Sign In Form -->
+        <form id="signInForm" onsubmit="submit_sign_in(event)">
+            <div class="form-group">
+                <label for="inputEmail">EMAIL:</label>
+                <input type="email" id="inputEmail" class="input-box" placeholder="Enter your email" required autofocus>
+                <div class="error-message" id="email-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="inputPassword">PASSWORD:</label>
+                <input type="password" id="inputPassword" class="input-box" placeholder="Enter your password" required>
+                <div class="error-message" id="password-error"></div>
+            </div>
+            
+            <div id="signInMessage"></div>
+            
+            <button type="submit">LOGIN</button>
+        </form>
+
+        <!-- Sign Up Link -->
+        <div class="signup-link">
+            <p>Don't have an account? <a href="/sign_up.html">Register here</a></p>
+        </div>
+    </div>
+    </div>
+
+    <script src="js/client.js"></script>
+    
+
+<!-- Decorative Pixels -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.container');
+            for (let i = 0; i < 8; i++) {
+                const pixel = document.createElement('div');
+                pixel.style.position = 'absolute';
+                pixel.style.width = '8px';
+                pixel.style.height = '8px';
+                pixel.style.left = Math.random() * 100 + '%';
+                pixel.style.top = Math.random() * 100 + '%';
+                pixel.style.backgroundColor = ['#29adff', '#ff004d', '#f8b700'][Math.floor(Math.random() * 3)];
+                pixel.style.opacity = '0.3';
+                container.appendChild(pixel);
+            }
+        });
+    </script>
+
+</body>
+</html>
