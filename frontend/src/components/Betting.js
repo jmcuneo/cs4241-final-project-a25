@@ -182,8 +182,9 @@ const Betting = () => {
                                     {selectedEvent ? selectedEvent.name : 'Select an Event'}
                                 </h3>
 
-                                {selectedEvent && (
+                                {selectedEvent && selectedEvent.odds && (
                                     <div className="space-y-4">
+                                        {/* Moneyline */}
                                         {selectedEvent.odds.moneyline && selectedEvent.odds.moneyline.length > 0 && (
                                             <div>
                                                 <h4 className="text-sm font-medium text-gray-900 mb-2">Moneyline</h4>
