@@ -160,7 +160,7 @@ const Betting = () => {
                                                     <div className="flex-1">
                                                         <h4 className="text-lg font-medium text-gray-900">{event.name}</h4>
                                                         <p className="mt-1 text-sm text-gray-500">
-                                                            {new Date(event.date).toLocaleDateString()} • {new Date(event.date).toLocaleTimeString()}
+                                                            {event.date ? new Date(event.date).toLocaleDateString() : 'Date TBA'} • {event.date ? new Date(event.date).toLocaleTimeString() : 'Time TBA'}
                                                         </p>
                                                     </div>
                                                     <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
