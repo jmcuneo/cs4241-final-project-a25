@@ -25,7 +25,7 @@ const Dashboard = () => {
     const fetchBets = async () => {
         try {
             console.log('Making API call to /api/bets');
-            const response = await axios.get('http://localhost:5000/api/bets');
+            const response = await axios.get(`${process.env.REACT_APP_API_URL || 'https://sportsbet-backend.onrender.com'}/api/bets`);
             console.log('Bets API response:', response.data);
             setBets(response.data);
         } catch (error) {

@@ -68,7 +68,7 @@ const Betting = () => {
                 stake: stakeAmount
             });
 
-            const response = await axios.post('http://localhost:5000/api/bets', {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL || 'https://sportsbet-backend.onrender.com'}/api/bets`, {
                 eventId: selectedEvent.id,
                 eventName: selectedEvent.name,
                 betType: selectedBet.type,

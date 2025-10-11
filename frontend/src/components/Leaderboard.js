@@ -13,7 +13,7 @@ const Leaderboard = () => {
 
     const fetchLeaderboard = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/leaderboard');
+            const response = await axios.get(`${process.env.REACT_APP_API_URL || 'https://sportsbet-backend.onrender.com'}/api/leaderboard`);
             setLeaderboard(response.data);
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
