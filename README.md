@@ -30,7 +30,7 @@ Conor: Front end design, playing card components
 
 Rohan: 
 
-Han:
+Han: Front end design, queue (initial with no server logic)
 
 Marie: Front end desgn. round behavior, video recording.
 
