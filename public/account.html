@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Account Page</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Page where users view and edit their account info.">
+        <script src="js/account.js"></script>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://unpkg.com/nes.css/css/nes.min.css" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    </head>
+    <header>
+        <nav>
+        <ul>
+            <li><a href="users.html">Users</a></li>
+            <li><a href="index.html">Create Review</a></li>
+            <li><a href="reviews.html">Your Reviews</a></li>
+            <li><a href="game-cluster.html">Your Game Cluster</a></li>
+            <li><a href="account.html">Account</a></li>
+            <li><a href="#" id="log-link">Logout</a></li>
+        </ul>
+        </nav>
+        <h1>Game Review Site</h1>
+    </header>
+    <body>
+        <h2 id="profile-heading">Your Account:</h2>
+        <div id="profile" class="review-card">
+            <span>
+                <h3 class="profile-subheading">Username:</h4>
+                <p id="account-username"></p>
+            </span>
+            <span>
+                <h3 class="profile-subheading">Pronouns:</h4>
+                <p id="account-pronouns"></p>
+            </span>
+            <span>
+                <h3 class="profile-subheading">Bio:</h4>
+                <p id="account-bio"></p>
+            </span>
+            <div>
+                <h3 class="profile-subheading">Favorite Games:</h4>
+                <ul id="account-faves"></ul>
+            </div>
+            <button id="edit-button" class="nes-btn hidden">Edit Profile</button>
+        </div>
+        
+        <div id="edit-window" class="edit-review hidden">
+            <h3 id="edit-title">Edit Profile:</h3>
+            <br>
+            <form>
+                <label for="edit-pronouns">Pronouns: </label>
+                <input type="text" id="edit-pronouns" class="nes-input">
+                <br>
+                <label for="edit-bio">Bio: </label>
+                <textarea type="text" id="edit-bio" class="nes-input" placeholder="Tell Other Users About Yourself"></textarea>
+                <br>
+                <label>Favourite Games: </label>
+                <div id="edit-favourites">
+                    <label for="edit-fav-number-one">Number One: </label>
+                    <input type="text" id="edit-fav-number-one" class="nes-input">
+                    <label for="edit-fav-number-two">Number Two: </label>
+                    <input type="text" id="edit-fav-number-two" class="nes-input">
+                    <label for="edit-fav-number-three">Number Three: </label>
+                    <input type="text" id="edit-fav-number-three" class="nes-input">
+                    <label for="edit-fav-number-four">Number Four: </label>
+                    <input type="text" id="edit-fav-number-four" class="nes-input">
+                    <label for="edit-fav-number-five">Number Five: </label>
+                    <input type="text" id="edit-fav-number-five" class="nes-input">
+                </div>
+                <br>
+                <br>
+                <button id="submit-edit-button" class="nes-btn">Confirm</button>
+                <button id="cancel-edit-button" class="nes-btn">Cancel</button>
+            </form>
+        </div>
+    </body>
+</html>
