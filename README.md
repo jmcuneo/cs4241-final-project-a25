@@ -21,6 +21,7 @@ For css, we used tailwind, which allowed us to do styling in component headers a
 We struggled to meet together as a team and collaborate effectively. It was also difficult to get in touch with each other to communicate.
 Additionally, there were great challenges in getting websockets to work with nextauth authentication - the websockets wanted to go through an /api route, but due to how authentication was set up, the websocket kept getting an authentication response rather than a websocket init response. This was very hard to figure out and realize what was going on.
 
+While checking whose card had the higher value did not present much of a challenge, the real difficulty arose when implementing the actual "war" component of the game. When users first encountered a war, the initial implementation did not account for the situation, causing them to put more of their cards down repeatedly. While the implementation still needs more work to handle the war mechanic properly, the game application currently reacts appropriately when a war is presented. (The only area in need of improvement is actually properly handling the war mechanic of the game, where users can properly play out a war, and determine a winner among the two.)
 
 5. What each group member was responsible for designing / developing.
 
@@ -28,7 +29,7 @@ Alexander: Deployment, Websockets server communication, Login and authentication
 
 Conor: Front end design, playing card components
 
-Rohan: 
+Rohan: Implementing the "War" card game mechanics 
 
 Han: Front end design, queue (initial with no server logic)
 
