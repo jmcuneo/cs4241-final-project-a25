@@ -132,11 +132,6 @@ export default function StartPage() {
                     >
                         Rules
                     </button>
-                    <div className="ml-auto">
-                        <Link href="/game" className="text-sm text-zinc-400 underline-offset-4 hover:underline">
-                            <p className="text-center">Skip to board (dev)</p>
-                        </Link>
-                    </div>
                 </div>
 
                 {/* Rules "add more if needed" */}

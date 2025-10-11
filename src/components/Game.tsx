@@ -162,8 +162,9 @@ export default function Game() {
                         break;
                     }
                     case "opponentDisconnected": {
-                        setStatus("Opponent disconnected. You win!");
-                        break;
+                        setGameStatus("Opponent disconnected. You win!");
+                        console.log("Disconnect recieved")
+                        setTimeout(()=>{ws.close(1000, "Game ended"); location.href = "/";}, 2000);
                     }
                     default:
                         console.log("Unhandled event:", message.event);
@@ -403,6 +404,11 @@ export default function Game() {
         }
     }, [lastPlayerCard, lastOpponentCard]);
 
+    function forfeit() {
+        wsRef.current?.close(1000, 'Normal Closure');
+        location.href = "/";
+    }
+
     function playTopCard() {
         if (!canPlay) return;
         setCanPlay(false);
@@ -458,6 +464,7 @@ export default function Game() {
         <div>
             <GameClient deck={pDeck} onPlay={playTopCard} onPlayEnd={() => {
             }} gameStatus={gameStatus}
+                        onForfeit={forfeit}
                         opponentDeckCount={opponentDeckCount}
                         lastOpponentCard={lastOpponentCard}
                         lastPlayerCard={lastPlayerCard}

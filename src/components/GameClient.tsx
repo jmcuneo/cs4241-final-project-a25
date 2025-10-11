@@ -9,6 +9,7 @@ type GameClientProps = {
     deck: string[];
     onPlay: () => void;
     onPlayEnd: () => void;
+    onForfeit: ()=> void;
     playerName: string;
     opponentName: string;
     gameStatus?: string;
@@ -31,6 +32,7 @@ export default function GameClient({
                                        deck,
                                        onPlay,
                                        onPlayEnd,
+                                       onForfeit,
                                        playerName,
                                        opponentName,
                                        gameStatus,
@@ -43,11 +45,11 @@ export default function GameClient({
                                    }: GameClientProps) {
     const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-    const [deckTheme, setDeckTheme] = useState<DeckTheme>("nordic"); 
+    const [deckTheme, setDeckTheme] = useState<DeckTheme>("nordic");
     useEffect(() => {
-    // read what Start page saved
-    const saved = (typeof window !== "undefined" && localStorage.getItem("deckTheme")) as DeckTheme | null;
-    if (saved === "egyptian" || saved === "nordic") setDeckTheme(saved);
+        // read what Start page saved
+        const saved = (typeof window !== "undefined" && localStorage.getItem("deckTheme")) as DeckTheme | null;
+        if (saved === "egyptian" || saved === "nordic") setDeckTheme(saved);
     }, []);
 
     if (playerName === opponentName) opponentName = "Opponent";
@@ -101,6 +103,12 @@ export default function GameClient({
                     backTheme={deckTheme}
                 />
                 <p className="text-center text-sm mt-1">{playerName} ({deck.length})</p>
+                <button type="button"
+                        onClick={() => {
+                            onForfeit();
+                        }}
+                        className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Forfeit
+                </button>
             </div>
 
             <style jsx global>{`
