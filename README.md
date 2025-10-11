@@ -32,7 +32,7 @@ Rohan:
 
 Han:
 
-Marie: 
+Marie: Front end desgn. round behavior, video recording.
 
 
 6. What accessibility features you included in your project.
