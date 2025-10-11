@@ -14,7 +14,7 @@ You will need a github account to log in, but you are also able to play without 
 3. An outline of the technologies you used and how you used them.
 
 We used next-auth for github authentication, and ws websockets to connect users. We also used Node for our websocket server, and next.js to make our app.
-For css, we used tailwind, which allowed us to do styling in component headers, and typescript instead of javascript. We deployed on render, with our server running on wss/... and our normal website on a normal browser protocol.
+For css, we used tailwind, which allowed us to do styling in component headers and for styling like back theme of card, and typescript instead of javascript. We deployed on render, with our server running on wss/... and our normal website on a normal browser protocol.
 
 4. What challenges you faced in completing the project.
 
