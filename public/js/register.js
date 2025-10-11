@@ -14,7 +14,7 @@ document.addEventListener("submit", async (event) => {
 
     if (data.success){
         document.getElementById("authorisation-error-message").textContent = "";
-        window.location.href = "index.html";
+        window.location.href = "account.html";
     } else {
         document.getElementById("authorisation-error-message").textContent = data.error;
     }

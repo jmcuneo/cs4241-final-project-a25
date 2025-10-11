@@ -1,4 +1,4 @@
-// let displayType = "bar";
+let orderType = "datePosted";
 let dataType = "overallRating";
 
 const getUserStatus = async function(){
@@ -6,8 +6,8 @@ const getUserStatus = async function(){
         const response = await fetch("/user");
         const session = await response.json();
         const statusUser = {
-        status: session.status,
-        user: session.user
+            status: session.status,
+            user: session.user
         }
         return statusUser;
     } catch (error){
@@ -15,15 +15,14 @@ const getUserStatus = async function(){
     }
 }
 
-const loadCluster = async function(){
-    const userStatus = await getUserStatus();
-    if (userStatus.status){
-        document.querySelector("#game-cluster-heading").textContent = userStatus.user.username + "'s Game Cluster";
-    } else {
-        window.location.href = "login.html";
-        return;
-    }
+const getAccount = function(){
+    const username = new URLSearchParams(window.location.search);
+    console.log(username);
+    return username.get("username");
+}
 
+const loadAccount = async function(){
+    console.log("Loading Account");
     const logLink = document.querySelector("#log-link");
     logLink.onclick = async (event) => {
         event.preventDefault();
@@ -31,19 +30,39 @@ const loadCluster = async function(){
         location.reload();
     }
 
-    // document.querySelector("#cluster-display-dropdown").addEventListener("change", function(){
-    //     displayType = this.value;
-    //     loadChart();
-    // });
-    document.querySelector("#cluster-data-dropdown").addEventListener("change", function(){
-        dataType = this.value;
-        loadChart();
-    });
+    const userStatus = await getUserStatus();
+    if (!userStatus.status){
+        window.location.href = "login.html";
+        return;
+    }
 
-    loadChart();
+    const username = getAccount() || userStatus.user.username;
+
+    if (userStatus.user && userStatus.user.username === username){
+        userCheck = true;
+    } else {
+        userCheck = false;
+    }
+    await loadCluster(username);
 }
 
-const loadChart = async function(){ 
+const loadCluster = async function(username){
+    document.querySelector("#game-cluster-heading").textContent = username + "'s Game Cluster";
+
+    document.querySelector("#cluster-order-dropdown").addEventListener("change", function(){
+        orderType = this.value;
+        loadChart(username);
+    });
+    
+    document.querySelector("#cluster-data-dropdown").addEventListener("change", function(){
+        dataType = this.value;
+        loadChart(username);
+    });
+
+    loadChart(username);
+}
+
+const loadChart = async function(username){ 
     const cluster = document.querySelector("#game-cluster");
     cluster.innerHTML = "";
     
@@ -58,8 +77,11 @@ const loadChart = async function(){
     cluster.appendChild(svg);
 
     try {
-        const response = await fetch("/reviews");
-        const data = await response.json();
+        const response = await fetch(`/reviews/${username}`);
+        if (!response.ok)
+            throw new Error("User Not Found");;
+        let data = await response.json();
+        data = sortData(data);
         
         const margin = { top: 20, right: 30, bottom: 100, left: 60 };
         const width = 800 - margin.left - margin.right;
@@ -115,6 +137,23 @@ const loadChart = async function(){
     }
 }
 
+const sortData = function(data){
+    switch(orderType){
+        case "datePosted":
+            return data.sort((i, j) => new Date(j.datePosted) - new Date(i.datePosted));
+        case "releaseYear":
+            return data.sort((i, j) => parseInt(i.year) - parseInt(j.year));
+        case "alphabetically":
+            return data.sort((i, j) => i.title.localeCompare(j.title));
+        case "scoreAscending":
+            return data.sort((i, j) => parseFloat(i[dataType]) - parseFloat(j[dataType]));
+        case "scoreDescending":
+            return data.sort((i, j) => parseFloat(j[dataType]) - parseFloat(i[dataType]));
+        default:
+            return data;
+    }
+}
+
 window.onload = async function(){
-    loadCluster();
+    loadAccount();
 }

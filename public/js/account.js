@@ -25,36 +25,42 @@ const loadAccount = async function(){
         location.reload();
     }
 
-    const user = await getUserStatus();
-    if (!user.status){
+    const userStatus = await getUserStatus();
+    if (!userStatus.status){
         window.location.href = "login.html";
         return;
     }
     
-    const username = getAccount() || user.user.username;
+    const username = getAccount() || userStatus.user.username;
 
     const editButton = document.querySelector("#edit-button");
-    if (user.user && user.user.username === username){
-        editButton.addEventListener("click", () => {
-            console.log("Editing Account " + user.user.username);
-            editProfile(user.user);
-        });
-        editButton.classList.remove("hidden");
+    if (userStatus.user && userStatus.user.username === username){
+        try {
+            const response = await fetch(`/account/${userStatus.user.username}`);
+            account = await response.json();
+            editButton.addEventListener("click", () => {
+                // console.log("Editing Account " + userStatus.user.username);
+                editProfile(account);
+            });
+            editButton.classList.remove("hidden");
+        } catch (error){
+            console.error("Failed to Load User Data", error);
+        }
     } else {
         editButton.classList.add("hidden");
     }
 
-    await loadAccountProfile(username);
+    await loadProfile(username);
 }
 
-const loadAccountProfile = async function(username){
+const loadProfile = async function(username){
     try {
         const response = await fetch(`/account/${username}`);
         if (!response.ok)
             throw new Error("User Not Found")
         const data = await response.json();
 
-        document.querySelector("#profile-heading").textContent = username + "'s Reviews";
+        document.querySelector("#profile-heading").textContent = username + "'s Account";
         
         document.querySelector("#account-username").textContent = data.username;
         document.querySelector("#account-pronouns").textContent = data.pronouns;
@@ -66,7 +72,8 @@ const loadAccountProfile = async function(username){
             data.faves.forEach((i, j) => {
                 if (i){
                     const fave = document.createElement("li");
-                    fave.textContent = "Number " + j + ": " + i;
+                    const rank = j + 1
+                    fave.textContent = "Number " + rank + ": " + i;
                     faves.appendChild(fave);
                 }
             });
@@ -78,15 +85,17 @@ const loadAccountProfile = async function(username){
 }
 
 const editProfile = function(user){
-    document.querySelector("#edit-title").innerText = "Editing " + user.username + "'s Account";
+    document.querySelector("#edit-title").innerText = "Editing " + user.username + "'s Profile";
 
     document.querySelector("#edit-pronouns").value = user.pronouns;
     document.querySelector("#edit-bio").value = user.bio;
-    document.querySelector("#edit-fav-number-one").value = user.faves[1];
-    document.querySelector("#edit-fav-number-two").value = user.faves[2];
-    document.querySelector("#edit-fav-number-three").value = user.faves[3];
-    document.querySelector("#edit-fav-number-four").value = user.faves[4];
-    document.querySelector("#edit-fav-number-five").value = user.faves[5];
+    if (user.faves && user.faves.length > 0) {
+        document.querySelector("#edit-fav-number-one").value = user.faves[0];
+        document.querySelector("#edit-fav-number-two").value = user.faves[1];
+        document.querySelector("#edit-fav-number-three").value = user.faves[2];
+        document.querySelector("#edit-fav-number-four").value = user.faves[3];
+        document.querySelector("#edit-fav-number-five").value = user.faves[4];
+    }
 
     // document.querySelector("#submit-edit-button").dataset.id = user.id;
     
@@ -125,7 +134,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (response.ok){
         document.querySelector("#edit-window").classList.add("hidden");
-        loadReviews();
+        loadAccount();
     } else {
         console.error("ERROR: Error Modifying Account");
     }

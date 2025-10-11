@@ -18,12 +18,13 @@ const loadUsers = async function(){
   users.innerHTML = "";
 
   data.forEach(i => {
-    const link = document.createElement("a");
-    link.href = `account.html?username=${i.username}`;
-    link.textContent = i.username;
+    // const link = document.createElement("a");
+    // link.href = `account.html?username=${i.username}`;
+    // link.textContent = i.username;
     
     const user = document.createElement("li");
-    user.appendChild(link);
+    // user.appendChild(link);
+    user.innerHTML = `<a href="account.html?username=${i.username}">${i.username}</a> (<a href="reviews.html?username=${i.username}">Reviews</a>) (<a href="game-cluster.html?username=${i.username}">Cluster</a>)`;
     users.appendChild(user);
   })
 }

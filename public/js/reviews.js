@@ -1,4 +1,5 @@
 let reviewSet = [];
+let userCheck = false;
 
 const getUserStatus = async function(){
   try {
@@ -14,96 +15,124 @@ const getUserStatus = async function(){
   }
 }
 
-const loadReviews = async function(){
-  const response = await fetch("/reviews");
-  if (!response.ok){
-    window.location.href = "login.html";
-    return;
-  }
-  const data = await response.json();
-  reviewSet = data;
+const getAccount = function(){
+    const username = new URLSearchParams(window.location.search);
+    console.log(username);
+    return username.get("username");
+}
 
-  
-  const userStatus = await getUserStatus();
-  if (userStatus.status)
-    document.querySelector("#reviews-heading").textContent = userStatus.user.username + "'s Reviews";
-
+const loadAccount = async function(){
+  console.log("Loading Account");
   const logLink = document.querySelector("#log-link");
   logLink.onclick = async (event) => {
     event.preventDefault();
     await fetch("/logout", { method: "POST" });
     location.reload();
   }
-  const reviews = document.querySelector("#reviews");
-  reviews.innerHTML = "";
 
-  data.forEach(i => {
-    const brk = document.createElement("br");
-    const newReview = document.createElement("div");
-    newReview.className = "review-card";
-    
-    const datePosted = document.createElement("div");
-    datePosted.className = "timestamp";
-    datePosted.innerText = i.datePosted;
-    newReview.appendChild(datePosted);
+  const userStatus = await getUserStatus();
+  if (!userStatus.status){
+    window.location.href = "login.html";
+    return;
+  }
 
-    const title = document.createElement("h3");
-    title.innerText = i.title + " (" + i.year + "):";
-    newReview.appendChild(title);
+  const username = getAccount() || userStatus.user.username;
 
-    const blurb = document.createElement("p");
-    blurb.innerText = "\"" + i.blurb + "\"";
-    newReview.appendChild(blurb);
-
-    const scoreTable = document.createElement("table")
-    scoreTable.className = "nes-table is-bordered is-centered"
-    scoreTable.innerHTML = `
-                            <thead>
-                              <tr>
-                                <th>Gameplay:</th>
-                                <th>Story:</th>
-                                <th>Visuals:</th>
-                                <th>Music:</th>
-                                <th>Overall:</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <th>${i.gameplayRating}/10</th>
-                                <th>${i.storyRating}/10</th>
-                                <th>${i.visualsRating}/10</th>
-                                <th>${i.musicRating}/10</th>
-                                <th>${i.overallRating}/10</th>
-                              </tr>
-                            </tbody>
-                           `;
-    newReview.appendChild(scoreTable);
-    newReview.appendChild(brk);
-
-    const edit = document.createElement("button");
-    edit.className = "nes-btn";
-    edit.innerText = "Edit Contents";
-    edit.addEventListener("click", () => {
-      console.log("Editing Post " + i._id);
-      editReview(i._id);
-    });
-    newReview.appendChild(edit);
-    newReview.appendChild(brk);
-
-    const deletion = document.createElement("button");
-    deletion.className = "nes-btn";
-    deletion.innerText = "Delete";
-    deletion.addEventListener("click", () => {
-      console.log("Deleting Post " + i._id);
-      deleteReview(i._id);
-    });
-    newReview.appendChild(deletion);
-
-    reviews.appendChild(newReview);
-  })
+  if (userStatus.user && userStatus.user.username === username){
+    userCheck = true;
+  } else {
+    userCheck = false;
+  }
+  await loadReviews(username);
 }
 
-const editReview = async function(id){
+const loadReviews = async function(username){
+  // console.log("Trying my best");
+  try {
+    const response = await fetch(`/reviews/${username}`);
+    if (!response.ok)
+      throw new Error("User Not Found");
+    const data = await response.json();
+    reviewSet = data;
+  
+    document.querySelector("#reviews-heading").textContent = username + "'s Reviews";
+
+    const reviews = document.querySelector("#reviews");
+    reviews.innerHTML = "";
+
+    data.forEach(i => {
+      const brk = document.createElement("br");
+      const newReview = document.createElement("div");
+      newReview.className = "review-card";
+      
+      const datePosted = document.createElement("div");
+      datePosted.className = "timestamp";
+      datePosted.innerText = i.datePosted;
+      newReview.appendChild(datePosted);
+
+      const title = document.createElement("h3");
+      title.innerText = i.title + " (" + i.year + "):";
+      newReview.appendChild(title);
+
+      const blurb = document.createElement("p");
+      blurb.innerText = "\"" + i.blurb + "\"";
+      newReview.appendChild(blurb);
+
+      const scoreTable = document.createElement("table")
+      scoreTable.className = "nes-table is-bordered is-centered"
+      scoreTable.innerHTML = `
+                              <thead>
+                                <tr>
+                                  <th>Gameplay:</th>
+                                  <th>Story:</th>
+                                  <th>Visuals:</th>
+                                  <th>Music:</th>
+                                  <th>Overall:</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <th>${i.gameplayRating}/10</th>
+                                  <th>${i.storyRating}/10</th>
+                                  <th>${i.visualsRating}/10</th>
+                                  <th>${i.musicRating}/10</th>
+                                  <th>${i.overallRating}/10</th>
+                                </tr>
+                              </tbody>
+                            `;
+      newReview.appendChild(scoreTable);
+      newReview.appendChild(brk);
+
+      if (userCheck){
+        const edit = document.createElement("button");
+        edit.className = "nes-btn";
+        edit.innerText = "Edit Contents";
+        edit.addEventListener("click", () => {
+          console.log("Editing Post " + i._id);
+          editReview(i._id);
+        });
+        newReview.appendChild(edit);
+        newReview.appendChild(brk);
+
+        const deletion = document.createElement("button");
+        deletion.className = "nes-btn";
+        deletion.innerText = "Delete";
+        deletion.addEventListener("click", () => {
+          console.log("Deleting Post " + i._id);
+          deleteReview(i._id);
+        });
+        newReview.appendChild(deletion);
+      }
+
+      reviews.appendChild(newReview);
+    })
+  } catch (error){
+    console.error("Error Loading Profile: ", error);
+    // window.location.href = "account.html";
+  }
+}
+
+const editReview = function(id){
   // console.log("Editing Post Id: " + id);
   const auditedReview = reviewSet.find(i => i._id === id);
   if (!auditedReview)
@@ -130,14 +159,14 @@ const deleteReview = async function(id){
   });
 
   if (response.ok){
-    loadReviews();
+    loadAccount();
   } else {
     console.error("ERROR: Error Deleting Review")
   }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  await loadReviews();
+  await loadAccount();
 
   document.querySelector("#cancel-edit-button").addEventListener("click", () => {
     console.log("Cancelling Edit")
@@ -171,7 +200,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (response.ok){
       document.querySelector("#edit-window").classList.add("hidden");
-      loadReviews();
+      loadAccount();
     } else {
       console.error("ERROR: Error Modifying Review");
     }

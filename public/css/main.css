@@ -63,12 +63,15 @@ input {
   background: #ffbfbf;
 }
 
+textarea {
+  background: #ffbfbf;
+}
+
 ul li {
   list-style: none;
   font-size: 20px;
   padding: 4px;
   width: auto;
-  cursor: pointer;
   position: relative;
 }
 
@@ -83,6 +86,41 @@ tr th {
   padding: 4px 5px;
 }
 
+nav {
+  padding: 15px 20px;
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li a {
+  display: inline-block;
+  text-decoration: none;
+  color: #000;
+  background: #ffbfbf;
+  padding: 12px 20px;
+  border: 2px solid #000;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
 #reviews {
   display: flex;
   flex-direction: column;
@@ -92,6 +130,29 @@ tr th {
   max-width: 100%;
   margin: 0;
   padding: 10px;
+}
+
+#profile span {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+#profile h3 {
+  text-align: left;
+  margin: 0;
+  min-width: 175px;
+}
+
+#profile p {
+  margin: 0;
+  font-size: 16px;
+}
+
+#profile ul li {
+  margin: 0;
+  font-size: 16px;
 }
 
 .hidden {
@@ -120,7 +181,7 @@ tr th {
   width: 150%;
   max-width: 800px;
   background: #ff9e9e;
-  margin: 0;
+  margin: 0 auto;
   padding: 20px;
   border-radius: 5px;
   display: flex;
@@ -138,4 +199,9 @@ tr th {
 
 .darker-link {
   color: #000E6B;
+}
+
+.profile-subheading {
+  justify-self: left;
+  font-weight: bold;
 }
