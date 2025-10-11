@@ -8,10 +8,8 @@ const BASE_URL = 'https://api.the-odds-api.com/v4';
 const mockEvents = [
     {
         id: 'nba1',
-        name: 'Los Angeles Lakers @ Golden State Warriors',
-        sport: 'NBA Basketball',
+        name: 'Los Angeles Lakers vs Golden State Warriors',
         date: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
-        bookmaker: 'FanDuel',
         odds: {
             moneyline: [
                 { team: 'Los Angeles Lakers', odds: -150 },
@@ -29,10 +27,8 @@ const mockEvents = [
     },
     {
         id: 'nba2',
-        name: 'Boston Celtics @ Milwaukee Bucks',
-        sport: 'NBA Basketball',
+        name: 'Boston Celtics vs Milwaukee Bucks',
         date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        bookmaker: 'FanDuel',
         odds: {
             moneyline: [
                 { team: 'Boston Celtics', odds: -120 },
@@ -52,10 +48,13 @@ const mockEvents = [
 
 router.get('/', async (req, res) => {
     if (!API_KEY || API_KEY === '1fab61de77270fb23d28dc6401ce25ea') {
+        console.log('No valid API key, using mock data');
         return res.json(mockEvents);
     }
 
     try {
+        console.log('Attempting to fetch real odds data from API...');
+
         const response = await axios.get(`${BASE_URL}/sports/basketball_nba/odds`, {
             params: {
                 apiKey: API_KEY,
@@ -63,8 +62,11 @@ router.get('/', async (req, res) => {
                 markets: 'h2h,spreads,totals',
                 oddsFormat: 'american'
             },
-            timeout: 10000
+            timeout: 15000
         });
+
+        console.log('Successfully fetched real odds data');
+        console.log(`Remaining requests: ${response.headers['x-requests-remaining']}`);
 
         const events = response.data.map(event => {
             const fanduel = event.bookmakers.find(bookmaker => bookmaker.key === 'fanduel');
@@ -75,9 +77,7 @@ router.get('/', async (req, res) => {
             return {
                 id: event.id,
                 name: `${event.away_team} @ ${event.home_team}`,
-                sport: 'NBA Basketball',
                 date: event.commence_time,
-                bookmaker: bookmaker.title,
                 odds: {
                     moneyline: bookmaker.markets.find(m => m.key === 'h2h')?.outcomes.map(outcome => ({
                         team: outcome.name,
@@ -97,9 +97,12 @@ router.get('/', async (req, res) => {
             };
         }).filter(event => event !== null);
 
+        console.log(`Processed ${events.length} events from API`);
         res.json(events.length > 0 ? events : mockEvents);
 
     } catch (error) {
+        console.log('Error fetching real odds data:', error.message);
+        console.log('Falling back to mock data');
         res.json(mockEvents);
     }
 });
