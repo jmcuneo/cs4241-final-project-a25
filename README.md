@@ -26,7 +26,7 @@ Additionally, there were great challenges in getting websockets to work with nex
 
 Alexander: Deployment, Websockets server communication, Login and authentication, frontend design, debugging
 
-Conor: 
+Conor: Front end design, playing card components
 
 Rohan: 
 
