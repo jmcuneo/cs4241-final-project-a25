@@ -1,0 +1,34 @@
+{
+  "name": "cs4241-final-project-group11",
+  "version": "1.0.0",
+  "description": "[Example Projects from D24](https://echo360.org/collection/35d9eb4e-1c44-4880-80b5-c7a2f04ba64c/public)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thakura1/cs4241-final-project-group11.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thakura1/cs4241-final-project-group11/issues"
+  },
+  "homepage": "https://github.com/thakura1/cs4241-final-project-group11#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.14",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-openid-connect": "^2.19.2",
+    "express-session": "^1.18.2",
+    "mongodb": "^6.20.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.14"
+  }
+}

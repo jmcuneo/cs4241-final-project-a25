@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Community | Snake</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> 
+    <link href="/css/styles.css" rel="stylesheet" />
+  </head>
+
+  <body class="bg-main flex flex-col min-h-screen">
+    <!-- nav bar -->
+     <header class="nav-header">
+        <nav class="nav-links">
+            <a href="/">Game</a>
+            <a href="/level_builder">Builder</a>
+            <a href="/community" class="active">Community</a>
+            <a href="/logout" id="logout">Logout</a>
+            <a href="/login" id = "login">Login</a>
+        </nav>
+     </header>
+
+     <!-- Main -->
+    <main class="flex flex-col items-center justify-center w-full mx-auto p-6 flex-1">
+        <h1>Community Levels</h1>
+
+        <p class="instructions mb-6 text-gray-400 text-center">
+            Explore and play levels created by the community! Create your own maps and challenge others.
+        </p>
+
+        <div id="community-levels" class="levels-grid">
+        </div>
+    </main>
+    <script src="js/community.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
