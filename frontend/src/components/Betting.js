@@ -17,23 +17,32 @@ const Betting = () => {
 
     const fetchOdds = async () => {
         try {
-            console.log('Fetching odds from API...');
-            const response = await axios.get(`${process.env.REACT_APP_API_URL || 'https://sportsbet-backend.onrender.com'}/api/bets`);
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+            const response = await axios.get(`${apiUrl}/api/odds`);
             console.log('Odds data received:', response.data);
+
+            // Debug: Log the structure of the first event
+            if (response.data && response.data.length > 0) {
+                console.log('First event structure:', response.data[0]);
+                console.log('First event odds:', response.data[0].odds);
+            }
+
             setEvents(response.data);
         } catch (error) {
             console.error('Error fetching odds:', error);
-            setMessage('Error loading odds. Using demo data.');
+            setMessage('Error loading odds data');
         } finally {
             setLoading(false);
         }
     };
 
     const formatOdds = (odds) => {
+        if (!odds) return '+0';
         return odds > 0 ? `+${odds}` : odds.toString();
     };
 
     const calculatePotentialWin = (odds, stakeAmount) => {
+        if (!odds) return '0.00';
         if (odds > 0) {
             return (stakeAmount * (odds / 100)).toFixed(2);
         } else {
@@ -59,7 +68,8 @@ const Betting = () => {
         }
 
         try {
-            console.log('Placing bet with data:', {
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+            const response = await axios.post(`${apiUrl}/api/bets`, {
                 eventId: selectedEvent.id,
                 eventName: selectedEvent.name,
                 betType: selectedBet.type,
@@ -67,34 +77,27 @@ const Betting = () => {
                 odds: selectedBet.odds,
                 stake: stakeAmount
             });
-
-            const response = await axios.post(`${process.env.REACT_APP_API_URL || 'https://sportsbet-backend.onrender.com'}/api/bets`, {
-                eventId: selectedEvent.id,
-                eventName: selectedEvent.name,
-                betType: selectedBet.type,
-                selection: selectedBet.team || selectedBet.type,
-                odds: selectedBet.odds,
-                stake: stakeAmount
-            });
-
-            console.log('Bet placed successfully:', response.data);
 
             updateBalance(response.data.user.balance);
             setMessage('Bet placed successfully!');
             setStake('');
             setSelectedBet(null);
-
-            setTimeout(() => setMessage(''), 3000);
-
         } catch (error) {
             console.error('Error placing bet:', error);
-            if (error.response) {
-                setMessage(`Error: ${error.response.data.message || 'Failed to place bet'}`);
-            } else if (error.request) {
-                setMessage('Network error - please check if backend is running');
-            } else {
-                setMessage('Unexpected error occurred');
-            }
+            setMessage(error.response?.data?.message || 'Error placing bet');
+        }
+    };
+
+    const renderEventDate = (event) => {
+        if (!event.date) return 'Date TBA';
+
+        try {
+            const date = new Date(event.date);
+            if (isNaN(date.getTime())) return 'Date TBA';
+
+            return date.toLocaleDateString() + ' • ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        } catch (error) {
+            return 'Date TBA';
         }
     };
 
@@ -125,7 +128,7 @@ const Betting = () => {
 
                 {message && (
                     <div className={`mb-4 p-4 rounded-md ${
-                        message.includes('Error') || message.includes('error') || message.includes('Failed') || message.includes('Insufficient')
+                        message.includes('Error') || message.includes('Insufficient')
                             ? 'bg-red-100 border border-red-400 text-red-700'
                             : 'bg-green-100 border border-green-400 text-green-700'
                     }`}>
@@ -143,34 +146,44 @@ const Betting = () => {
                                 </p>
                             </div>
                             <div className="border-t border-gray-200">
-                                <ul className="divide-y divide-gray-200">
-                                    {events.map((event) => (
-                                        <li key={event.id}>
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedEvent(event);
-                                                    setSelectedBet(null);
-                                                    setStake('');
-                                                }}
-                                                className={`w-full text-left p-6 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out ${
-                                                    selectedEvent?.id === event.id ? 'bg-blue-50' : ''
-                                                }`}
-                                            >
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex-1">
-                                                        <h4 className="text-lg font-medium text-gray-900">{event.name}</h4>
-                                                        <p className="mt-1 text-sm text-gray-500">
-                                                            {event.date ? new Date(event.date).toLocaleDateString() : 'Date TBA'} • {event.date ? new Date(event.date).toLocaleTimeString() : 'Time TBA'}
-                                                        </p>
+                                {events.length === 0 ? (
+                                    <div className="px-4 py-12 text-center">
+                                        <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <h3 className="mt-2 text-sm font-medium text-gray-900">No events available</h3>
+                                        <p className="mt-1 text-sm text-gray-500">Check back later for upcoming games.</p>
+                                    </div>
+                                ) : (
+                                    <ul className="divide-y divide-gray-200">
+                                        {events.map((event) => (
+                                            <li key={event.id}>
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedEvent(event);
+                                                        setSelectedBet(null);
+                                                        setStake('');
+                                                    }}
+                                                    className={`w-full text-left p-6 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out ${
+                                                        selectedEvent?.id === event.id ? 'bg-blue-50' : ''
+                                                    }`}
+                                                >
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex-1">
+                                                            <h4 className="text-lg font-medium text-gray-900">{event.name}</h4>
+                                                            <p className="mt-1 text-sm text-gray-500">
+                                                                {renderEventDate(event)}
+                                                            </p>
+                                                        </div>
+                                                        <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                        </svg>
                                                     </div>
-                                                    <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                                    </svg>
-                                                </div>
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -184,7 +197,6 @@ const Betting = () => {
 
                                 {selectedEvent && selectedEvent.odds && (
                                     <div className="space-y-4">
-                                        {/* Moneyline */}
                                         {selectedEvent.odds.moneyline && selectedEvent.odds.moneyline.length > 0 && (
                                             <div>
                                                 <h4 className="text-sm font-medium text-gray-900 mb-2">Moneyline</h4>
