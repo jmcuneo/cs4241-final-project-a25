@@ -47,7 +47,7 @@ export function AuthProvider({ children }) {
     const login = async (userData) => {
         try {
             console.log('Attempting login for user:', userData.username);
-            const response = await axios.post('http://localhost:5000/api/auth/login', userData);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL || 'https://sportsbet-backend.onrender.com'}/api/auth/login`, userData);
             const { token, user } = response.data;
 
             localStorage.setItem('token', token);

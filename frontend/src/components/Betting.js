@@ -18,7 +18,7 @@ const Betting = () => {
     const fetchOdds = async () => {
         try {
             console.log('Fetching odds from API...');
-            const response = await axios.get('http://localhost:5000/api/odds');
+            const response = await axios.get(`${process.env.REACT_APP_API_URL || 'https://sportsbet-backend.onrender.com'}/api/bets`);
             console.log('Odds data received:', response.data);
             setEvents(response.data);
         } catch (error) {

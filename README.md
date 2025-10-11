@@ -1,62 +1,67 @@
-# Final Project
+# SportsBet - NBA Simulated Sports Betting Web App
 
-[Example Projects from D24](https://echo360.org/collection/35d9eb4e-1c44-4880-80b5-c7a2f04ba64c/public)
+SportsBet is a full stack web app that simulates sports betting using virtual currency. Users can register for accounts, 
+receive starting balances of virtual coins, and place bets on real NBA games with live odds from FanDuel. 
+The platform includes user authentication, real time balance tracking, betting history, and a competitive leaderboard system.
 
-[Example Projects from A23](https://echo360.org/collection/50a4d343-caea-4deb-93ee-61bdd7da543f/public)
+The application uses modern web development with a React frontend, Node.js/Express backend, and MongoDB database. 
+It is a realistic sports betting experience without losing real money, making it perfect for learning 
+betting strategies and having fun in a safe environment.
 
-**Example Projects from Earlier Terms:**
-- [https://pushbox.glitch.me/app](https://pushbox.glitch.me/app)
-- [https://github.com/Cather-Zhang/final_project](https://github.com/Cather-Zhang/final_project)
-- [https://clip.kmoene.com/](https://clip.kmoene.com/)
-- [https://github.com/GP2P/G3P-Expense-Tracker](https://github.com/GP2P/G3P-Expense-Tracker)
+## Setup and Usage
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+To run this project locally, follow these steps:
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+1. Clone the repository and navigate to the project directory
+2. Backend Setup:
+    - Run `cd backend`
+    - Run `npm install`
+    - Create a `.env` file with MongoDB connection string and JWT secret
+    - Run `npm start` to start the backend server on port 5000
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation. 
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) Upload the video to Canvas. (Further instructions are available in the Canvas assignment.) Make sure your video is less than five minutes but long enough to successfully explain your project and show it in action. There is no minimum video length.
+3. Frontend Setup:
+    - Run `cd frontend`
+    - Run `npm install`
+    - Run `npm start` to start the React development server on port 3000
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have some impact, whether artistically, politically, productivity, or something else altogether. 
+4. Access the application at `http://localhost:3000`
+5. Register a new account to receive 1000 virtual coins
+6. Start placing bets on NBA games with real odds data
 
-## Deliverables
+## Technologies Used
 
-### Form Team (Due Tuesday, September 23, 11:59 pm)
-Students are will work in teams of 3-5 students for the project. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#finalproject` channel in Slack to pitch ideas for final projects and/or find fellow team members as needed.
+**Frontend:** React with functional components (including a useContext hook) and hooks for state management, 
+React Router for navigation, Tailwind CSS for responsive styling, Axios for API communication
 
-Teams must be in place by end of day on Tuesday, September 23. If you have not identified a team at this point, you will be assigned a team. **Put all team members together in one of the empty "Final Project" groups on Canvas. You MUST do this step to receive full credit on the assignment.**
+**Backend:** Node.js with Express.js framework, JWT for authentication, bcrypt for password hashing, Mongoose 
+for MongoDB object modeling, CORS for cross-origin requests
 
-### Proposal (Due Tuesday, September 30, 11:59 pm) 
-Provide an outline of your project direction and the names of associated team members. The outline should have enough detail so that staff can determine if it meets the minimum expectations or if it goes too far to be reasonable by the deadline. Please include a general description of the project and a list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript, etc.). Two to four paragraps should provide enough level of detail. Name the file proposal.md and submit a pull request by Tuesday, September 30th at 11:59 PM (end of day). Your pull request does not need to have a specific name. Only one pull request is required per team.
+**Database:** MongoDB for storing user accounts, bets, and balances with proper data relationships and indexing
 
-There are no other scheduled checkpoints for your project. 
+**External APIs:** Integrated with The Odds API to fetch real time sports betting odds from FanDuel 
 
-### Turning in Your Project (Due Friday, October 10, 11:59 pm)
-**Although the assignment is due at 11:59 pm, you must be prepared to demo your website in class that day.**
+## Technical Challenges
 
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
+One major challenge was integrating with third party sports betting APIs, which required data transformation 
+to normalize odds from multiple bookmakers into a consistent format for the frontend. The authentication system with JWT 
+tokens and protected routes needed state management across React components, which was super tricky.
 
-Deploy your app, in the form of a webpage, to Render/Heroku/Digital Ocean or whatever hosting service you choose; it is critical that the application functions correctly wherever you post it.
+The leaderboard was also challenging, since it needed to work efficiently with our database.
 
-The README for your second pull request doesn’t need to be a formal report, but it should contain the following:
+Our group had some difficulties with Github as well.
 
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information, etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. What accessibility features you included in your project.
+## Team Responsibilities
 
-Think of 1, 3, and 4 in particular in a similar vein to the design / technical achievements for A1—A4. Make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
+**Joe** - Betting page backend work, login with dcrypt functionality, Login styling
 
-The video described above is also due on Canvas at this time.
+**Mike** - Leaderboard page styling and backend work, About page styling and backend work
 
-## FAQs
+**Riley** - Dashboard styling and backend work, betting page styling, Navbar backend work and styling
 
-**Can I use XYZ framework?** 
+## Accessibility Features
 
-You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. Note that the staff may not be able to assist with TypeScript questions.
+The application includes comprehensive accessibility features following WCAG guidelines. 
+All interactive elements are keyboard navigable with proper focus indicators. Form inputs include 
+associated labels, and error messages are announced to screen readers. Color contrast ratios meet AA standards, 
+and the interface is fully responsive across mobile and desktop devices. Semantic HTML structure ensures proper screen 
+reader interpretation too.

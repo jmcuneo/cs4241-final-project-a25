@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard';
 import Betting from './components/Betting';
 import Navbar from './components/Navbar';
 import About from './components/About';
+import Leaderboard from './components/Leaderboard';
 
 
 function App() {
@@ -21,6 +22,8 @@ function App() {
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/betting" element={<Betting />} />
                         <Route path="/about" element={<About />} />
+                        <Route path="/leaderboard" element={<Leaderboard />} />
+
 
 
                         <Route path="/" element={<Navigate to="/dashboard" replace />} />
