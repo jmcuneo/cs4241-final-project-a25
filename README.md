@@ -1,5 +1,8 @@
 # SportsBet - NBA Simulated Sports Betting Web App
 
+backend deployment: https://sportsbet-backend.onrender.com
+frontend deployment (what you actually need to open to see project): https://sportsbet-frontend.onrender.com
+
 SportsBet is a full stack web app that simulates sports betting using virtual currency. Users can register for accounts, 
 receive starting balances of virtual coins, and place bets on real NBA games with live odds from FanDuel. 
 The platform includes user authentication, real time balance tracking, betting history, and a competitive leaderboard system.
