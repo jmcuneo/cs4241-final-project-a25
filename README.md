@@ -1,62 +1,43 @@
-# Final Project
+Final Assignment
 
-[Example Projects from D24](https://echo360.org/collection/35d9eb4e-1c44-4880-80b5-c7a2f04ba64c/public)
+===
 
-[Example Projects from A23](https://echo360.org/collection/50a4d343-caea-4deb-93ee-61bdd7da543f/public)
+## CS4241 Final Assignment -- Battleship - Sink 'Em
 
-**Example Projects from Earlier Terms:**
-- [https://pushbox.glitch.me/app](https://pushbox.glitch.me/app)
-- [https://github.com/Cather-Zhang/final_project](https://github.com/Cather-Zhang/final_project)
-- [https://clip.kmoene.com/](https://clip.kmoene.com/)
-- [https://github.com/GP2P/G3P-Expense-Tracker](https://github.com/GP2P/G3P-Expense-Tracker)
+https://webware-sink-em.onrender.com/
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+Our group created a battleship game named Sink 'Em. It includes a create/join game feature for two players to play together, a placement phase where players decide where to place their ships on a grid, and a firing phase where players guess where their opponent's ship might be. Our application supports multiple on-going games running in parallel through the use of game codes, and will notify users to reset the game if their opponent disconnects. 
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+The create game feature creates a game code the join game field accepts, and both pages generate a name for the player which can be modified if desired. When both players click "Ready," the placement stage begins and gives players 5 ships to place anywhere on the board, allowing them to rotate them both horizontally and vertically. You can place ships on the board with your mouse and rotate by pressing the 'R" key. To select a ship to place, you can click the respective keys 1, 2, 3, 4, 5. The firing stage allows players to select a square to guess (within 30 seconds, otherwise it switches to the opponent's turn) by clicking a square and then clicking submit when ready. The game will then display to both players if the guess was a hit or miss and update their boards to show the new state. While waiting for your turn, the player can see the hits and misses of their opponent. When a ship has been sunk or when a player has won, the server also notifies the users. Everything is brought together with visuals via Tailwind. Please use this application with your browser in full screen.  Can be used in dark or light mode.
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation. 
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) Upload the video to Canvas. (Further instructions are available in the Canvas assignment.) Make sure your video is less than five minutes but long enough to successfully explain your project and show it in action. There is no minimum video length.
+## Technologies Used:
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have some impact, whether artistically, politically, productivity, or something else altogether. 
+- **Express + Vite** : We used Express and Vite to build the server to communicate with the client.
+- **React** : We used React to build the app, including the client side and display (i.e. buttons, grid, etc).
+- **WebSocket** : We used WebSockets (express-ws) to maintain separate communication with varying amounts of players to allow users to play together simultaneously. This was the most challenging technology for us to use since it was new to all of us.
+- **MongoDB** : We used Mongo to store game data, and used the IDs to reference them across clients
+- **Tailwind** : We used Tailwind to style our app.
 
-## Deliverables
+## Challenges faced:
 
-### Form Team (Due Tuesday, September 23, 11:59 pm)
-Students are will work in teams of 3-5 students for the project. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#finalproject` channel in Slack to pitch ideas for final projects and/or find fellow team members as needed.
+- Our biggest challenge centered around managing work within a group of 5. We found it difficult splitting up work in a way that minimized blockers so that everyone could work simultaneously without waiting for another feature to be finished. We worked to minimize this by assigning tasks related to distinct features within the project (placing stage, firing stage, game management, etc.) and by maintaining constant communication. We also required submitting PRs to push code to main to reduce the chances of breaking functionality or overriding someone's design decisions.
+- Learning to work with websockets and maintain a live game state between two distinct players was also a challenge for us to get used to. With traditional software development, APIs are usually used to communicate with the server, however, since we were working with live players who needed different information at a given point in the game, we needed to use websockets to communicate. Working out how to set up a communication protocol was something that we had to look into and tweak as we progressed through development since it was so unfamiliar.
+- Managing board states was also difficult because the server needed to maintain two board states and ship values for both players. Additionally, given the nature of the game, the server needed to send both personal and opponent data to each user, meaning that we had to set up good player + game object and data structure design to support these server tasks. Similarly, detecting when a ship was sunk was difficult as it required referencing both a guesses board and ship values for a player to see if all cells for a given ship mapped to hits on a player's guess board. 
+- Implementing frontend design for logic extending across the project was also difficult. The game displays boards throughout the game, however, each require slightly different functionality and design depending on their purpose (placing grid vs. fleet grid vs. firing grid). We had to figure out how to integrate these small varying design aspects into a single Grid component. Similarly to above, updating design functionality to accommodate someone else's new component changes also took a lot of debugging time. Grid frontend logic also depends on how data is manipulated and sent from the server, which was another hurdle that we had to account for by "cleaning" the data the frontend received to prepare it for display on the grid. 
+- Implementing the battleship placement was also difficult. We had to figure out how to make each ship get stored as an object while having them also store their own coordinates, while also updating the shared 10×10 grid without breaking React’s reactivity was challenging. Allowing players to remove in order to reposition any placed ship required tracking and clearing exact coordinates from both the board and the ship’s own cells array without interfering with other ships. Creating a “hover silhouette” that dynamically highlighted all squares a ship would occupy was tricky. It had to update every time the mouse moved and everytime the ship was rotated, while maintaining smooth visual feedback along with error messages that came up when trying to do an invalid placement (sush as ship overlapping and out of bounds placement).
+- Storing the games in the database as opposed to in-memory raised several challenges, including retrieving the most up-to-date copy of the game at the beginning of each client request and explicitly saving it to the database after every modification.
 
-Teams must be in place by end of day on Tuesday, September 23. If you have not identified a team at this point, you will be assigned a team. **Put all team members together in one of the empty "Final Project" groups on Canvas. You MUST do this step to receive full credit on the assignment.**
+## Group Members and Responsibilities:
 
-### Proposal (Due Tuesday, September 30, 11:59 pm) 
-Provide an outline of your project direction and the names of associated team members. The outline should have enough detail so that staff can determine if it meets the minimum expectations or if it goes too far to be reasonable by the deadline. Please include a general description of the project and a list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript, etc.). Two to four paragraps should provide enough level of detail. Name the file proposal.md and submit a pull request by Tuesday, September 30th at 11:59 PM (end of day). Your pull request does not need to have a specific name. Only one pull request is required per team.
+- **Andreas Keating** : Implemented battleship placement phase, which includes: placing ships on the grid, removing any placed ship of your choosing from the grid, a ship selector/inventory system, error checks that prevent overlapping ship placement and off grid ship placement, a feature that adds a "ship hovering silhouette" to allow the user to preview where the ship would be placed.
+- **Ceci Herriman** : Set up prototype with framework for communication, grid, and game stages. Further helped work on server/client communication for directing game state, architecture for managing necessary player/game data, and integrating placing phase with firing phase. Responsible for reviewing PRs.
+- **Christopher Yon** : Adapted initial WebSocket implementation to use express-ws, allowing both web requests and WebSocket requests to be handled by the single backend server. Implemented storing games in MongoDB, and having multiple games running at once on the same server. Adapted create/join game functionality to use MongoDB object IDs as codes. Made initial server implementation much more resilient to edge cases, such as a player disconnecting during the middle of a game. Implemented display name functionality, prefilled with a random adjective + animal.  
+- **Kyra Brown** : Installed and implemented Tailwind for project.  Set up index.css file to have different classes to use.  Integrated frontend with user logic and functionality.  Created components like header, board axis, hit and miss icons, updating user statements and data to be visible.  Helped with debugging.
+- **Kelsey Bishqemi** : Create/join game function, frontend firing
 
-There are no other scheduled checkpoints for your project. 
+## Accessibility Features
 
-### Turning in Your Project (Due Friday, October 10, 11:59 pm)
-**Although the assignment is due at 11:59 pm, you must be prepared to demo your website in class that day.**
-
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
-
-Deploy your app, in the form of a webpage, to Render/Heroku/Digital Ocean or whatever hosting service you choose; it is critical that the application functions correctly wherever you post it.
-
-The README for your second pull request doesn’t need to be a formal report, but it should contain the following:
-
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information, etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. What accessibility features you included in your project.
-
-Think of 1, 3, and 4 in particular in a similar vein to the design / technical achievements for A1—A4. Make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
-
-The video described above is also due on Canvas at this time.
-
-## FAQs
-
-**Can I use XYZ framework?** 
-
-You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. Note that the staff may not be able to assist with TypeScript questions.
+- CSS used for visual styling
+- High contrast colors used against a light background to ensure elements are visible for users with low vision (contrast maintained for both dark and light mode)
+- Descriptive and clear instructions for users in game
+- Contrasting keyboard focus on elements selected via keyboard to provide clarity for keyboard users
